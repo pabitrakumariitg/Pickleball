@@ -1,0 +1,17 @@
+import { Metadata } from "next";
+import { UpdatesHero } from "@/components/updates/hero";
+import { NewsList } from "@/components/updates/news-list";
+import { EventsList } from "@/components/updates/events-list";
+import { CTASection } from "@/components/home/cta-section";
+export const metadata: Metadata = {
+  title: "Events & Updates | Pickleball Association Nagaland",
+  description: "Stay informed about the latest pickleball events, tournaments, and news from Pickleball Association Nagaland."
+};
+export default function UpdatesPage() {
+  return <>
+      <UpdatesHero />
+      <EventsList />
+      <NewsList />
+      <CTASection />
+    </>;
+}
