@@ -6,51 +6,36 @@ import { Calendar, MapPin, Users, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Event } from "@/types";
 import { formatDate } from "@/lib/utils";
+
 export function EventsList() {
   // Sample upcoming events
-  const events: Event[] = [{
-    id: "1",
-    title: "Kohima Open Tournament",
-    date: "2025-06-15",
-    location: "City Sports Complex, Kohima",
-    description: "Annual open tournament with categories for all skill levels. Join us for a weekend of competitive play and community building.",
-    image: "https://images.unsplash.com/photo-1511067007398-7e4b90cfa4bc?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3"
-  }, {
-    id: "2",
-    title: "Beginner's Clinic",
-    date: "2025-06-22",
-    location: "PAN Training Center, Dimapur",
-    description: "Learn the basics of pickleball in this 3-hour instructional clinic. Equipment provided. Perfect for those new to the sport.",
-    image: "https://images.unsplash.com/photo-1554068865-24cecd4e34b8?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3"
-  }, {
-    id: "3",
-    title: "Mixed Doubles Night",
-    date: "2025-07-01",
-    location: "Indoor Courts, Mokokchung",
-    description: "Social play and friendly competition for mixed doubles teams. All skill levels welcome. Refreshments provided.",
-    image: "https://images.unsplash.com/photo-1551698618-1dfe5d97d256?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3"
-  }, {
-    id: "4",
-    title: "Youth Summer Camp",
-    date: "2025-07-10",
-    location: "Community Center, Wokha",
-    description: "Five-day camp for young players ages 8-16. Learn skills, strategy, and sportsmanship in a fun, supportive environment.",
-    image: "https://images.unsplash.com/photo-1502014822147-1aedfb0676e0?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3"
-  }, {
-    id: "5",
-    title: "Seniors Tournament",
-    date: "2025-07-20",
-    location: "Kohima Sports Complex",
-    description: "Special tournament for players 55+. Singles and doubles divisions available. Experience the joy of competition with your peers.",
-    image: "https://images.unsplash.com/photo-1517466787929-bc90951d0974?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3"
-  }, {
-    id: "6",
-    title: "Nagaland State Championships",
-    date: "2025-08-15",
-    location: "State Indoor Stadium, Dimapur",
-    description: "The premier pickleball event in Nagaland. Three days of competition across all divisions. Registration required by August 1.",
-    image: "https://images.unsplash.com/photo-1518611012118-696072aa579a?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3"
-  }];
+  const events: Event[] = [
+    {
+      id: "101",
+      title: "Pickleball 101 Workshop",
+      date: "2025-11-10",
+      location: "City Sports Complex, Kohima",
+      description: "Perfect for beginners! Learn the basics of pickleball in a friendly, supportive environment.",
+      image: "https://images.unsplash.com/photo-1511067007398-7e4b90cfa4bc?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3"
+    },
+    {
+      id: "102",
+      title: "Nagaland State Pickleball Championship",
+      date: "2025-12-05",
+      location: "State Indoor Stadium, Dimapur",
+      description: "December 5–7, 2025: Register now for Nagaland's premier pickleball event! Three days of competition across all divisions.",
+      image: "https://images.unsplash.com/photo-1518611012118-696072aa579a?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3"
+    },
+    {
+      id: "103",
+      title: "Mixed Doubles Round Robin",
+      date: "2026-01-15",
+      location: "Indoor Courts, Mokokchung",
+      description: "January 2026: Sign up for fun and prizes in this mixed doubles round robin event!",
+      image: "https://images.unsplash.com/photo-1551698618-1dfe5d97d256?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3"
+    }
+  ];
+
   const containerVariants = {
     hidden: {
       opacity: 0

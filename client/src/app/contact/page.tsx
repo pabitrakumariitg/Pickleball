@@ -8,6 +8,8 @@ import { cn } from '@/lib/utils';
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
+import { PartnerWithUs } from "@/components/contact/partner-withus";
+import { ConnectOnSocialMedia } from '@/components/contact/connect-on-social-media';
 export default function ContactPage() {
   const [formData, setFormData] = useState({
     name: '',
@@ -45,7 +47,7 @@ export default function ContactPage() {
   };
   return <>
     {/* Hero Section */}
-    
+
 
     <section className="relative overflow-hidden bg-gradient-to-b from-background to-secondary pt-24 pb-16 md:pb-24 md:pt-32" data-unique-id="c555b44a-6d36-4d4b-9445-09ea69be8c53" data-file-name="components/about/hero.tsx" data-dynamic-text="true">
       {/* Background pattern */}
@@ -83,7 +85,7 @@ export default function ContactPage() {
             duration: 0.7,
             delay: 0.2
           }} className="mb-4 text-4xl font-bold md:text-5xl lg:text-6xl" data-unique-id="630d7f21-1ff2-4354-b630-1df7062390c9" data-file-name="components/about/hero.tsx"><span className="editable-text" data-unique-id="6b3267b5-94ae-4f54-80c1-a2f127b05463" data-file-name="components/about/hero.tsx">
-              About </span><span className="text-primary" data-unique-id="0f6b76ad-ecf1-47f1-b729-5bc49f12874a" data-file-name="components/about/hero.tsx"><span className="editable-text" data-unique-id="8f9f9d00-36bf-4684-8233-da959bc1da95" data-file-name="components/about/hero.tsx">Contact Us</span></span>
+              Contact </span><span className="text-primary" data-unique-id="0f6b76ad-ecf1-47f1-b729-5bc49f12874a" data-file-name="components/about/hero.tsx"><span className="editable-text" data-unique-id="8f9f9d00-36bf-4684-8233-da959bc1da95" data-file-name="components/about/hero.tsx"> Us</span></span>
           </motion.h1>
 
           <motion.p initial={{
@@ -96,9 +98,12 @@ export default function ContactPage() {
             duration: 0.7,
             delay: 0.3
           }} className="mb-8 text-lg text-foreground/80" data-unique-id="77dd913a-7bef-4b11-b47b-21e0a415c647" data-file-name="components/about/hero.tsx"><span className="editable-text" data-unique-id="a29be9fa-8438-4912-ad47-5349d3a790f5" data-file-name="components/about/hero.tsx">
-              Get in touch with the Pickleball Association Nagaland team.
+              Get in Touch with Pickleball Association Nagaland
               <br />
-              We'd love to hear from you!
+              Have questions? Want to collaborate or share your pickleball passion?
+              <br />
+              We’d love to hear from you!
+
             </span></motion.p>
 
           <motion.div initial={{
@@ -258,13 +263,13 @@ export default function ContactPage() {
                       Subject *
                     </span></label>
                     <select id="subject" name="subject" value={formData.subject} onChange={handleChange} required className="w-full p-3 border border-input rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent" data-unique-id="452dcb1f-e138-4682-910d-736c157545a4" data-file-name="app/contact/page.tsx">
-                      <option value="" disabled data-unique-id="75e2d731-a228-497a-aec8-c41dd9a9668c" data-file-name="app/contact/page.tsx"><span className="editable-text" data-unique-id="79895126-b4aa-4087-ae6a-1d7a3e33ea15" data-file-name="app/contact/page.tsx">Select a subject</span></option>
-                      <option value="General Inquiry" data-unique-id="5f532b02-d881-4d0b-b812-e4bf3d068b47" data-file-name="app/contact/page.tsx"><span className="editable-text" data-unique-id="c47846ab-1d2d-4799-ae07-15ab2ba93298" data-file-name="app/contact/page.tsx">General Inquiry</span></option>
-                      <option value="Membership" data-unique-id="1ec2f41a-f3a6-451c-a7af-719a41782f40" data-file-name="app/contact/page.tsx"><span className="editable-text" data-unique-id="b01ef6e2-efd2-4c4c-8b93-15d165c2b166" data-file-name="app/contact/page.tsx">Membership</span></option>
-                      <option value="Court Booking" data-unique-id="73219c48-7f9b-43c8-b57f-f989e299f766" data-file-name="app/contact/page.tsx"><span className="editable-text" data-unique-id="4dc95060-2a3e-4cd7-b663-47f686a4b576" data-file-name="app/contact/page.tsx">Court Booking</span></option>
-                      <option value="Events & Tournaments" data-unique-id="758bfbc7-b747-48b5-9d30-816fa9d83e9d" data-file-name="app/contact/page.tsx"><span className="editable-text" data-unique-id="0f1bc9ec-0cca-49c5-944c-6c43dc77fd6e" data-file-name="app/contact/page.tsx">Events & Tournaments</span></option>
-                      <option value="Partnership & Sponsorship" data-unique-id="fe84596a-88dc-4513-a1e9-bc1c83dd24e7" data-file-name="app/contact/page.tsx"><span className="editable-text" data-unique-id="0464b54e-3dcd-4efa-be80-14c617333c74" data-file-name="app/contact/page.tsx">Partnership & Sponsorship</span></option>
-                      <option value="Other" data-unique-id="6a7a73bc-b2d5-41ef-9e3e-6dc152dfb10e" data-file-name="app/contact/page.tsx"><span className="editable-text" data-unique-id="6ccc7c10-1321-45bb-bcaa-95a07dd17ef7" data-file-name="app/contact/page.tsx">Other</span></option>
+                      <option value="" disabled data-unique-id="75e2d731-a228-497a-aec8-c41dd9a9668c" data-file-name="app/contact/page.tsx">Select a subject</option>
+                      <option value="General Inquiry" data-unique-id="5f532b02-d881-4d0b-b812-e4bf3d068b47" data-file-name="app/contact/page.tsx">General Inquiry</option>
+                      <option value="Membership" data-unique-id="1ec2f41a-f3a6-451c-a7af-719a41782f40" data-file-name="app/contact/page.tsx">Membership</option>
+                      <option value="Court Booking" data-unique-id="73219c48-7f9b-43c8-b57f-f989e299f766" data-file-name="app/contact/page.tsx">Court Booking</option>
+                      <option value="Events & Tournaments" data-unique-id="758bfbc7-b747-48b5-9d30-816fa9d83e9d" data-file-name="app/contact/page.tsx">Events & Tournaments</option>
+                      <option value="Partnership & Sponsorship" data-unique-id="fe84596a-88dc-4513-a1e9-bc1c83dd24e7" data-file-name="app/contact/page.tsx">Partnership & Sponsorship</option>
+                      <option value="Other" data-unique-id="6a7a73bc-b2d5-41ef-9e3e-6dc152dfb10e" data-file-name="app/contact/page.tsx">Other</option>
                     </select>
                   </div>
                 </div>
@@ -315,63 +320,9 @@ export default function ContactPage() {
       </div>
     </section>
 
-    {/* Volunteer & Sponsor CTA */}
-    <section className="py-16 bg-secondary" data-unique-id="99ff4643-f2fd-4065-bbe7-4255a5e94fc9" data-file-name="app/contact/page.tsx">
-      <div className="container" data-unique-id="37d8e1b3-ef09-4812-9526-b6e391d7f313" data-file-name="app/contact/page.tsx">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8" data-unique-id="b43c8236-934c-4636-a122-73ce44762785" data-file-name="app/contact/page.tsx">
-          <motion.div initial={{
-            opacity: 0,
-            y: 20
-          }} whileInView={{
-            opacity: 1,
-            y: 0
-          }} transition={{
-            duration: 0.6
-          }} viewport={{
-            once: true
-          }} className="bg-gradient-to-r from-primary to-cta p-8 rounded-lg shadow-md text-white" data-unique-id="c4abe988-0773-4a31-a0f4-b12c1c0a312f" data-file-name="app/contact/page.tsx">
-            <h2 className="text-2xl font-bold mb-4" data-unique-id="f77cff83-bacf-4c58-9ca4-35c93ef2c66d" data-file-name="app/contact/page.tsx"><span className="editable-text" data-unique-id="72bf8861-1899-45bc-b4ce-ec70e05ba1c2" data-file-name="app/contact/page.tsx">Become a Volunteer</span></h2>
-            <p className="mb-6" data-unique-id="668091b0-faba-4216-a580-e540c4f356ab" data-file-name="app/contact/page.tsx"><span className="editable-text" data-unique-id="067d3142-19cc-4f51-8cfe-403f7d0014ee" data-file-name="app/contact/page.tsx">
-              Join our team of dedicated volunteers and help us grow pickleball across Nagaland.
-              We're always looking for passionate individuals to assist with events, coaching, and outreach programs.
-            </span></p>
-            <motion.a href="/contact?subject=Volunteer" whileHover={{
-              scale: 1.05
-            }} whileTap={{
-              scale: 0.95
-            }} className="inline-block bg-white text-primary font-medium py-2 px-6 rounded-full hover:bg-accent-2 hover:text-foreground transition-colors" data-unique-id="d1389b98-530b-44fb-bfe9-b9e5dd61e225" data-file-name="app/contact/page.tsx"><span className="editable-text" data-unique-id="38470a5d-74e7-490b-a829-e750f01ecbdb" data-file-name="app/contact/page.tsx">
-                Learn More
-              </span></motion.a>
-          </motion.div>
+    <ConnectOnSocialMedia />
+    <PartnerWithUs />
 
-          <motion.div initial={{
-            opacity: 0,
-            y: 20
-          }} whileInView={{
-            opacity: 1,
-            y: 0
-          }} transition={{
-            duration: 0.6,
-            delay: 0.2
-          }} viewport={{
-            once: true
-          }} className="bg-gradient-to-r from-accent to-accent-2 p-8 rounded-lg shadow-md" data-unique-id="4b7986aa-f467-466c-8bfa-a171ed19f7cb" data-file-name="app/contact/page.tsx">
-            <h2 className="text-2xl font-bold mb-4" data-unique-id="9863cd62-1afc-4e8c-9200-0ac99488242e" data-file-name="app/contact/page.tsx"><span className="editable-text" data-unique-id="6c0e3794-e4f1-41aa-8558-ecd5a7126b4c" data-file-name="app/contact/page.tsx">Sponsor a Court</span></h2>
-            <p className="mb-6" data-unique-id="7a03eea7-9029-423c-a8db-19f9af4e95e8" data-file-name="app/contact/page.tsx"><span className="editable-text" data-unique-id="2a5f7218-a68f-4bca-96fb-081f01ae1736" data-file-name="app/contact/page.tsx">
-              Support the growth of pickleball in Nagaland by sponsoring a court.
-              Your contribution will help us maintain and build new facilities across the region.
-            </span></p>
-            <motion.a href="/contact?subject=Sponsorship" whileHover={{
-              scale: 1.05
-            }} whileTap={{
-              scale: 0.95
-            }} className="inline-block bg-white text-accent font-medium py-2 px-6 rounded-full hover:bg-primary hover:text-white transition-colors" data-unique-id="7e203922-feb0-4b4e-a58c-a2b6e3120bca" data-file-name="app/contact/page.tsx"><span className="editable-text" data-unique-id="26fce0ee-5104-4b9f-90b7-3c0c3a338af8" data-file-name="app/contact/page.tsx">
-                Become a Sponsor
-              </span></motion.a>
-          </motion.div>
-        </div>
-      </div>
-    </section>
   </>;
 }
 

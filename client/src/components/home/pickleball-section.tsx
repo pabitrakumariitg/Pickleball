@@ -41,7 +41,7 @@ export function PickleballSection() {
           duration: 0.6
         }} data-unique-id="36496e22-df15-4e24-90c9-24476227a635" data-file-name="components/home/pickleball-section.tsx">
             <div className="relative" data-unique-id="de45a4b8-87f2-42f5-b346-2b0a05b35275" data-file-name="components/home/pickleball-section.tsx" data-dynamic-text="true">
-              <img src="https://picsum.photos/200" alt="Pickleball equipment" className="rounded-lg shadow-lg" data-unique-id="3fc9901b-ca2a-43bb-8b9e-2d0c83871f74" data-file-name="components/home/pickleball-section.tsx" />
+              <img src="/pickleball-what.jpg" alt="Pickleball equipment" className="rounded-lg shadow-lg" data-unique-id="3fc9901b-ca2a-43bb-8b9e-2d0c83871f74" data-file-name="components/home/pickleball-section.tsx" />
               {/* Overlay elements */}
               <div className="absolute -top-5 -right-5 h-20 w-20 rounded-full border-4 border-accent opacity-50" data-unique-id="65a39626-82dd-4bad-afd0-8c855926bdad" data-file-name="components/home/pickleball-section.tsx"></div>
               <div className="absolute -bottom-3 -left-3 h-16 w-16 bg-primary rounded-lg opacity-20" data-unique-id="5e8beb69-774e-4ea2-8759-85fc896ddf49" data-file-name="components/home/pickleball-section.tsx"></div>

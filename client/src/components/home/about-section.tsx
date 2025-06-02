@@ -64,7 +64,7 @@ export function AboutSection() {
         duration: 0.5
       }} className="mb-16 text-center" data-unique-id="543840cd-7813-4525-b15e-255cf2b2b7ad" data-file-name="components/home/about-section.tsx">
           <h2 className="mb-4 text-3xl font-bold md:text-4xl" data-unique-id="b963ce7a-ced1-4c7c-9e8b-6ae0f6dab0c2" data-file-name="components/home/about-section.tsx"><span className="editable-text" data-unique-id="9c485205-8559-4c2f-8ca9-693efd91d8f3" data-file-name="components/home/about-section.tsx">
-            About </span><span className="text-primary" data-unique-id="082799a5-4e0b-489c-ac74-e924c3975492" data-file-name="components/home/about-section.tsx"><span className="editable-text" data-unique-id="80644d1e-876b-4549-85b0-ceb430aff212" data-file-name="components/home/about-section.tsx">Pickleball Association Nagaland</span></span>
+            Why </span><span className="text-primary" data-unique-id="082799a5-4e0b-489c-ac74-e924c3975492" data-file-name="components/home/about-section.tsx"><span className="editable-text" data-unique-id="80644d1e-876b-4549-85b0-ceb430aff212" data-file-name="components/home/about-section.tsx">Pickleball </span></span>
           </h2>
           <p className="mx-auto max-w-2xl text-lg text-foreground/70" data-unique-id="9b57b586-e75b-41d1-9632-467ed6e00e32" data-file-name="components/home/about-section.tsx"><span className="editable-text" data-unique-id="d6344049-9448-42ae-b34e-be6bbc398413" data-file-name="components/home/about-section.tsx">
             Founded in 2022, we're dedicated to promoting pickleball throughout

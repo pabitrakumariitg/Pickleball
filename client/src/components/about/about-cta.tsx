@@ -3,7 +3,7 @@
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-export function CTASection() {
+export function AboutCTA() {
   return <section className="py-20" data-unique-id="f05d44e0-9548-4a4a-a4dc-0d0009a3b26b" data-file-name="components/home/cta-section.tsx">
     <div className="container mx-auto px-6" data-unique-id="4e3fbb28-2b53-4a9b-906b-353929691b8d" data-file-name="components/home/cta-section.tsx">
       <motion.div initial={{
@@ -50,8 +50,7 @@ export function CTASection() {
               duration: 0.6,
               delay: 0.3
             }} className="mb-10 text-lg opacity-90" data-unique-id="cb3326f8-d689-4b9a-a147-ebd3c458498a" data-file-name="components/home/cta-section.tsx"><span className="editable-text" data-unique-id="dec055bb-28af-4fb2-9c92-ed85e261d39f" data-file-name="components/home/cta-section.tsx">
-                Ready to swing? Book a court, join our community, or explore upcoming events. Let’s make pickleball the heartbeat of Nagaland’s sports scene!
-              </span></motion.p>
+               Join us in making pickleball a household name in Nagaland! </span></motion.p>
 
             <motion.div initial={{
               opacity: 0,
@@ -65,19 +64,15 @@ export function CTASection() {
               duration: 0.6,
               delay: 0.4
             }} className="flex flex-wrap justify-center gap-4" data-unique-id="5c6bec71-4dac-4834-83cd-19ae18229a91" data-file-name="components/home/cta-section.tsx">
-              <Link href="/book" data-unique-id="ce4d8dfb-0bac-4fb7-b782-c228a992977c" data-file-name="components/home/cta-section.tsx">
-                <Button variant="accent" size="lg" motion data-unique-id="ecfef4c1-3835-4378-b253-faa03637f6e2" data-file-name="components/home/cta-section.tsx"><span className="editable-text" data-unique-id="96419b7b-dca9-43e7-b558-91617763d546" data-file-name="components/home/cta-section.tsx">
-                  Book a Court
-                </span></Button>
-              </Link>
-              <Link href="/book" data-unique-id="ce4d8dfb-0bac-4fb7-b782-c228a992977c" data-file-name="components/home/cta-section.tsx">
-                <Button variant="accent" size="lg" motion data-unique-id="ecfef4c1-3835-4378-b253-faa03637f6e2" data-file-name="components/home/cta-section.tsx"><span className="editable-text" data-unique-id="96419b7b-dca9-43e7-b558-91617763d546" data-file-name="components/home/cta-section.tsx">
-                  Join Now
-                </span></Button>
-              </Link>
+              
               <Link href="/book" data-unique-id="ce4d8dfb-0bac-4fb7-b782-c228a992977c" data-file-name="components/home/cta-section.tsx">
                 <Button variant="accent" size="lg" motion data-unique-id="ecfef4c1-3835-4378-b253-faa03637f6e2" data-file-name="components/home/cta-section.tsx"><span className="editable-text" data-unique-id="96419b7b-dca9-43e7-b558-91617763d546" data-file-name="components/home/cta-section.tsx">
                   Learn More
+                </span></Button>
+              </Link>
+              <Link href="/book" data-unique-id="ce4d8dfb-0bac-4fb7-b782-c228a992977c" data-file-name="components/home/cta-section.tsx">
+                <Button variant="accent" size="lg" motion data-unique-id="ecfef4c1-3835-4378-b253-faa03637f6e2" data-file-name="components/home/cta-section.tsx"><span className="editable-text" data-unique-id="96419b7b-dca9-43e7-b558-91617763d546" data-file-name="components/home/cta-section.tsx">
+                  Join Our Team
                 </span></Button>
               </Link>
 

@@ -8,19 +8,19 @@ import { FeatureItem } from "@/types";
 export function OffersSection() {
   const offers: FeatureItem[] = [{
     title: "Court Access",
-    description: "Book indoor and outdoor courts across multiple locations in Nagaland",
+    description: "Book courts easily at our affiliated venues.",
     icon: Map
   }, {
     title: "Events & Tournaments",
-    description: "Participate in regular competitions for all skill levels and age groups",
+    description: "Participate in local tournaments, clinics, and social play sessions.",
     icon: Trophy
   }, {
     title: "Membership Benefits",
-    description: "Enjoy discounted court rates, special events, and equipment perks",
+    description: " Unlock exclusive perks, coaching, and community events.",
     icon: UserPlus
   }, {
-    title: "Coaching Programs",
-    description: "Learn from certified coaches through group or private instruction",
+    title: "Skill Development",
+    description: "From beginner lessons to advanced strategies, grow your game with us.",
     icon: Calendar
   }];
 

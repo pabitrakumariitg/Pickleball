@@ -62,9 +62,7 @@ export function HeroSection() {
             duration: 0.7,
             delay: 0.5
           }} className="mb-8 max-w-xl text-lg text-foreground/80" data-unique-id="6e5b03e9-cfb9-45f7-8356-4ece6812a994" data-file-name="components/home/hero-section.tsx"><span className="editable-text" data-unique-id="4f8d7ea8-8df5-4a82-9f7f-827d2b349c00" data-file-name="components/home/hero-section.tsx">
-              Join our vibrant community of players for fun, fitness, and
-              friendly competition. Perfect for all ages and skill levels.
-            </span></motion.p>
+              Swing into action with Nagaland Pickleball Association (NPA)! From Dimapur, we’re bringing this exciting sport to your doorstep—perfect for friends, family, and fitness lovers. </span></motion.p>
 
           <motion.div initial={{
             opacity: 0,
