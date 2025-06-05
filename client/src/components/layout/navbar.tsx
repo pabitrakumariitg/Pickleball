@@ -3,9 +3,11 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Menu, X, ChevronDown, Sun, Moon } from "lucide-react";
+import { Menu, X, ChevronDown, Sun, Moon, User, LogOut } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useTheme } from "next-themes";
+import { useAuth } from "@/lib/auth";
+
 const navItems = [{
   name: "Home",
   href: "/"
@@ -25,14 +27,18 @@ const navItems = [{
   name: "Contact",
   href: "/contact"
 }];
+
 export function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
   const {
     theme,
     setTheme
   } = useTheme();
+  const { user, logout } = useAuth();
   const pathname = usePathname();
+
   useEffect(() => {
     const handleScroll = () => {
       if (window.scrollY > 10) {
@@ -49,9 +55,20 @@ export function Navbar() {
   useEffect(() => {
     setIsOpen(false);
   }, [pathname]);
+
   const toggleTheme = () => {
     setTheme(theme === "light" ? "dark" : "light");
   };
+
+  const handleLogout = async () => {
+    try {
+      await logout();
+      setIsUserMenuOpen(false);
+    } catch (error) {
+      console.error('Logout failed:', error);
+    }
+  };
+
   return <header className={`fixed top-0 z-40 w-full transition-all duration-300 ${isScrolled ? "bg-background/95 backdrop-blur-md shadow-sm" : "bg-transparent"}`} data-unique-id="80375470-70f1-48cf-b703-09ea8d986f0f" data-file-name="components/layout/navbar.tsx" data-dynamic-text="true">
     <div className="container mx-auto px-4 sm:px-6" data-unique-id="9bc8d5a9-c2c1-46c8-9682-fe464c2b8364" data-file-name="components/layout/navbar.tsx">
       <div className="flex h-16 items-center justify-between" data-unique-id="ea0c0d14-3e26-439e-87a6-62c7414bdb32" data-file-name="components/layout/navbar.tsx" data-dynamic-text="true">
@@ -96,9 +113,45 @@ export function Navbar() {
             </motion.div>)}
           </AnimatePresence>
 
-          <button onClick={toggleTheme} className="ml-2 rounded-full p-2 transition-colors hover:bg-secondary" aria-label="Toggle theme" data-unique-id="1108012e-821a-4369-bce4-55509c78137f" data-file-name="components/layout/navbar.tsx" data-dynamic-text="true">
+          <button
+            onClick={toggleTheme}
+            className="ml-2 rounded-full p-2 transition-colors hover:bg-secondary"
+            aria-label="Toggle theme"
+          >
             {theme === "light" ? <Moon size={18} /> : <Sun size={18} />}
           </button>
+
+          {user ? (
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={handleLogout}
+              className="ml-4 rounded-full bg-red-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-red-700"
+            >
+              Logout
+            </motion.button>
+          ) : (
+            <div className="ml-4 flex items-center gap-2">
+              <Link href="/login">
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  className="rounded-full bg-secondary px-4 py-2 text-sm font-medium transition-colors hover:bg-secondary/80"
+                >
+                  Login
+                </motion.button>
+              </Link>
+              <Link href="/register">
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  className="rounded-full bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary-hover"
+                >
+                  Register
+                </motion.button>
+              </Link>
+            </div>
+          )}
 
           <Link href="/book" data-unique-id="6312a20c-57f7-4118-bbc2-14d29765ce04" data-file-name="components/layout/navbar.tsx">
             <motion.button whileHover={{
@@ -141,6 +194,40 @@ export function Navbar() {
           {navItems.map(item => <Link key={item.name} href={item.href} className={`block py-3 text-base font-medium transition-colors hover:text-primary ${pathname === item.href ? "text-primary" : "text-foreground/90"}`} data-unique-id="f2c5345e-df8a-4fdb-8248-5c81cb6461cd" data-file-name="components/layout/navbar.tsx" data-dynamic-text="true">
             {item.name}
           </Link>)}
+          
+          {user ? (
+            <>
+              <Link
+                href="/profile"
+                className="block py-3 text-base font-medium transition-colors hover:text-primary"
+              >
+                Profile
+              </Link>
+              <button
+                onClick={handleLogout}
+                className="flex w-full items-center gap-2 py-3 text-base font-medium text-foreground/90 transition-colors hover:text-primary"
+              >
+                <LogOut size={18} />
+                Logout
+              </button>
+            </>
+          ) : (
+            <>
+              <Link
+                href="/login"
+                className="block py-3 text-base font-medium transition-colors hover:text-primary"
+              >
+                Login
+              </Link>
+              <Link
+                href="/register"
+                className="block py-3 text-base font-medium transition-colors hover:text-primary"
+              >
+                Register
+              </Link>
+            </>
+          )}
+
           <Link href="/book" data-unique-id="1cf52be6-73d0-4416-8198-61cd70d79c7f" data-file-name="components/layout/navbar.tsx">
             <button className="mt-3 w-full rounded-full bg-primary px-4 py-2 text-base font-medium text-primary-foreground transition-colors hover:bg-primary-hover" data-unique-id="65468ebc-c9f8-4e9c-9175-f196f2199daf" data-file-name="components/layout/navbar.tsx"><span className="editable-text" data-unique-id="32cdaa22-dd60-4d43-a21a-a1380a32c354" data-file-name="components/layout/navbar.tsx">
               Book a Court
