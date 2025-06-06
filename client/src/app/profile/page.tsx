@@ -3,8 +3,9 @@
 import { useState, useEffect } from "react";
 import { useAuth } from "@/lib/auth";
 import { motion } from "framer-motion";
-import { Calendar, Clock, MapPin, User, Mail, Phone, Edit2, Camera } from "lucide-react";
+import { Calendar, Clock, MapPin, User, Mail, Phone, Edit2, Camera, Tag, CheckCircle, ArrowRight } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 
 interface Booking {
   id: string;
@@ -29,6 +30,7 @@ export default function ProfilePage() {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const [profileImage, setProfileImage] = useState<string | null>(null);
+  const [membershipData, setMembershipData] = useState<any>(null);
 
   useEffect(() => {
     if (user) {
@@ -43,8 +45,25 @@ export default function ProfilePage() {
         setProfileImage(savedImage);
       }
       fetchBookings();
+      fetchMembershipStatus();
     }
   }, [user]);
+
+  const fetchMembershipStatus = async () => {
+    try {
+      const response = await fetch("/api/v1/membership/status", {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`
+        }
+      });
+      const data = await response.json();
+      if (data.status === 'success') {
+        setMembershipData(data.data.membership);
+      }
+    } catch (err) {
+      console.error("Failed to fetch membership status:", err);
+    }
+  };
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -158,6 +177,37 @@ export default function ProfilePage() {
                   />
                 </label>
               </div>
+            </div>
+
+            {/* Membership Status Section */}
+            <div className="mb-6 border-t border-border pt-4">
+              <h3 className="mb-3 text-lg font-semibold">Membership Status</h3>
+              {membershipData ? (
+                <div className="space-y-2">
+                  <div className="flex items-center gap-2">
+                    <Tag className="h-5 w-5 text-primary" />
+                    <span className="font-medium">Type: {membershipData.type.charAt(0).toUpperCase() + membershipData.type.slice(1)}</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Calendar className="h-5 w-5 text-primary" />
+                    <span className="font-medium">Valid until: {new Date(membershipData.endDate).toLocaleDateString()}</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <CheckCircle className="h-5 w-5 text-green-500" />
+                    <span className="font-medium text-green-600">Active</span>
+                  </div>
+                </div>
+              ) : (
+                <div className="flex flex-col items-start gap-3">
+                  <span className="text-foreground/70">No active membership</span>
+                  <Link href="/membership">
+                    <button className="inline-flex items-center gap-2 rounded-full bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary-hover">
+                      Join Now
+                      <ArrowRight size={16} />
+                    </button>
+                  </Link>
+                </div>
+              )}
             </div>
 
             {error && (

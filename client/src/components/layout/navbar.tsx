@@ -91,7 +91,7 @@ export function Navbar() {
         </Link>
 
         {/* Desktop Nav */}
-        <nav className="hidden md:flex items-center space-x-1" data-unique-id="66e45dcc-1311-4836-91f9-6fe3ecff62bf" data-file-name="components/layout/navbar.tsx">
+        <nav className="hidden items-center space-x-4 md:flex">
           <AnimatePresence>
             {navItems.map(item => <motion.div key={item.name} initial={{
               opacity: 0
@@ -101,14 +101,14 @@ export function Navbar() {
               opacity: 0
             }} transition={{
               duration: 0.3
-            }} data-unique-id="5831e638-a498-420f-9d1d-a7440d72957a" data-file-name="components/layout/navbar.tsx">
-              <Link href={item.href} className={`relative px-3 py-2 text-sm font-medium transition-colors hover:text-primary ${pathname === item.href ? "text-primary" : "text-foreground/90"}`} data-unique-id="cf126594-690c-415b-83c3-477c9cfa8543" data-file-name="components/layout/navbar.tsx" data-dynamic-text="true">
+            }}>
+              <Link href={item.href} className={`relative px-3 py-2 text-sm font-medium transition-colors hover:text-primary ${pathname === item.href ? "text-primary" : "text-foreground/90"}`}>
                 {item.name}
                 {pathname === item.href && <motion.span className="absolute inset-x-1 -bottom-px h-0.5 bg-primary" layoutId="navbar-active-indicator" transition={{
                   type: "spring",
                   stiffness: 350,
                   damping: 30
-                }} data-unique-id="5c29542b-4df3-4c34-a6f4-81f432eaf512" data-file-name="components/layout/navbar.tsx" />}
+                }} />}
               </Link>
             </motion.div>)}
           </AnimatePresence>
@@ -122,14 +122,29 @@ export function Navbar() {
           </button>
 
           {user ? (
-            <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              onClick={handleLogout}
-              className="ml-4 rounded-full bg-red-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-red-700"
-            >
-              Logout
-            </motion.button>
+            <>
+              <Link href="/profile">
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  className="flex items-center gap-2 rounded-full bg-secondary px-4 py-2 text-sm font-medium transition-colors hover:bg-secondary/80"
+                >
+                  <User size={18} />
+
+                </motion.button>
+              </Link>
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={handleLogout}
+                className="rounded-full bg-red-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-red-700"
+              >
+                <span className="flex items-center gap-2">
+                  <LogOut size={18} />
+                  Logout
+                </span>
+              </motion.button>
+            </>
           ) : (
             <div className="ml-4 flex items-center gap-2">
               <Link href="/login">
@@ -153,14 +168,14 @@ export function Navbar() {
             </div>
           )}
 
-          <Link href="/book" data-unique-id="6312a20c-57f7-4118-bbc2-14d29765ce04" data-file-name="components/layout/navbar.tsx">
-            <motion.button whileHover={{
-              scale: 1.05
-            }} whileTap={{
-              scale: 0.95
-            }} className="ml-4 rounded-full bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary-hover" data-unique-id="5fbc1edd-dbaf-4c02-8599-b9c92f6b6bc0" data-file-name="components/layout/navbar.tsx"><span className="editable-text" data-unique-id="b3fcffe0-be33-4ec3-8dd7-78fc3aa2f9cb" data-file-name="components/layout/navbar.tsx">
-                Book a Court
-              </span></motion.button>
+          <Link href="/book">
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className="ml-4 rounded-full bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary-hover"
+            >
+              Book a Court
+            </motion.button>
           </Link>
         </nav>
 
@@ -194,7 +209,7 @@ export function Navbar() {
           {navItems.map(item => <Link key={item.name} href={item.href} className={`block py-3 text-base font-medium transition-colors hover:text-primary ${pathname === item.href ? "text-primary" : "text-foreground/90"}`} data-unique-id="f2c5345e-df8a-4fdb-8248-5c81cb6461cd" data-file-name="components/layout/navbar.tsx" data-dynamic-text="true">
             {item.name}
           </Link>)}
-          
+
           {user ? (
             <>
               <Link
