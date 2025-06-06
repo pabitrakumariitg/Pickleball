@@ -4,8 +4,7 @@ import { Poppins, Inter } from 'next/font/google';
 import { type Metadata } from "next";
 import { ThemeProvider } from 'next-themes';
 import { AuthProvider } from "@/lib/auth";
-import { Navbar } from "@/components/layout/navbar";
-import { Footer } from "@/components/layout/footer";
+import { RootLayoutWrapper } from "@/components/layout/root-layout-wrapper";
 
 export const viewport = {
   width: "device-width",
@@ -76,17 +75,17 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  return <html suppressHydrationWarning lang="en" className={`${poppins.variable} ${inter.variable}`} data-unique-id="9acd336b-e224-4731-bd48-86d62db54c18" data-file-name="app/layout.tsx">
-    <body className="bg-background text-foreground antialiased min-h-screen flex flex-col" data-unique-id="d35276d9-8eb1-4a07-a0d6-5901df38ad32" data-file-name="app/layout.tsx">
-      <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
-        <AuthProvider>
-          <Navbar />
-          <main className="flex-grow" data-unique-id="eb3f05f2-8739-4342-bbd5-66ab763345a3" data-file-name="app/layout.tsx" data-dynamic-text="true">
-            {children}
-          </main>
-          <Footer />
-        </AuthProvider>
-      </ThemeProvider>
-    </body>
-  </html>;
+  return (
+    <html suppressHydrationWarning lang="en" className={`${poppins.variable} ${inter.variable}`}>
+      <body className="bg-background text-foreground antialiased min-h-screen flex flex-col">
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
+          <AuthProvider>
+            <RootLayoutWrapper>
+              {children}
+            </RootLayoutWrapper>
+          </AuthProvider>
+        </ThemeProvider>
+      </body>
+    </html>
+  );
 }
