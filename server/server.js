@@ -59,8 +59,13 @@ app.use(limiter);
 // Prevent http param pollution
 app.use(hpp());
 
-// Enable CORS
-app.use(cors());
+app.use(cors({
+  origin: [
+    'http://localhost:3000',
+    'https://pickleball-alpha.vercel.app'
+  ],
+  credentials: true
+}));
 
 // Mount routers
 app.use('/api/v1/auth', authRoutes);
