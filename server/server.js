@@ -82,11 +82,14 @@ const corsOptions = {
     if (allowedOrigins.includes(origin)) return callback(null, true);
     return callback(new Error('Not allowed by CORS'), false);
   },
-  credentials: true
+  credentials: true,
+  methods: ['GET','HEAD','PUT','PATCH','POST','DELETE','OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With']
 };
-app.use(cors(corsOptions));
-// Preflight support
-app.options('*', cors(corsOptions));
+// Apply CORS to all API routes
+app.use('/api', cors(corsOptions));
+// Preflight for API routes
+app.options('/api/*', cors(corsOptions));
 
 app.use('/api/v1/auth', authRoutes);
 app.use('/api/v1/admin', adminRoutes);
