@@ -1,8 +1,11 @@
 'use client';
 
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
+
+// Base API URL from env
+const API_URL = process.env.NEXT_PUBLIC_API_URL || '';
 
 export default function AdminLogin() {
   const [username, setUsername] = useState('');
@@ -16,12 +19,12 @@ export default function AdminLogin() {
 
     try {
       // TODO: Implement actual authentication logic here
-      const response = await fetch('/api/admin/login', {
+      const response = await fetch(`${API_URL}/api/v1/auth/login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ username, password }),
+        body: JSON.stringify({ email: username, password }),
       });
 
       if (response.ok) {
