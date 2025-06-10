@@ -52,16 +52,10 @@ if (process.env.NODE_ENV === 'development') {
 // Sanitize data
 app.use(mongoSanitize());
 
-// CORS setup: reflect origin and support credentials
-const corsOptions = {
-  origin: true,
-  credentials: true,
-  methods: ['GET','HEAD','PUT','PATCH','POST','DELETE','OPTIONS'],
-  allowedHeaders: ['Content-Type','Authorization','X-Requested-With']
-};
-// Apply CORS and handle preflight for all routes
-app.use(cors(corsOptions));
-app.options('*', cors(corsOptions));
+// CORS setup: reflect origin and support credentials for all routes
+app.use(cors({ origin: true, credentials: true }));
+// Preflight support
+app.options('*', cors({ origin: true, credentials: true }));
 
 // Relaxed COOP for auth routes to allow Google OAuth popups
 app.use('/api/v1/auth', helmet({
