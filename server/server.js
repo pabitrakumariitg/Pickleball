@@ -36,6 +36,44 @@ app.use(express.json());
 // Cookie parser
 app.use(cookieParser());
 
+// CORS setup - MUST BE BEFORE ROUTES
+const allowedOrigins = [
+  process.env.FRONTEND_URL, 
+  'https://pickleball-alpha.vercel.app',
+  'http://localhost:3000', // Add for local development
+  'http://localhost:3001'  // Add for local development
+];
+
+const corsOptions = {
+  origin: (origin, callback) => {
+    // Allow requests with no origin (mobile apps, curl, etc.)
+    if (!origin) return callback(null, true);
+    
+    if (allowedOrigins.includes(origin)) {
+      return callback(null, true);
+    }
+    
+    console.log('CORS blocked origin:', origin);
+    return callback(new Error('Not allowed by CORS'), false);
+  },
+  credentials: true,
+  methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE', 'OPTIONS'],
+  allowedHeaders: [
+    'Content-Type', 
+    'Authorization', 
+    'X-Requested-With',
+    'Accept',
+    'Origin'
+  ],
+  optionsSuccessStatus: 200 // For legacy browser support
+};
+
+// Apply CORS globally - BEFORE all other middleware and routes
+app.use(cors(corsOptions));
+
+// Handle preflight requests for all routes
+app.options('*', cors(corsOptions));
+
 // File upload middleware
 app.use(fileUpload({
   useTempFiles: true,
@@ -52,18 +90,20 @@ if (process.env.NODE_ENV === 'development') {
 // Sanitize data
 app.use(mongoSanitize());
 
-// CORS setup: reflect origin and support credentials for all routes
-app.use(cors({ origin: true, credentials: true }));
-// Preflight support
-app.options('*', cors({ origin: true, credentials: true }));
-
-// Relaxed COOP for auth routes to allow Google OAuth popups
+// Set security headers
+// Use relaxed COOP for auth routes to allow Google OAuth popups
 app.use('/api/v1/auth', helmet({
   crossOriginOpenerPolicy: { policy: 'same-origin-allow-popups' },
   crossOriginEmbedderPolicy: false
 }));
-// Default helmet for other routes
-app.use(helmet());
+// Default helmet for other routes (except auth)
+app.use((req, res, next) => {
+  if (!req.path.startsWith('/api/v1/auth')) {
+    helmet()(req, res, next);
+  } else {
+    next();
+  }
+});
 
 // Prevent XSS attacks
 app.use(xss());
@@ -71,13 +111,24 @@ app.use(xss());
 // Rate limiting
 const limiter = rateLimit({
   windowMs: 10 * 60 * 1000, // 10 minutes
-  max: 100
+  max: 100,
+  message: 'Too many requests from this IP, please try again later.'
 });
 app.use(limiter);
 
 // Prevent http param pollution
 app.use(hpp());
 
+// Health check route
+app.get('/health', (req, res) => {
+  res.status(200).json({ 
+    status: 'OK', 
+    timestamp: new Date().toISOString(),
+    env: process.env.NODE_ENV 
+  });
+});
+
+// Mount API routes
 app.use('/api/v1/auth', authRoutes);
 app.use('/api/v1/admin', adminRoutes);
 app.use('/api/v1/courts', courtRoutes);
@@ -86,7 +137,15 @@ app.use('/api/v1/events', eventRoutes);
 app.use('/api/v1/memberships', membershipRoutes);
 app.use('/api/v1/businesses', businessRoutes);
 
-// Error handler
+// Catch all handler for undefined routes
+app.all('*', (req, res) => {
+  res.status(404).json({
+    success: false,
+    message: `Route ${req.originalUrl} not found`
+  });
+});
+
+// Error handler (must be last)
 app.use(errorHandler);
 
 const PORT = process.env.PORT || 5000;
@@ -103,4 +162,10 @@ process.on('unhandledRejection', (err, promise) => {
   console.log(`Error: ${err.message}`.red);
   // Close server & exit process
   server.close(() => process.exit(1));
+});
+
+// Handle uncaught exceptions
+process.on('uncaughtException', (err) => {
+  console.log(`Error: ${err.message}`.red);
+  process.exit(1);
 });
