@@ -52,8 +52,18 @@ if (process.env.NODE_ENV === 'development') {
 // Sanitize data
 app.use(mongoSanitize());
 
-// Set security headers
-// Use relaxed COOP for auth routes to allow Google OAuth popups
+// CORS setup: reflect origin and support credentials
+const corsOptions = {
+  origin: true,
+  credentials: true,
+  methods: ['GET','HEAD','PUT','PATCH','POST','DELETE','OPTIONS'],
+  allowedHeaders: ['Content-Type','Authorization','X-Requested-With']
+};
+// Apply CORS and handle preflight for all routes
+app.use(cors(corsOptions));
+app.options('*', cors(corsOptions));
+
+// Relaxed COOP for auth routes to allow Google OAuth popups
 app.use('/api/v1/auth', helmet({
   crossOriginOpenerPolicy: { policy: 'same-origin-allow-popups' },
   crossOriginEmbedderPolicy: false
@@ -73,18 +83,6 @@ app.use(limiter);
 
 // Prevent http param pollution
 app.use(hpp());
-
-// CORS setup: reflect origin and support credentials
-const corsOptions = {
-  origin: true,
-  credentials: true,
-  methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With']
-};
-// Apply CORS to all routes
-app.use(cors(corsOptions));
-// Preflight support
-app.options('*', cors(corsOptions));
 
 app.use('/api/v1/auth', authRoutes);
 app.use('/api/v1/admin', adminRoutes);
