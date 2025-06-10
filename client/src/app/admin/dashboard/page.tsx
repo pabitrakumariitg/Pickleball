@@ -1,4 +1,7 @@
+// Client-side guard for admin dashboard
 'use client';
+import React, { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 
 import { 
   Users, 
@@ -26,6 +29,12 @@ const recentBookings = [
 ];
 
 export default function DashboardPage() {
+  const router = useRouter();
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (!token) router.replace('/admin/login');
+  }, [router]);
+
   return (
     <div className="space-y-8">
       <div>
