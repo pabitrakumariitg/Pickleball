@@ -10,6 +10,7 @@ interface User {
   email: string;
   role: string;
   phone?: string;
+  profilePicture?: string;
 }
 
 interface AuthContextType {
@@ -17,6 +18,7 @@ interface AuthContextType {
   loading: boolean;
   error: string | null;
   login: (email: string, password: string) => Promise<void>;
+  loginWithGoogle: (token: string) => Promise<void>;
   register: (name: string, email: string, password: string) => Promise<void>;
   logout: () => Promise<void>;
   forgotPassword: (email: string) => Promise<void>;
@@ -65,6 +67,22 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setUser(userResponse.data.data);
     } catch (err: any) {
       setError(err.response?.data?.error || 'Login failed');
+      throw err;
+    }
+  };
+
+  const loginWithGoogle = async (token: string) => {
+    try {
+      setError(null);
+      const response = await axios.post('/api/v1/auth/google', { token });
+      const { token: authToken } = response.data;
+      localStorage.setItem('token', authToken);
+      
+      // Fetch user data after successful login
+      const userResponse = await axios.get('/api/v1/auth/me');
+      setUser(userResponse.data.data);
+    } catch (err: any) {
+      setError(err.response?.data?.error || 'Google login failed');
       throw err;
     }
   };
@@ -151,6 +169,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         loading,
         error,
         login,
+        loginWithGoogle,
         register,
         logout,
         forgotPassword,

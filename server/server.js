@@ -9,11 +9,12 @@ const helmet = require('helmet');
 const xss = require('xss-clean');
 const rateLimit = require('express-rate-limit');
 const hpp = require('hpp');
+const fileUpload = require('express-fileupload');
 const connectDB = require('./config/db');
 const errorHandler = require('./middleware/error');
 
 // Load env vars
-dotenv.config({ path: './config/config.env' });
+dotenv.config();
 
 // Connect to database
 connectDB();
@@ -34,6 +35,14 @@ app.use(express.json());
 
 // Cookie parser
 app.use(cookieParser());
+
+// File upload middleware
+app.use(fileUpload({
+  useTempFiles: true,
+  tempFileDir: '/tmp/',
+  limits: { fileSize: 50 * 1024 * 1024 }, // 50MB max file size
+  abortOnLimit: true
+}));
 
 // Dev logging middleware
 if (process.env.NODE_ENV === 'development') {
@@ -61,6 +70,7 @@ app.use(hpp());
 
 app.use(cors({
   origin: [
+    '*',
     'http://localhost:3000',
     'https://pickleball-alpha.vercel.app'
   ],

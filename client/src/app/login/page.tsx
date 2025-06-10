@@ -1,10 +1,25 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useAuth } from "@/lib/auth";
 import { motion } from "framer-motion";
+import { FcGoogle } from "react-icons/fc";
+
+declare global {
+  interface Window {
+    google: {
+      accounts: {
+        id: {
+          initialize: (config: any) => void;
+          renderButton: (element: HTMLElement, config: any) => void;
+          prompt: () => void;
+        };
+      };
+    };
+  }
+}
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
@@ -12,19 +27,57 @@ export default function LoginPage() {
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
-  const { login } = useAuth();
+  const { login, loginWithGoogle } = useAuth();
+
+  // Initialize Google Sign-In
+  useEffect(() => {
+    const initializeGoogleSignIn = () => {
+      window.google.accounts.id.initialize({
+        client_id: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID,
+        callback: handleGoogleSignIn
+      });
+
+      window.google.accounts.id.renderButton(
+        document.getElementById("googleSignIn")!,
+        { theme: "outline", size: "large", width: "100%" }
+      );
+    };
+
+    // Load Google Sign-In script
+    const script = document.createElement("script");
+    script.src = "https://accounts.google.com/gsi/client";
+    script.async = true;
+    script.defer = true;
+    script.onload = initializeGoogleSignIn;
+    document.head.appendChild(script);
+
+    return () => {
+      document.head.removeChild(script);
+    };
+  }, []);
+
+  const handleGoogleSignIn = async (response: any) => {
+    try {
+      setError("");
+      setIsLoading(true);
+      await loginWithGoogle(response.credential);
+      router.push("/");
+    } catch (err: any) {
+      setError(err.response?.data?.error || "Google login failed");
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError(""); // Clear any previous errors
+    setError("");
     setIsLoading(true);
     
     try {
       await login(email, password);
-      // Only redirect on successful login
       router.push("/");
     } catch (err: any) {
-      // Handle different types of errors
       if (err.response?.data?.error) {
         setError(err.response.data.error);
       } else if (err.response?.status === 401) {
@@ -34,122 +87,99 @@ export default function LoginPage() {
       } else {
         setError("An error occurred during login. Please try again.");
       }
-      // Don't redirect on error
     } finally {
       setIsLoading(false);
     }
   };
 
   return (
-    <div className="container mx-auto flex min-h-screen items-center justify-center px-4 py-16">
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="w-full max-w-md space-y-8 rounded-lg bg-background p-8 shadow-lg"
-      >
-        <div className="text-center">
-          <h2 className="text-3xl font-bold">Welcome back</h2>
-          <p className="mt-2 text-sm text-foreground/60">
-            Don't have an account?{" "}
-            <Link href="/register" className="text-primary hover:underline">
-              Register
-            </Link>
-          </p>
+    <div className="min-h-screen flex items-center justify-center bg-background">
+      <div className="w-full max-w-md p-8 space-y-8 bg-card rounded-lg shadow-lg">
+        <div className="flex flex-col items-center space-y-4">
+          <h2 className="text-2xl font-bold text-foreground">Login</h2>
         </div>
 
-        <form onSubmit={handleSubmit} className="mt-8 space-y-6">
-          {error && (
-            <motion.div
-              initial={{ opacity: 0, y: -10 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="rounded-md bg-red-50 p-4 text-sm text-red-600"
-            >
-              {error}
-            </motion.div>
-          )}
+        {error && (
+          <div className="bg-destructive/15 text-destructive p-3 rounded-md text-sm">
+            {error}
+          </div>
+        )}
 
+        <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
           <div className="space-y-4">
             <div>
-              <label
-                htmlFor="email"
-                className="block text-sm font-medium text-foreground"
-              >
-                Email address
+              <label htmlFor="email" className="block text-sm font-medium text-foreground">
+                Email
               </label>
               <input
                 id="email"
                 name="email"
                 type="email"
-                autoComplete="email"
                 required
+                className="mt-1 block w-full px-3 py-2 bg-background border border-input rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary"
+                placeholder="Enter your email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="mt-1 block w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary"
-                placeholder="Enter your email"
-                disabled={isLoading}
               />
             </div>
 
             <div>
-              <div className="flex items-center justify-between">
-                <label
-                  htmlFor="password"
-                  className="block text-sm font-medium text-foreground"
-                >
-                  Password
-                </label>
-                <Link
-                  href="/forgot-password"
-                  className="text-sm text-primary hover:underline"
-                >
-                  Forgot password?
-                </Link>
-              </div>
+              <label htmlFor="password" className="block text-sm font-medium text-foreground">
+                Password
+              </label>
               <input
                 id="password"
                 name="password"
                 type="password"
-                autoComplete="current-password"
                 required
+                className="mt-1 block w-full px-3 py-2 bg-background border border-input rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary"
+                placeholder="Enter your password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="mt-1 block w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary"
-                placeholder="Enter your password"
-                disabled={isLoading}
               />
             </div>
           </div>
 
           <div className="flex items-center justify-between">
-            <div className="flex items-center">
-              <input
-                id="remember-me"
-                name="remember-me"
-                type="checkbox"
-                className="h-4 w-4 rounded border-input bg-background text-primary focus:ring-primary"
-              />
-              <label
-                htmlFor="remember-me"
-                className="ml-2 block text-sm text-foreground/60"
+            <div className="text-sm">
+              <Link
+                href="/forgot-password"
+                className="font-medium text-primary hover:text-primary/80"
               >
-                Remember me
-              </label>
+                Forgot your password?
+              </Link>
             </div>
           </div>
 
           <div>
-            <motion.button
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
+            <button
               type="submit"
               disabled={isLoading}
-              className="w-full rounded-full bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary-hover disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-primary hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {isLoading ? "Signing in..." : "Sign in"}
-            </motion.button>
+            </button>
           </div>
+
+          <div className="relative">
+            <div className="absolute inset-0 flex items-center">
+              <div className="w-full border-t border-border"></div>
+            </div>
+            <div className="relative flex justify-center text-sm">
+              <span className="px-2 bg-card text-muted-foreground">Or continue with</span>
+            </div>
+          </div>
+
+          <div id="googleSignIn" className="w-full"></div>
         </form>
-      </motion.div>
+
+        <div className="text-center text-sm">
+          <span className="text-muted-foreground">Don't have an account? </span>
+          <Link href="/register" className="font-medium text-primary hover:text-primary/80">
+            Sign up
+          </Link>
+        </div>
+      </div>
     </div>
   );
 } 

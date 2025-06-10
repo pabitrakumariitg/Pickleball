@@ -3,6 +3,10 @@ const ErrorResponse = require('../utils/errorResponse');
 const asyncHandler = require('../middleware/async');
 const crypto = require('crypto');
 const sendEmail = require('../utils/sendEmail');
+const { OAuth2Client } = require('google-auth-library');
+const config = require('../config/config');
+
+const client = new OAuth2Client(config.google.clientId);
 
 // @desc    Register user
 // @route   POST /api/v1/auth/register
@@ -35,9 +39,9 @@ exports.login = asyncHandler(async (req, res, next) => {
   // Check for user
   const user = await User.findOne({ email }).select('+password');
 
-  if (!user) {
-    return next(new ErrorResponse('Invalid credentials', 401));
-  }
+  // if (!user) {
+  //   return next(new ErrorResponse('Invalid credentials', 401));
+  // }
 
   // Check if password matches
   const isMatch = await user.matchPassword(password);
@@ -181,6 +185,47 @@ exports.resetPassword = asyncHandler(async (req, res, next) => {
   await user.save();
 
   sendTokenResponse(user, 200, res);
+});
+
+// @desc    Google OAuth login
+// @route   POST /api/v1/auth/google
+// @access  Public
+exports.googleLogin = asyncHandler(async (req, res, next) => {
+  const { token } = req.body;
+
+  try {
+    // Verify Google token
+    const ticket = await client.verifyIdToken({
+      idToken: token,
+      audience: config.google.clientId
+    });
+
+    const payload = ticket.getPayload();
+    const { email, name, picture, sub: googleId } = payload;
+
+    // Check if user exists
+    let user = await User.findOne({ email });
+
+    if (!user) {
+      // Create new user if doesn't exist
+      user = await User.create({
+        name,
+        email,
+        googleId,
+        profilePicture: picture,
+        password: crypto.randomBytes(16).toString('hex') // Random password for Google users
+      });
+    } else if (!user.googleId) {
+      // Link Google account to existing user
+      user.googleId = googleId;
+      user.profilePicture = picture;
+      await user.save();
+    }
+
+    sendTokenResponse(user, 200, res);
+  } catch (err) {
+    return next(new ErrorResponse('Invalid Google token', 401));
+  }
 });
 
 // Get token from model, create cookie and send response

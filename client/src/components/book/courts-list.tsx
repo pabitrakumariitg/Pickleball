@@ -5,7 +5,10 @@ import { MapPin, Clock, Users, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Court } from "@/types";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
+
 export function CourtsList() {
+  const router = useRouter();
   const [selectedCity, setSelectedCity] = useState<string>("all");
   const courts: Court[] = [{
     id: "1",
@@ -64,6 +67,11 @@ export function CourtsList() {
       }
     }
   };
+
+  const handleBookCourt = (courtId: string) => {
+    router.push(`/book/${courtId}`);
+  };
+
   return <section id="courts" className="py-20 bg-secondary" data-unique-id="5e30db63-bdd3-4cc3-9bbf-2827c4a7ff24" data-file-name="components/book/courts-list.tsx">
     <div className="container mx-auto px-6" data-unique-id="6fd83dd1-e9a7-41a1-b19e-b52cac3cd876" data-file-name="components/book/courts-list.tsx" data-dynamic-text="true">
       <motion.div initial={{
@@ -141,7 +149,7 @@ export function CourtsList() {
                 </div>
               </div>
 
-              <Button variant="primary" className="w-full" motion data-unique-id="6ff00be3-4750-41da-8702-eeb948148b63" data-file-name="components/book/courts-list.tsx">
+              <Button variant="primary" className="w-full" onClick={() => handleBookCourt(court.id)} data-unique-id="6ff00be3-4750-41da-8702-eeb948148b63" data-file-name="components/book/courts-list.tsx">
                 <span className="editable-text" data-unique-id="f4a6f11f-354f-42ce-912e-4136412f2fb1" data-file-name="components/book/courts-list.tsx">Book This Court</span>
               </Button>
             </div>

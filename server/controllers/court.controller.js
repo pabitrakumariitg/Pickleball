@@ -5,6 +5,7 @@ const { logger } = require('../utils/logger');
 const Booking = require('../models/booking.model');
 const ErrorResponse = require('../utils/errorResponse');
 const asyncHandler = require('../middleware/async');
+const TemporarySelection = require('../models/temporarySelection.model');
 
 // Create new court
 exports.createCourt = async (req, res, next) => {
@@ -376,7 +377,7 @@ exports.getCourtBookings = asyncHandler(async (req, res, next) => {
   });
 });
 
-// @desc    Get court availability
+// @desc    Get court availability with real-time status
 // @route   GET /api/v1/courts/:id/availability
 // @access  Public
 exports.getCourtAvailability = asyncHandler(async (req, res, next) => {
@@ -390,18 +391,25 @@ exports.getCourtAvailability = asyncHandler(async (req, res, next) => {
   const endDate = new Date(date);
   endDate.setHours(23, 59, 59, 999);
 
-  const bookings = await Booking.find({
-    court: req.params.id,
-    startTime: { $gte: startDate, $lte: endDate }
-  });
-
   // Get court details
   const court = await Court.findById(req.params.id);
   if (!court) {
     return next(new ErrorResponse(`Court not found with id of ${req.params.id}`, 404));
   }
 
-  // Generate time slots
+  // Get all bookings for the date
+  const bookings = await Booking.find({
+    court: req.params.id,
+    startTime: { $gte: startDate, $lte: endDate }
+  });
+
+  // Get all temporary selections (slots being selected by other users)
+  const temporarySelections = await TemporarySelection.find({
+    court: req.params.id,
+    startTime: { $gte: startDate, $lte: endDate }
+  });
+
+  // Generate time slots with status
   const timeSlots = [];
   const startHour = court.openingTime.getHours();
   const endHour = court.closingTime.getHours();
@@ -417,15 +425,101 @@ exports.getCourtAvailability = asyncHandler(async (req, res, next) => {
         return slotTime >= bookingStart && slotTime < bookingEnd;
       });
 
+      const isBeingSelected = temporarySelections.some(selection => {
+        const selectionStart = new Date(selection.startTime);
+        const selectionEnd = new Date(selection.endTime);
+        return slotTime >= selectionStart && slotTime < selectionEnd;
+      });
+
+      const selectedBy = isBeingSelected 
+        ? temporarySelections.find(selection => {
+            const selectionStart = new Date(selection.startTime);
+            const selectionEnd = new Date(selection.endTime);
+            return slotTime >= selectionStart && slotTime < selectionEnd;
+          })?.user
+        : undefined;
+
       timeSlots.push({
-        time: slotTime,
-        available: !isBooked
+        id: `${req.params.id}-${slotTime.toISOString()}`,
+        time: slotTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+        status: isBooked ? 'booked' : isBeingSelected ? 'being-selected' : 'available',
+        selectedBy
       });
     }
   }
 
   res.status(200).json({
     success: true,
-    data: timeSlots
+    data: {
+      slots: timeSlots
+    }
+  });
+});
+
+// @desc    Temporarily select a time slot
+// @route   POST /api/v1/courts/:id/select-slot
+// @access  Private
+exports.selectTimeSlot = asyncHandler(async (req, res, next) => {
+  const { startTime, endTime } = req.body;
+  const courtId = req.params.id;
+
+  // Check if court exists
+  const court = await Court.findById(courtId);
+  if (!court) {
+    return next(new ErrorResponse(`Court not found with id of ${courtId}`, 404));
+  }
+
+  // Check if slot is available
+  const isAvailable = await court.isAvailable(startTime, endTime);
+  if (!isAvailable) {
+    return next(new ErrorResponse('This time slot is not available', 400));
+  }
+
+  // Create temporary selection
+  const temporarySelection = await TemporarySelection.create({
+    court: courtId,
+    user: req.user.id,
+    startTime,
+    endTime,
+    expiresAt: new Date(Date.now() + 15 * 60 * 1000) // 15 minutes expiry
+  });
+
+  // Notify other users through WebSocket
+  req.app.get('io').to(`court-${courtId}`).emit('slotUpdate', {
+    slotId: `${courtId}-${new Date(startTime).toISOString()}`,
+    status: 'being-selected',
+    selectedBy: req.user.name
+  });
+
+  res.status(200).json({
+    success: true,
+    data: temporarySelection
+  });
+});
+
+// @desc    Release a time slot
+// @route   DELETE /api/v1/courts/:id/release-slot
+// @access  Private
+exports.releaseTimeSlot = asyncHandler(async (req, res, next) => {
+  const { startTime, endTime } = req.body;
+  const courtId = req.params.id;
+
+  // Remove temporary selection
+  await TemporarySelection.findOneAndDelete({
+    court: courtId,
+    user: req.user.id,
+    startTime,
+    endTime
+  });
+
+  // Notify other users through WebSocket
+  req.app.get('io').to(`court-${courtId}`).emit('slotUpdate', {
+    slotId: `${courtId}-${new Date(startTime).toISOString()}`,
+    status: 'available'
+  });
+
+  res.status(200).json({
+    success: true,
+    data: {}
   });
 }); 

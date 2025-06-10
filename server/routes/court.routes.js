@@ -8,7 +8,9 @@ const {
   updateCourt,
   deleteCourt,
   getCourtBookings,
-  getCourtAvailability
+  getCourtAvailability,
+  selectTimeSlot,
+  releaseTimeSlot
 } = require('../controllers/court.controller');
 
 router
@@ -24,5 +26,7 @@ router
 
 router.get('/:id/bookings', protect, getCourtBookings);
 router.get('/:id/availability', getCourtAvailability);
+router.post('/:id/select-slot', protect, selectTimeSlot);
+router.delete('/:id/release-slot', protect, releaseTimeSlot);
 
 module.exports = router; 
