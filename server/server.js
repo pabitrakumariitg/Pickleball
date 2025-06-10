@@ -76,14 +76,17 @@ app.use(hpp());
 
 // CORS setup
 const allowedOrigins = [process.env.FRONTEND_URL, 'https://pickleball-alpha.vercel.app'];
-app.use(cors({
+const corsOptions = {
   origin: (origin, callback) => {
     if (!origin) return callback(null, true);
     if (allowedOrigins.includes(origin)) return callback(null, true);
     return callback(new Error('Not allowed by CORS'), false);
   },
   credentials: true
-}));
+};
+app.use(cors(corsOptions));
+// Preflight support
+app.options('*', cors(corsOptions));
 
 app.use('/api/v1/auth', authRoutes);
 app.use('/api/v1/admin', adminRoutes);
