@@ -24,8 +24,8 @@ const PrivateRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => 
 const App: React.FC = () => {
   return (
     <ThemeProvider theme={theme}>
-      <CssBaseline />
       <AuthProvider>
+        <CssBaseline />
         <Router>
           <Routes>
             {/* Public Routes */}
