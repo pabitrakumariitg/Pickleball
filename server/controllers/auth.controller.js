@@ -187,6 +187,18 @@ exports.resetPassword = asyncHandler(async (req, res, next) => {
   sendTokenResponse(user, 200, res);
 });
 
+// @desc    Google OAuth callback (for redirect flow)
+// @route   GET /api/v1/auth/google/callback
+// @access  Public
+exports.googleCallback = asyncHandler(async (req, res, next) => {
+  // This is a placeholder for future support of OAuth redirect flow
+  // Typically you would exchange req.query.code for tokens here
+  return res.status(501).json({
+    success: false,
+    message: 'Google OAuth redirect/callback not implemented yet. Use POST /api/v1/auth/google with ID token.'
+  });
+});
+
 // @desc    Google OAuth login
 // @route   POST /api/v1/auth/google
 // @access  Public

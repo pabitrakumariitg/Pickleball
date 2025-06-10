@@ -53,6 +53,12 @@ if (process.env.NODE_ENV === 'development') {
 app.use(mongoSanitize());
 
 // Set security headers
+// Use relaxed COOP for auth routes to allow Google OAuth popups
+app.use('/api/v1/auth', helmet({
+  crossOriginOpenerPolicy: { policy: 'same-origin-allow-popups' },
+  crossOriginEmbedderPolicy: false
+}));
+// Default helmet for other routes
 app.use(helmet());
 
 // Prevent XSS attacks

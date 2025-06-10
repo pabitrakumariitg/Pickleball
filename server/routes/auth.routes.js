@@ -8,7 +8,8 @@ const {
   resetPassword,
   updateDetails,
   updatePassword,
-  googleLogin
+  googleLogin,
+  googleCallback
 } = require('../controllers/auth.controller');
 
 const router = express.Router();
@@ -19,6 +20,7 @@ const { protect } = require('../middleware/auth');
 router.post('/register', register);
 router.post('/login', login);
 router.post('/google', googleLogin);
+router.get('/google/callback', googleCallback);
 router.get('/logout', logout);
 router.post('/forgotpassword', forgotPassword);
 router.put('/resetpassword/:resettoken', resetPassword);
