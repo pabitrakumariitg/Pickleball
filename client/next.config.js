@@ -47,6 +47,10 @@ const config = {
         source: '/_next/:path*.map',
         destination: '/_next/:path*.map',
       },
+      {
+        source: '/api/v1/:path*',
+        destination: 'http://localhost:5000/api/v1/:path*' // Adjust the port if your backend runs on a different port
+      }
     ];
   },
 };
