@@ -2,26 +2,86 @@
 
 import { useState } from 'react';
 import { Calendar, Search, Filter, Plus } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import { useEffect } from 'react';
+import { getApiUrl } from '@/config';
 
-// Mock data - replace with actual data from your API
-const bookings = [
-  {
-    id: 1,
-    user: 'John Doe',
-    court: 'Court 1',
-    date: '2024-03-20',
-    time: '14:00-15:00',
-    status: 'Confirmed',
-    payment: 'Paid',
-    amount: 50
-  },
-  // Add more mock bookings...
-];
+
+interface User {
+  _id: string;
+  name: string;
+  email: string;
+}
+
+interface CourtType {
+  _id: string;
+  name: string;
+}
+
+interface Booking {
+  _id: string;
+  user: User;
+  court: CourtType;
+  startTime: string;
+  endTime: string;
+  status: string;
+}
+
 
 export default function BookingsPage() {
+
+  const router = useRouter();
   const [showCreateForm, setShowCreateForm] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [dateFilter, setDateFilter] = useState('');
+  const [bookings, setBookings] = useState<Booking[]>([]);    
+
+
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      router.replace('/admin/login');
+      return;
+    }
+  }, [router]);
+  useEffect(() => {
+
+    const fetchBookings = async () => {
+      try {
+        const token = localStorage.getItem('token');
+        if (!token) {
+          router.replace('/admin/login');
+          return;
+        }
+
+        const headers = {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        };
+
+        const response = await fetch(getApiUrl('api/v1/bookings'), { headers });
+        console.log(response)
+
+
+
+        if (!response.ok) {
+          throw new Error('Failed to fetch bookings');
+        }
+        const data = await response.json();
+        console.log(data.data);
+        setBookings(data.data)
+
+
+      } catch (err) {
+        console.error('Error fetching bookings:', err);
+      }
+    };
+
+
+
+    fetchBookings();
+
+  }, [router]);
 
   return (
     <div className="space-y-6">
@@ -65,60 +125,49 @@ export default function BookingsPage() {
 
       {/* Bookings Table */}
       <div className="bg-card rounded-lg shadow">
-        <div className="overflow-x-auto">
-          <table className="w-full">
-            <thead>
-              <tr className="border-b border-border">
-                <th className="text-left py-3 px-4 text-sm font-medium text-muted-foreground">User</th>
-                <th className="text-left py-3 px-4 text-sm font-medium text-muted-foreground">Court</th>
-                <th className="text-left py-3 px-4 text-sm font-medium text-muted-foreground">Date</th>
-                <th className="text-left py-3 px-4 text-sm font-medium text-muted-foreground">Time</th>
-                <th className="text-left py-3 px-4 text-sm font-medium text-muted-foreground">Status</th>
-                <th className="text-left py-3 px-4 text-sm font-medium text-muted-foreground">Payment</th>
-                <th className="text-left py-3 px-4 text-sm font-medium text-muted-foreground">Amount</th>
-                <th className="text-left py-3 px-4 text-sm font-medium text-muted-foreground">Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {bookings.map((booking) => (
-                <tr key={booking.id} className="border-b border-border last:border-0">
-                  <td className="py-3 px-4 text-sm text-foreground">{booking.user}</td>
-                  <td className="py-3 px-4 text-sm text-foreground">{booking.court}</td>
-                  <td className="py-3 px-4 text-sm text-foreground">{booking.date}</td>
-                  <td className="py-3 px-4 text-sm text-foreground">{booking.time}</td>
-                  <td className="py-3 px-4 text-sm">
-                    <span
-                      className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                        booking.status === 'Confirmed'
+        <div className="p-6">
+          <h2 className="text-lg font-semibold text-foreground mb-4">Recent Bookings</h2>
+          <div className="overflow-x-auto">
+            <table className="w-full">
+              <thead>
+                <tr className="border-b border-border">
+                  <th className="text-left py-3 px-4 text-sm font-medium text-muted-foreground">User</th>
+                  <th className="text-left py-3 px-4 text-sm font-medium text-muted-foreground">Court</th>
+                  <th className="text-left py-3 px-4 text-sm font-medium text-muted-foreground">Date</th>
+                  <th className="text-left py-3 px-4 text-sm font-medium text-muted-foreground">Time</th>
+                  <th className="text-left py-3 px-4 text-sm font-medium text-muted-foreground">Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                {bookings.map((booking) => (
+                  <tr key={booking._id} className="border-b border-border last:border-0">
+                    <td className="py-3 px-4 text-sm text-foreground">{booking.user.name}</td>
+                    <td className="py-3 px-4 text-sm text-foreground">{booking.court.name}</td>
+                    <td className="py-3 px-4 text-sm text-foreground">
+                      {new Date(booking.startTime).toLocaleDateString('en-GB', {
+                        day: '2-digit',
+                        month: '2-digit',
+                        year: 'numeric'
+                      })}
+                    </td>
+                    <td className="py-3 px-4 text-sm text-foreground">
+                      {new Date(booking.startTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                    </td>
+                    <td className="py-3 px-4 text-sm">
+                      <span
+                        className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${booking.status === 'Confirmed'
                           ? 'bg-green-100 text-green-800'
                           : 'bg-yellow-100 text-yellow-800'
-                      }`}
-                    >
-                      {booking.status}
-                    </span>
-                  </td>
-                  <td className="py-3 px-4 text-sm">
-                    <span
-                      className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                        booking.payment === 'Paid'
-                          ? 'bg-green-100 text-green-800'
-                          : 'bg-red-100 text-red-800'
-                      }`}
-                    >
-                      {booking.payment}
-                    </span>
-                  </td>
-                  <td className="py-3 px-4 text-sm text-foreground">${booking.amount}</td>
-                  <td className="py-3 px-4 text-sm">
-                    <div className="flex gap-2">
-                      <button className="text-primary hover:text-primary/80">Edit</button>
-                      <button className="text-destructive hover:text-destructive/80">Cancel</button>
-                    </div>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+                          }`}
+                      >
+                        {booking.status}
+                      </span>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
 

@@ -12,6 +12,7 @@ import { Card } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { format } from 'date-fns';
 import { toast } from 'sonner';
+import { getApiUrl } from '@/config';
 
 interface Booking {
   _id: string;
@@ -34,6 +35,14 @@ interface Booking {
   cancellationReason?: string;
 }
 
+interface MembershipData {
+  status: 'active' | 'inactive' | 'expired';
+  type: string;
+  startDate: string;
+  endDate: string;
+  benefits: string[];
+}
+
 export default function ProfilePage() {
   const { user, updateProfile } = useAuth();
   const [isEditing, setIsEditing] = useState(false);
@@ -47,7 +56,7 @@ export default function ProfilePage() {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const [profileImage, setProfileImage] = useState<string | null>(null);
-  const [membershipData, setMembershipData] = useState<any>(null);
+  const [membershipData, setMembershipData] = useState<MembershipData | null>(null);
   const router = useRouter();
   const [activeTab, setActiveTab] = useState('bookings');
 
@@ -70,17 +79,34 @@ export default function ProfilePage() {
 
   const fetchMembershipStatus = async () => {
     try {
-      const response = await fetch("/api/v1/membership/status", {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        router.push('/login');
+        return;
+      }
+
+      const response = await fetch(getApiUrl("api/v1/membership/status"), {
         headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json'
         }
       });
+
+      if (!response.ok) {
+        if (response.status === 401) {
+          router.push('/login');
+          return;
+        }
+        throw new Error("Failed to fetch membership status");
+      }
+
       const data = await response.json();
-      if (data.status === 'success') {
+      if (data.success) {
         setMembershipData(data.data.membership);
       }
     } catch (err) {
       console.error("Failed to fetch membership status:", err);
+      toast.error("Failed to load membership information");
     }
   };
 
@@ -92,6 +118,7 @@ export default function ProfilePage() {
         const base64String = reader.result as string;
         setProfileImage(base64String);
         localStorage.setItem('profileImage', base64String);
+        toast.success("Profile picture updated successfully");
       };
       reader.readAsDataURL(file);
     }
@@ -99,25 +126,34 @@ export default function ProfilePage() {
 
   const fetchBookings = async () => {
     try {
-      const response = await fetch("/api/v1/bookings/user", {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        router.push('/login');
+        return;
+      }
+
+      const response = await fetch(getApiUrl("api/v1/bookings/user"), {
         headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
         }
       });
+
       if (!response.ok) {
         if (response.status === 401) {
-          throw new Error("Unauthorized");
+          router.push('/login');
+          return;
         }
         throw new Error("Failed to fetch bookings");
       }
+
       const data = await response.json();
-      setBookings(data.data);
-    } catch (err: any) {
-      console.error("Error fetching bookings:", err);
-      if (err.message === "Unauthorized") {
-        router.push('/login');
+      if (data.success) {
+        setBookings(data.data);
       }
-      setError("Failed to load bookings");
+    } catch (err) {
+      console.error("Error fetching bookings:", err);
+      toast.error("Failed to load bookings");
     } finally {
       setIsLoading(false);
     }
@@ -130,14 +166,48 @@ export default function ProfilePage() {
     setIsLoading(true);
 
     try {
-      await updateProfile({
-        name: formData.name,
-        email: formData.email
+      const token = localStorage.getItem('token');
+      if (!token) {
+        router.push('/login');
+        return;
+      }
+
+      const response = await fetch(getApiUrl("api/v1/users/profile"), {
+        method: 'PUT',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          name: formData.name,
+          email: formData.email,
+          phone: formData.phone
+        })
       });
-      setSuccess("Profile updated successfully");
-      setIsEditing(false);
-    } catch (err: any) {
-      setError(err.response?.data?.error || "Failed to update profile");
+
+      if (!response.ok) {
+        if (response.status === 401) {
+          router.push('/login');
+          return;
+        }
+        throw new Error("Failed to update profile");
+      }
+
+      const data = await response.json();
+      if (data.success) {
+        toast.success("Profile updated successfully");
+        setIsEditing(false);
+        // Update the user context if needed
+        if (updateProfile) {
+          await updateProfile({
+            name: formData.name,
+            email: formData.email
+          });
+        }
+      }
+    } catch (err) {
+      console.error("Error updating profile:", err);
+      toast.error("Failed to update profile");
     } finally {
       setIsLoading(false);
     }
@@ -294,7 +364,7 @@ export default function ProfilePage() {
                       </span>
                     </div>
                     <div className="text-sm text-gray-600 mt-2">
-                      Valid until: {format(new Date(membershipData.expiryDate), 'MMM d, yyyy')}
+                      Valid until: {format(new Date(membershipData.endDate), 'MMM d, yyyy')}
                     </div>
                   </div>
                 )}
