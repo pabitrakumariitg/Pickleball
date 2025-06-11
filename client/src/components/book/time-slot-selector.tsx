@@ -17,11 +17,12 @@ interface TimeSlot {
 
 interface TimeSlotSelectorProps {
   courtId: string;
+  date: string;
   onSlotSelect: (slot: TimeSlot) => void;
   selectedSlot: TimeSlot | null;
 }
 
-export function TimeSlotSelector({ courtId, onSlotSelect, selectedSlot }: TimeSlotSelectorProps) {
+export function TimeSlotSelector({ courtId, date, onSlotSelect, selectedSlot }: TimeSlotSelectorProps) {
   const [slots, setSlots] = useState<TimeSlot[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -29,7 +30,7 @@ export function TimeSlotSelector({ courtId, onSlotSelect, selectedSlot }: TimeSl
   useEffect(() => {
     const fetchSlots = async () => {
       try {
-        const response = await fetch(`/api/courts/${courtId}/slots`);
+        const response = await fetch(`/api/courts/${courtId}/slots?date=${date}`);
         if (!response.ok) {
           throw new Error('Failed to fetch time slots');
         }
@@ -44,7 +45,7 @@ export function TimeSlotSelector({ courtId, onSlotSelect, selectedSlot }: TimeSl
     };
 
     fetchSlots();
-  }, [courtId]);
+  }, [courtId, date]);
 
   if (loading) {
     return (
@@ -75,11 +76,11 @@ export function TimeSlotSelector({ courtId, onSlotSelect, selectedSlot }: TimeSl
             <Tooltip>
               <TooltipTrigger asChild>
                 <Button
-                  variant={slot.isSelected ? "default" : "outline"}
+                  variant={selectedSlot?.id === slot.id ? "primary" : "outline"}
                   className={`w-full h-12 ${
                     !slot.isAvailable
                       ? "bg-gray-100 text-gray-400 cursor-not-allowed"
-                      : slot.isSelected
+                      : selectedSlot?.id === slot.id
                       ? "bg-primary text-primary-foreground"
                       : "hover:bg-primary/10"
                   }`}

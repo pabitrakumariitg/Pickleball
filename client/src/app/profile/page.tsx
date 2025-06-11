@@ -3,18 +3,25 @@
 import { useState, useEffect } from "react";
 import { useAuth } from "@/lib/auth";
 import { motion } from "framer-motion";
-import { Calendar, Clock, MapPin, User, Mail, Phone, Edit2, Camera, Tag, CheckCircle, ArrowRight } from "lucide-react";
+import { Calendar, Clock, MapPin, User, Mail, Phone, Edit2, Camera, Tag, CheckCircle, ArrowRight, Plus } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from 'next/navigation';
+import { Button } from '@/components/ui/button';
+import { Card } from '@/components/ui/card';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { format } from 'date-fns';
+import { toast } from 'sonner';
 
 interface Booking {
   id: string;
-  courtName: string;
+  courtId: string;
   date: string;
   startTime: string;
   endTime: string;
-  status: string;
-  totalAmount: number;
+  price: number;
+  status: 'confirmed';
+  createdAt: string;
 }
 
 export default function ProfilePage() {
@@ -31,6 +38,8 @@ export default function ProfilePage() {
   const [success, setSuccess] = useState("");
   const [profileImage, setProfileImage] = useState<string | null>(null);
   const [membershipData, setMembershipData] = useState<any>(null);
+  const router = useRouter();
+  const [activeTab, setActiveTab] = useState('bookings');
 
   useEffect(() => {
     if (user) {
@@ -80,17 +89,15 @@ export default function ProfilePage() {
 
   const fetchBookings = async () => {
     try {
-      const response = await fetch("/api/v1/bookings/user", {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`
-        }
-      });
-      const data = await response.json();
-      if (data.success) {
-        setBookings(data.data);
+      const response = await fetch("/api/bookings/user");
+      if (!response.ok) {
+        throw new Error("Failed to fetch bookings");
       }
+      const data = await response.json();
+      setBookings(data.data);
     } catch (err) {
-      setError("Failed to fetch bookings");
+      console.error("Error fetching bookings:", err);
+      setError("Failed to load bookings");
     } finally {
       setIsLoading(false);
     }
@@ -125,257 +132,208 @@ export default function ProfilePage() {
     });
   };
 
-  return (
-    <div className="container mx-auto px-4 py-8">
-      <div className="grid gap-8 md:grid-cols-3">
-        {/* Profile Section */}
-        <div className="md:col-span-1">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="rounded-lg bg-background p-6 shadow-lg"
-          >
-            <div className="mb-6 flex items-center justify-between">
-              <h2 className="text-2xl font-bold">Profile</h2>
-              <button
-                onClick={() => setIsEditing(!isEditing)}
-                className="rounded-full p-2 text-primary hover:bg-primary/10"
-              >
-                <Edit2 size={20} />
-              </button>
-            </div>
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+      </div>
+    );
+  }
 
-            {/* Profile Image Section */}
-            <div className="mb-6 flex justify-center">
-              <div className="relative">
-                <div className="h-32 w-32 overflow-hidden rounded-full border-4 border-primary">
-                  {profileImage ? (
-                    <Image
-                      src={profileImage}
-                      alt="Profile"
-                      width={128}
-                      height={128}
-                      className="h-full w-full object-cover"
+  return (
+    <div className="min-h-screen bg-gray-50">
+      <div className="container mx-auto px-4 py-8">
+        <h1 className="text-3xl font-bold mt-10 mb-8">My Profile</h1>
+
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          {/* Profile Details - Left Column */}
+          <div className="lg:col-span-1">
+            <Card className="p-6">
+              <div className="space-y-6">
+                {/* Profile Image and Basic Info */}
+                <div className="text-center">
+                  <div className="relative inline-block">
+                    <div className="h-32 w-32 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-4">
+                      {profileImage ? (
+                        <Image
+                          src={profileImage}
+                          alt="Profile"
+                          width={128}
+                          height={128}
+                          className="rounded-full object-cover"
+                        />
+                      ) : (
+                        <User className="h-16 w-16 text-primary" />
+                      )}
+                    </div>
+                    <label
+                      htmlFor="profile-image"
+                      className="absolute bottom-0 right-0 p-1 bg-primary text-white rounded-full cursor-pointer hover:bg-primary/90"
+                    >
+                      <Camera className="h-4 w-4" />
+                    </label>
+                    <input
+                      type="file"
+                      id="profile-image"
+                      className="hidden"
+                      accept="image/*"
+                      onChange={handleImageUpload}
                     />
+                  </div>
+                  <h2 className="text-xl font-semibold mt-4">{user?.name}</h2>
+                  <p className="text-gray-600">{user?.email}</p>
+                </div>
+
+                {/* Membership Status */}
+                {membershipData && (
+                  <div className="bg-primary/5 rounded-lg p-4">
+                    <div className="flex items-center gap-2 mb-2">
+                      <Tag className="h-5 w-5 text-primary" />
+                      <span className="font-medium">Membership Status</span>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm text-gray-600">{membershipData.type}</span>
+                      <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                        Active
+                      </span>
+                    </div>
+                    <div className="text-sm text-gray-600 mt-2">
+                      Valid until: {format(new Date(membershipData.expiryDate), 'MMM d, yyyy')}
+                    </div>
+                  </div>
+                )}
+
+                {/* Contact Information */}
+                <div className="space-y-4">
+                  <h3 className="font-medium flex items-center justify-between">
+                    Contact Information
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => setIsEditing(!isEditing)}
+                      className="text-primary"
+                    >
+                      <Edit2 className="h-4 w-4 mr-1" />
+                      {isEditing ? 'Cancel' : 'Edit'}
+                    </Button>
+                  </h3>
+
+                  {isEditing ? (
+                    <form onSubmit={handleSubmit} className="space-y-4">
+                      <div>
+                        <label className="text-sm font-medium">Name</label>
+                        <input
+                          type="text"
+                          value={formData.name}
+                          onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                          className="w-full mt-1 px-3 py-2 border rounded-md"
+                        />
+                      </div>
+                      <div>
+                        <label className="text-sm font-medium">Email</label>
+                        <input
+                          type="email"
+                          value={formData.email}
+                          onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                          className="w-full mt-1 px-3 py-2 border rounded-md"
+                        />
+                      </div>
+                      <div>
+                        <label className="text-sm font-medium">Phone</label>
+                        <input
+                          type="tel"
+                          value={formData.phone}
+                          onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                          className="w-full mt-1 px-3 py-2 border rounded-md"
+                        />
+                      </div>
+                      <Button type="submit" className="w-full">
+                        Save Changes
+                      </Button>
+                    </form>
                   ) : (
-                    <div className="flex h-full w-full items-center justify-center bg-secondary">
-                      <User size={48} className="text-foreground/60" />
+                    <div className="space-y-3">
+                      <div className="flex items-center gap-2 text-gray-600">
+                        <Mail className="w-4 h-4" />
+                        <span>{user?.email}</span>
+                      </div>
+                      <div className="flex items-center gap-2 text-gray-600">
+                        <Phone className="w-4 h-4" />
+                        <span>{user?.phone || 'Not provided'}</span>
+                      </div>
                     </div>
                   )}
                 </div>
-                <label
-                  htmlFor="photo-upload"
-                  className="absolute bottom-0 right-0 cursor-pointer rounded-full bg-primary p-2 text-primary-foreground hover:bg-primary-hover"
-                >
-                  <Camera size={20} />
-                  <input
-                    id="photo-upload"
-                    type="file"
-                    accept="image/*"
-                    className="hidden"
-                    onChange={handleImageUpload}
-                  />
-                </label>
               </div>
-            </div>
+            </Card>
+          </div>
 
-            {/* Membership Status Section */}
-            <div className="mb-6 border-t border-border pt-4">
-              <h3 className="mb-3 text-lg font-semibold">Membership Status</h3>
-              {membershipData ? (
-                <div className="space-y-2">
-                  <div className="flex items-center gap-2">
-                    <Tag className="h-5 w-5 text-primary" />
-                    <span className="font-medium">Type: {membershipData.type.charAt(0).toUpperCase() + membershipData.type.slice(1)}</span>
+          {/* Booking History - Right Column */}
+          <div className="lg:col-span-2">
+            <Card className="p-6">
+              <div className="flex items-center justify-between mb-6">
+                <h2 className="text-xl font-semibold">Booking History</h2>
+                <Button
+                  onClick={() => router.push('/book')}
+                  className="flex items-center gap-2"
+                >
+                  <Plus className="h-4 w-4" />
+                  Book a Court
+                </Button>
+              </div>
+
+              {bookings.length === 0 ? (
+                <div className="text-center py-12">
+                  <div className="mb-4">
+                    <Calendar className="h-12 w-12 text-gray-400 mx-auto" />
                   </div>
-                  <div className="flex items-center gap-2">
-                    <Calendar className="h-5 w-5 text-primary" />
-                    <span className="font-medium">Valid until: {new Date(membershipData.endDate).toLocaleDateString()}</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <CheckCircle className="h-5 w-5 text-green-500" />
-                    <span className="font-medium text-green-600">Active</span>
-                  </div>
+                  <p className="text-gray-600 mb-4">No bookings found</p>
+                  <Button
+                    onClick={() => router.push('/book')}
+                    className="inline-flex items-center gap-2"
+                  >
+                    Book Your First Court
+                    <ArrowRight className="h-4 w-4" />
+                  </Button>
                 </div>
               ) : (
-                <div className="flex flex-col items-start gap-3">
-                  <span className="text-foreground/70">No active membership</span>
-                  <Link href="/membership">
-                    <button className="inline-flex items-center gap-2 rounded-full bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary-hover">
-                      Join Now
-                      <ArrowRight size={16} />
-                    </button>
-                  </Link>
+                <div className="space-y-4">
+                  {bookings.map((booking) => (
+                    <Card key={booking.id} className="p-4 hover:bg-gray-50 transition-colors">
+                      <div className="flex items-center justify-between">
+                        <div className="space-y-1">
+                          <div className="flex items-center gap-2">
+                            <Calendar className="w-4 h-4 text-primary" />
+                            <span className="font-medium">
+                              {format(new Date(booking.date), 'MMM d, yyyy')}
+                            </span>
+                          </div>
+                          <div className="flex items-center gap-4 text-sm text-gray-600">
+                            <div className="flex items-center gap-1">
+                              <Clock className="w-3 h-3" />
+                              <span>{booking.startTime} - {booking.endTime}</span>
+                            </div>
+                            <div className="flex items-center gap-1">
+                              <MapPin className="w-3 h-3" />
+                              <span>Court {booking.courtId}</span>
+                            </div>
+                          </div>
+                        </div>
+                        <div className="text-right">
+                          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800 mb-1">
+                            {booking.status}
+                          </span>
+                          <div className="text-sm text-gray-600">
+                            ₹{booking.price}
+                          </div>
+                        </div>
+                      </div>
+                    </Card>
+                  ))}
                 </div>
               )}
-            </div>
-
-            {error && (
-              <div className="mb-4 rounded-md bg-red-50 p-4 text-sm text-red-600">
-                {error}
-              </div>
-            )}
-
-            {success && (
-              <div className="mb-4 rounded-md bg-green-50 p-4 text-sm text-green-600">
-                {success}
-              </div>
-            )}
-
-            {isEditing ? (
-              <form onSubmit={handleSubmit} className="space-y-4">
-                <div>
-                  <label className="block text-sm font-medium text-foreground">
-                    Name
-                  </label>
-                  <input
-                    type="text"
-                    value={formData.name}
-                    onChange={(e) =>
-                      setFormData({ ...formData, name: e.target.value })
-                    }
-                    className="mt-1 block w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary"
-                    required
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-foreground">
-                    Email
-                  </label>
-                  <input
-                    type="email"
-                    value={formData.email}
-                    onChange={(e) =>
-                      setFormData({ ...formData, email: e.target.value })
-                    }
-                    className="mt-1 block w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary"
-                    required
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-foreground">
-                    Phone
-                  </label>
-                  <input
-                    type="tel"
-                    value={formData.phone}
-                    onChange={(e) =>
-                      setFormData({ ...formData, phone: e.target.value })
-                    }
-                    className="mt-1 block w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary"
-                  />
-                </div>
-
-                <div className="flex gap-4">
-                  <button
-                    type="submit"
-                    disabled={isLoading}
-                    className="flex-1 rounded-full bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary-hover disabled:opacity-50"
-                  >
-                    {isLoading ? "Saving..." : "Save Changes"}
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setIsEditing(false)}
-                    className="flex-1 rounded-full bg-secondary px-4 py-2 text-sm font-medium transition-colors hover:bg-secondary/80"
-                  >
-                    Cancel
-                  </button>
-                </div>
-              </form>
-            ) : (
-              <div className="space-y-4">
-                <div className="flex items-center gap-3">
-                  <User className="h-5 w-5 text-primary" />
-                  <span className="text-foreground/80">{user?.name}</span>
-                </div>
-                <div className="flex items-center gap-3">
-                  <Mail className="h-5 w-5 text-primary" />
-                  <span className="text-foreground/80">{user?.email}</span>
-                </div>
-                {user?.phone && (
-                  <div className="flex items-center gap-3">
-                    <Phone className="h-5 w-5 text-primary" />
-                    <span className="text-foreground/80">{user.phone}</span>
-                  </div>
-                )}
-              </div>
-            )}
-          </motion.div>
-        </div>
-
-        {/* Bookings Section */}
-        <div className="md:col-span-2">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="rounded-lg bg-background p-6 shadow-lg"
-          >
-            <h2 className="mb-6 text-2xl font-bold">Booking History</h2>
-
-            {isLoading ? (
-              <div className="text-center">Loading bookings...</div>
-            ) : bookings.length === 0 ? (
-              <div className="text-center text-foreground/60">
-                No bookings found
-              </div>
-            ) : (
-              <div className="space-y-4">
-                {bookings.map((booking) => (
-                  <motion.div
-                    key={booking.id}
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    className="rounded-lg border border-input p-4"
-                  >
-                    <div className="mb-2 flex items-center justify-between">
-                      <h3 className="font-semibold">{booking.courtName}</h3>
-                      <span
-                        className={`rounded-full px-3 py-1 text-xs font-medium ${
-                          booking.status === "confirmed"
-                            ? "bg-green-100 text-green-800"
-                            : booking.status === "pending"
-                            ? "bg-yellow-100 text-yellow-800"
-                            : "bg-red-100 text-red-800"
-                        }`}
-                      >
-                        {booking.status.charAt(0).toUpperCase() +
-                          booking.status.slice(1)}
-                      </span>
-                    </div>
-
-                    <div className="space-y-2 text-sm text-foreground/80">
-                      <div className="flex items-center gap-2">
-                        <Calendar className="h-4 w-4 text-primary" />
-                        <span>{formatDate(booking.date)}</span>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <Clock className="h-4 w-4 text-primary" />
-                        <span>
-                          {booking.startTime} - {booking.endTime}
-                        </span>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <MapPin className="h-4 w-4 text-primary" />
-                        <span>Court Location</span>
-                      </div>
-                    </div>
-
-                    <div className="mt-4 flex items-center justify-between border-t border-input pt-4">
-                      <span className="text-sm text-foreground/60">
-                        Total Amount
-                      </span>
-                      <span className="font-semibold">
-                        ${booking.totalAmount.toFixed(2)}
-                      </span>
-                    </div>
-                  </motion.div>
-                ))}
-              </div>
-            )}
-          </motion.div>
+            </Card>
+          </div>
         </div>
       </div>
     </div>

@@ -3,10 +3,11 @@
 import { useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
-import { Calendar, Clock, MapPin, Users, CreditCard, ArrowLeft, Info, Shield, CheckCircle } from 'lucide-react';
+import { Calendar, Clock, MapPin, Users, ArrowLeft, Info, Shield, CheckCircle } from 'lucide-react';
 import { TimeSlotSelector } from '@/components/book/time-slot-selector';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
+import { toast } from 'sonner';
 import { format } from 'date-fns';
 
 interface TimeSlot {
@@ -35,7 +36,7 @@ export default function BookCourtPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [selectedSlot, setSelectedSlot] = useState<TimeSlot | null>(null);
-  const [step, setStep] = useState<'select' | 'confirm' | 'payment'>('select');
+  const [step, setStep] = useState<'select' | 'confirm'>('select');
   const [selectedDate, setSelectedDate] = useState<string>(format(new Date(), 'yyyy-MM-dd'));
 
   useEffect(() => {
@@ -63,11 +64,9 @@ export default function BookCourtPage() {
     setStep('confirm');
   };
 
-  const handleConfirm = () => {
-    setStep('payment');
-  };
+  const handleBooking = async () => {
+    if (!selectedSlot) return;
 
-  const handlePayment = async () => {
     try {
       const response = await fetch('/api/bookings', {
         method: 'POST',
@@ -76,17 +75,23 @@ export default function BookCourtPage() {
         },
         body: JSON.stringify({
           courtId: params.courtId,
-          date: selectedSlot?.time,
-          startTime: selectedSlot?.time,
-          endTime: selectedSlot?.time,
+          date: selectedDate,
+          startTime: selectedSlot.startTime,
+          endTime: selectedSlot.endTime,
+          price: selectedSlot.price
         }),
       });
 
-      if (response.ok) {
-        router.push('/bookings/success');
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.error || 'Failed to create booking');
       }
+
+      toast.success('Booking created successfully!');
+      router.push('/bookings/success');
     } catch (error) {
       console.error('Error creating booking:', error);
+      toast.error('Failed to create booking. Please try again.');
     }
   };
 
@@ -193,7 +198,7 @@ export default function BookCourtPage() {
               {step === 'confirm' && selectedSlot && (
                 <div className="space-y-6">
                   <div className="flex items-center justify-between">
-                    <h3 className="text-lg font-semibold">Selected Time Slot</h3>
+                    <h3 className="text-lg font-semibold">Confirm Booking</h3>
                     <Button
                       variant="ghost"
                       size="sm"
@@ -204,70 +209,28 @@ export default function BookCourtPage() {
                   </div>
 
                   <div className="p-4 bg-gray-50 rounded-lg">
-                    <div className="flex justify-between items-center">
+                    <div className="space-y-4">
                       <div>
-                        <p className="font-medium">{selectedSlot.startTime} - {selectedSlot.endTime}</p>
-                        <p className="text-sm text-gray-600">{format(new Date(selectedDate), 'MMMM d, yyyy')}</p>
+                        <p className="text-sm text-gray-600">Date</p>
+                        <p className="font-medium">{format(new Date(selectedDate), 'MMMM d, yyyy')}</p>
                       </div>
-                      <p className="font-semibold">₹{selectedSlot.price}</p>
+                      <div>
+                        <p className="text-sm text-gray-600">Time</p>
+                        <p className="font-medium">{selectedSlot.startTime} - {selectedSlot.endTime}</p>
+                      </div>
+                      <div>
+                        <p className="text-sm text-gray-600">Price</p>
+                        <p className="font-medium">₹{selectedSlot.price}</p>
+                      </div>
                     </div>
                   </div>
 
                   <Button
                     className="w-full"
-                    onClick={() => setStep('payment')}
+                    onClick={handleBooking}
                   >
-                    Proceed to Payment
+                    Confirm Booking
                   </Button>
-                </div>
-              )}
-
-              {step === 'payment' && (
-                <div className="space-y-6">
-                  <div className="flex items-center justify-between">
-                    <h3 className="text-lg font-semibold">Payment Details</h3>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => setStep('confirm')}
-                    >
-                      Back
-                    </Button>
-                  </div>
-
-                  <div className="space-y-4">
-                    <div>
-                      <label className="block text-sm font-medium mb-2">Card Number</label>
-                      <input
-                        type="text"
-                        placeholder="1234 5678 9012 3456"
-                        className="w-full px-3 py-2 border rounded-md"
-                      />
-                    </div>
-                    
-                    <div className="grid grid-cols-2 gap-4">
-                      <div>
-                        <label className="block text-sm font-medium mb-2">Expiry Date</label>
-                        <input
-                          type="text"
-                          placeholder="MM/YY"
-                          className="w-full px-3 py-2 border rounded-md"
-                        />
-                      </div>
-                      <div>
-                        <label className="block text-sm font-medium mb-2">CVV</label>
-                        <input
-                          type="text"
-                          placeholder="123"
-                          className="w-full px-3 py-2 border rounded-md"
-                        />
-                      </div>
-                    </div>
-
-                    <Button className="w-full">
-                      Pay ₹{selectedSlot?.price}
-                    </Button>
-                  </div>
                 </div>
               )}
             </Card>

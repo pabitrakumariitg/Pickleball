@@ -10,37 +10,53 @@ import { useRouter } from "next/navigation";
 export function CourtsList() {
   const router = useRouter();
   const [selectedCity, setSelectedCity] = useState<string>("all");
-  const courts: Court[] = [{
-    id: "1",
-    name: "Kohima Pickleball court",
-    location: "Near AKIM Home,Kohima",
-    price: 30000,
-    memberPrice: 20000,
-    image: "/court1.jpg",
-    isIndoor: true,
-    city: "Kohima",
-    available: true
-  }, {
-    id: "2",
-    name: "Niathu Resort",
-    location: "Chümoukedima, Dimapur",
-    price: 25000,
-    memberPrice: 15000,
-    image: "/court2.jpg",
-    isIndoor: true,
-    city: "Dimapur",
-    available: true
-  }, {
-    id: "3",
-    name: "Aiko Arena",
-    location: "Purana Bazar, Dimapur",
-    price: 20000,
-    memberPrice: 12000,
-    image: "/court3.jpg",
-    isIndoor: false,
-    city: "Dimapur",
-    available: true
-  }];
+  const courts: Court[] = [
+    {
+      id: "1",
+      name: "Akim Astro Turf",
+      location: "M4V4+F9, Kohima, Nagaland 797001",
+      price: 28000,
+      memberPrice: 18000,
+      image: "/court1.jpg",
+      isIndoor: true,
+      city: "Kohima",
+      available: true
+    },
+    {
+      id: "2",
+      name: "Aiko Greens",
+      location: "Purana Bazar, Dimapur, Nagaland 797112, India",
+      price: 22000,
+      memberPrice: 14000,
+      image: "/court2.jpg",
+      isIndoor: false,
+      city: "Dimapur",
+      available: true
+    },
+    {
+      id: "3",
+      name: "Niathu Resort",
+      location: "Chumukedima, 7th Mile, Dimapur, Nagaland 797103",
+      price: 25000,
+      memberPrice: 15000,
+      image: "/court3.jpg",
+      isIndoor: true,
+      city: "Dimapur",
+      available: true
+    },
+    {
+      id: "4",
+      name: "Noune Resort",
+      location: "Seithekiema-A Village, Seithekima-A, Dimapur, Nagaland 797103",
+      price: 23000,
+      memberPrice: 13000,
+      image: "/court4.jpg",
+      isIndoor: false,
+      city: "Dimapur",
+      available: true
+    }
+  ];
+  
   const cities = ["all", ...Array.from(new Set(courts.map(court => court.city)))];
   const filteredCourts = selectedCity === "all" ? courts : courts.filter(court => court.city === selectedCity);
   const containerVariants = {

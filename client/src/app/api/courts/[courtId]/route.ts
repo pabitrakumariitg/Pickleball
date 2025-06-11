@@ -4,15 +4,15 @@ import { NextResponse } from 'next/server';
 const courts = [
   {
     id: "1",
-    name: "Kohima Pickleball court",
-    location: "Near AKIM Home,Kohima",
-    price: 30000,
-    memberPrice: 20000,
+    name: "Akim Astro Turf",
+    location: "M4V4+F9, Kohima, Nagaland 797001",
+    price: 28000,
+    memberPrice: 18000,
     image: "/court1.jpg",
     isIndoor: true,
     city: "Kohima",
     available: true,
-    description: "State-of-the-art indoor pickleball court with professional equipment",
+    description: "High-quality turf pickleball court in the heart of Kohima, perfect for all skill levels.",
     amenities: ["Parking", "Changing Rooms", "Equipment Rental", "Water Dispenser"],
     operatingHours: {
       start: "09:00",
@@ -21,16 +21,16 @@ const courts = [
   },
   {
     id: "2",
-    name: "Niathu Resort",
-    location: "Chümoukedima, Dimapur",
-    price: 25000,
-    memberPrice: 15000,
+    name: "Aiko Greens",
+    location: "Purana Bazar, Dimapur, Nagaland 797112, India",
+    price: 22000,
+    memberPrice: 14000,
     image: "/court2.jpg",
-    isIndoor: true,
+    isIndoor: false,
     city: "Dimapur",
     available: true,
-    description: "Luxury resort pickleball court with premium facilities",
-    amenities: ["Parking", "Changing Rooms", "Equipment Rental", "Refreshments"],
+    description: "Beautiful outdoor pickleball court with green surroundings and modern facilities.",
+    amenities: ["Parking", "Changing Rooms", "Equipment Rental"],
     operatingHours: {
       start: "09:00",
       end: "21:00"
@@ -38,22 +38,40 @@ const courts = [
   },
   {
     id: "3",
-    name: "Aiko Arena",
-    location: "Purana Bazar, Dimapur",
-    price: 20000,
-    memberPrice: 12000,
+    name: "Niathu Resort",
+    location: "Chumukedima, 7th Mile, Dimapur, Nagaland 797103",
+    price: 25000,
+    memberPrice: 15000,
     image: "/court3.jpg",
-    isIndoor: false,
+    isIndoor: true,
     city: "Dimapur",
     available: true,
-    description: "Outdoor pickleball court with natural lighting",
-    amenities: ["Parking", "Changing Rooms", "Equipment Rental"],
+    description: "Luxury resort court offering top-notch indoor pickleball experience.",
+    amenities: ["Parking", "Changing Rooms", "Equipment Rental", "Refreshments"],
     operatingHours: {
       start: "09:00",
       end: "21:00"
     }
+  },
+  {
+    id: "4",
+    name: "Noune Resort",
+    location: "Seithekiema-A Village, Seithekima-A, Dimapur, Nagaland 797103",
+    price: 23000,
+    memberPrice: 13000,
+    image: "/court4.jpg",
+    isIndoor: false,
+    city: "Dimapur",
+    available: true,
+    description: "Scenic outdoor pickleball court located inside Noune Resort, surrounded by nature.",
+    amenities: ["Parking", "Changing Rooms", "Equipment Rental", "Cafeteria"],
+    operatingHours: {
+      start: "08:00",
+      end: "20:00"
+    }
   }
 ];
+
 
 export async function GET(
   request: Request,
