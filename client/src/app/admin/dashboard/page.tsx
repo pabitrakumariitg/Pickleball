@@ -10,6 +10,7 @@ import {
   Clock
 } from 'lucide-react';
 import Image from 'next/image';
+import { getApiUrl } from '@/config';
 
 interface StatData {
   totalUsers: number;
@@ -78,7 +79,7 @@ export default function DashboardPage() {
           'Content-Type': 'application/json'
         };
 
-        const response = await fetch('/api/v1/courts', { headers });
+        const response = await fetch(getApiUrl('api/v1/courts'), { headers });
         if (!response.ok) {
           throw new Error('Failed to fetch courts');
         }
@@ -103,7 +104,7 @@ export default function DashboardPage() {
           'Content-Type': 'application/json'
         };
 
-        const response = await fetch('/api/v1/bookings', { headers });
+        const response = await fetch(getApiUrl('api/v1/bookings'), { headers });
         if (!response.ok) {
           throw new Error('Failed to fetch bookings');
         }
@@ -117,7 +118,7 @@ export default function DashboardPage() {
       }
     };
 
-    const fetchUserCount = async () => {
+    const fetchStats = async () => {
       try {
         const token = localStorage.getItem('token');
         if (!token) {
@@ -130,7 +131,7 @@ export default function DashboardPage() {
           'Content-Type': 'application/json'
         };
 
-        const response = await fetch('/api/v1/admin/stats', { headers });
+        const response = await fetch(getApiUrl('api/v1/admin/stats'), { headers });
         if (!response.ok) {
           throw new Error('Failed to fetch stats');
         }
@@ -143,7 +144,7 @@ export default function DashboardPage() {
 
     fetchCourts();
     fetchBookings();
-    fetchUserCount();
+    fetchStats();
   }, [router]);
 
   if (loading) {

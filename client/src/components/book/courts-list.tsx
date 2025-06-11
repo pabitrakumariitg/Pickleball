@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Court } from "@/types";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { getApiUrl } from "@/config";
 
 export function CourtsList() {
   const router = useRouter();
@@ -17,7 +18,7 @@ export function CourtsList() {
   useEffect(() => {
     const fetchCourts = async () => {
       try {
-        const response = await fetch('/api/v1/courts');
+        const response = await fetch(getApiUrl('api/v1/courts'));
         if (!response.ok) {
           throw new Error('Failed to fetch courts');
         }
