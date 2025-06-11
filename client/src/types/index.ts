@@ -36,8 +36,8 @@ export type Event = {
 };
 
 // Court type
-export type Court = {
-  id: string;
+export interface Court {
+  _id: string;
   name: string;
   location: string;
   price: number;
@@ -46,7 +46,13 @@ export type Court = {
   isIndoor: boolean;
   city: string;
   available: boolean;
-};
+  description?: string;
+  amenities?: string[];
+  operatingHours?: {
+    start: string;
+    end: string;
+  };
+}
 
 // Membership type
 export type MembershipTier = {
@@ -56,3 +62,30 @@ export type MembershipTier = {
   benefits: string[];
   isPopular?: boolean;
 };
+
+export interface Booking {
+  _id: string;
+  user: {
+    _id: string;
+    name: string;
+    email: string;
+  };
+  court: {
+    _id: string;
+    name: string;
+    location: string;
+  };
+  startTime: string;
+  endTime: string;
+  status: 'pending' | 'confirmed' | 'cancelled' | 'completed';
+  payment?: {
+    _id: string;
+    status: string;
+    amount: number;
+  };
+  totalAmount: number;
+  players: number;
+  notes?: string;
+  cancellationReason?: string;
+  createdAt: string;
+}

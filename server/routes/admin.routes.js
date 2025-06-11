@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const { protect, authorize } = require('../middleware/auth');
 const Business = require('../models/business.model');
+const User = require('../models/user.model');
 
 // Admin routes
 router.get('/dashboard', protect, authorize('admin'), async (req, res) => {
@@ -31,6 +32,53 @@ router.get('/dashboard', protect, authorize('admin'), async (req, res) => {
     res.status(500).json({
       success: false,
       error: 'Error fetching admin dashboard data'
+    });
+  }
+});
+
+router.get('/stats', protect, authorize('admin'), async (req, res) => {
+  try {
+    const [userStats, businessStats] = await Promise.all([
+      User.aggregate([
+        {
+          $group: {
+            _id: null,
+            totalUsers: { $sum: 1 },
+            activeUsers: {
+              $sum: { $cond: [{ $eq: ['$status', 'active'] }, 1, 0] }
+            }
+          }
+        }
+      ]),
+      Business.aggregate([
+        {
+          $group: {
+            _id: null,
+            totalBusinesses: { $sum: 1 },
+            activeBusinesses: {
+              $sum: { $cond: [{ $eq: ['$status', 'active'] }, 1, 0] }
+            },
+            totalRevenue: { $sum: '$revenue' }
+          }
+        }
+      ])
+    ]);
+
+    res.json({
+      success: true,
+      data: {
+        ...userStats[0] || { totalUsers: 0, activeUsers: 0 },
+        ...businessStats[0] || {
+          totalBusinesses: 0,
+          activeBusinesses: 0,
+          totalRevenue: 0
+        }
+      }
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: 'Error fetching admin statistics'
     });
   }
 });

@@ -14,14 +14,24 @@ import { format } from 'date-fns';
 import { toast } from 'sonner';
 
 interface Booking {
+  _id: string;
   id: string;
-  courtId: string;
-  date: string;
+  court: {
+    name: string;
+    location: string;
+  };
   startTime: string;
   endTime: string;
   price: number;
-  status: 'confirmed';
+  status: 'confirmed' | 'pending' | 'cancelled';
   createdAt: string;
+  players: number;
+  totalAmount: number;
+  payment?: {
+    status: 'success' | 'pending' | 'failed';
+  };
+  notes?: string;
+  cancellationReason?: string;
 }
 
 export default function ProfilePage() {
@@ -89,14 +99,24 @@ export default function ProfilePage() {
 
   const fetchBookings = async () => {
     try {
-      const response = await fetch("/api/bookings/user");
+      const response = await fetch("/api/v1/bookings/user", {
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
+        }
+      });
       if (!response.ok) {
+        if (response.status === 401) {
+          throw new Error("Unauthorized");
+        }
         throw new Error("Failed to fetch bookings");
       }
       const data = await response.json();
       setBookings(data.data);
-    } catch (err) {
+    } catch (err: any) {
       console.error("Error fetching bookings:", err);
+      if (err.message === "Unauthorized") {
+        router.push('/login');
+      }
       setError("Failed to load bookings");
     } finally {
       setIsLoading(false);
@@ -130,6 +150,82 @@ export default function ProfilePage() {
       month: "long",
       day: "numeric"
     });
+  };
+
+  const BookingCard = ({ booking }: { booking: Booking }) => {
+    return (
+      <div className="bg-white rounded-lg shadow-md p-6 mb-4">
+        <div className="flex justify-between items-start mb-4">
+          <div>
+            <h3 className="text-lg font-semibold">{booking.court.name}</h3>
+            <p className="text-gray-600">{booking.court.location}</p>
+          </div>
+          <span className={`px-3 py-1 rounded-full text-sm ${
+            booking.status === 'confirmed' ? 'bg-green-100 text-green-800' :
+            booking.status === 'pending' ? 'bg-yellow-100 text-yellow-800' :
+            booking.status === 'cancelled' ? 'bg-red-100 text-red-800' :
+            'bg-gray-100 text-gray-800'
+          }`}>
+            {booking.status.charAt(0).toUpperCase() + booking.status.slice(1)}
+          </span>
+        </div>
+        
+        <div className="grid grid-cols-2 gap-4 mb-4">
+          <div>
+            <p className="text-sm text-gray-600">Date</p>
+            <p className="font-medium">{new Date(booking.startTime).toLocaleDateString()}</p>
+          </div>
+          <div>
+            <p className="text-sm text-gray-600">Time</p>
+            <p className="font-medium">
+              {new Date(booking.startTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} - 
+              {new Date(booking.endTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+            </p>
+          </div>
+          <div>
+            <p className="text-sm text-gray-600">Players</p>
+            <p className="font-medium">{booking.players}</p>
+          </div>
+          <div>
+            <p className="text-sm text-gray-600">Amount</p>
+            <p className="font-medium">₹{booking.totalAmount}</p>
+          </div>
+        </div>
+
+        {booking.payment && (
+          <div className="border-t pt-4 mt-4">
+            <p className="text-sm text-gray-600">Payment Status</p>
+            <p className={`font-medium ${
+              booking.payment.status === 'success' ? 'text-green-600' :
+              booking.payment.status === 'pending' ? 'text-yellow-600' :
+              'text-red-600'
+            }`}>
+              {booking.payment.status.charAt(0).toUpperCase() + booking.payment.status.slice(1)}
+            </p>
+          </div>
+        )}
+
+        {booking.notes && (
+          <div className="border-t pt-4 mt-4">
+            <p className="text-sm text-gray-600">Notes</p>
+            <p className="text-gray-800">{booking.notes}</p>
+          </div>
+        )}
+
+        {booking.cancellationReason && (
+          <div className="border-t pt-4 mt-4">
+            <p className="text-sm text-gray-600">Cancellation Reason</p>
+            <p className="text-gray-800">{booking.cancellationReason}</p>
+          </div>
+        )}
+
+        <div className="text-xs text-gray-500 mt-4">
+          Booking ID: {booking._id}
+          <br />
+          Created: {new Date(booking.createdAt).toLocaleString()}
+        </div>
+      </div>
+    );
   };
 
   if (isLoading) {
@@ -299,36 +395,7 @@ export default function ProfilePage() {
               ) : (
                 <div className="space-y-4">
                   {bookings.map((booking) => (
-                    <Card key={booking.id} className="p-4 hover:bg-gray-50 transition-colors">
-                      <div className="flex items-center justify-between">
-                        <div className="space-y-1">
-                          <div className="flex items-center gap-2">
-                            <Calendar className="w-4 h-4 text-primary" />
-                            <span className="font-medium">
-                              {format(new Date(booking.date), 'MMM d, yyyy')}
-                            </span>
-                          </div>
-                          <div className="flex items-center gap-4 text-sm text-gray-600">
-                            <div className="flex items-center gap-1">
-                              <Clock className="w-3 h-3" />
-                              <span>{booking.startTime} - {booking.endTime}</span>
-                            </div>
-                            <div className="flex items-center gap-1">
-                              <MapPin className="w-3 h-3" />
-                              <span>Court {booking.courtId}</span>
-                            </div>
-                          </div>
-                        </div>
-                        <div className="text-right">
-                          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800 mb-1">
-                            {booking.status}
-                          </span>
-                          <div className="text-sm text-gray-600">
-                            ₹{booking.price}
-                          </div>
-                        </div>
-                      </div>
-                    </Card>
+                    <BookingCard key={booking._id} booking={booking} />
                   ))}
                 </div>
               )}

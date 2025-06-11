@@ -202,19 +202,44 @@ exports.getUserBookings = asyncHandler(async (req, res, next) => {
       path: 'court',
       select: 'name location'
     })
+    .populate({
+      path: 'user',
+      select: 'name email'
+    })
+    .populate({
+      path: 'payment',
+      select: 'status amount'
+    })
     .sort('-createdAt');
 
   res.status(200).json({
     success: true,
     count: bookings.length,
     data: bookings.map(booking => ({
-      id: booking._id,
-      courtName: booking.court.name,
-      date: booking.date,
+      _id: booking._id,
+      court: {
+        _id: booking.court._id,
+        name: booking.court.name,
+        location: booking.court.location
+      },
+      user: {
+        _id: booking.user._id,
+        name: booking.user.name,
+        email: booking.user.email
+      },
       startTime: booking.startTime,
       endTime: booking.endTime,
       status: booking.status,
-      totalAmount: booking.totalAmount
+      payment: booking.payment ? {
+        _id: booking.payment._id,
+        status: booking.payment.status,
+        amount: booking.payment.amount
+      } : undefined,
+      totalAmount: booking.totalAmount,
+      players: booking.players,
+      notes: booking.notes,
+      cancellationReason: booking.cancellationReason,
+      createdAt: booking.createdAt
     }))
   });
 }); 

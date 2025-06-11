@@ -20,13 +20,22 @@ interface TimeSlot {
 }
 
 interface Court {
-  id: string;
+  _id: string;
   name: string;
+  description: string;
   location: string;
   price: number;
   memberPrice: number;
   image: string;
-  isIndoor: boolean;
+  type: 'indoor' | 'outdoor';
+  surface: 'concrete' | 'asphalt' | 'wood' | 'synthetic';
+  capacity: number;
+  business: string;
+  openingTime: string;
+  closingTime: string;
+  amenities: string[];
+  status: 'active' | 'maintenance' | 'inactive';
+  city: string;
 }
 
 export default function BookCourtPage() {
@@ -65,20 +74,23 @@ export default function BookCourtPage() {
   };
 
   const handleBooking = async () => {
-    if (!selectedSlot) return;
+    if (!selectedSlot || !court) return;
 
     try {
-      const response = await fetch('/api/bookings', {
+      const response = await fetch('/api/v1/bookings', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
         },
         body: JSON.stringify({
-          courtId: params.courtId,
-          date: selectedDate,
-          startTime: selectedSlot.startTime,
-          endTime: selectedSlot.endTime,
-          price: selectedSlot.price
+          court: court._id,
+          startTime: new Date(`${selectedDate}T${selectedSlot.startTime}`).toISOString(),
+          endTime: new Date(`${selectedDate}T${selectedSlot.endTime}`).toISOString(),
+          totalAmount: selectedSlot.price,
+          players: 2, // Default minimum players
+          notes: '', // Optional notes
+          status: 'pending' // Initial status
         }),
       });
 
@@ -87,11 +99,15 @@ export default function BookCourtPage() {
         throw new Error(error.error || 'Failed to create booking');
       }
 
+      const data = await response.json();
+      
+      // Store booking ID in local storage for reference
+      localStorage.setItem('lastBookingId', data.data._id);
+      
       toast.success('Booking created successfully!');
       router.push('/bookings/success');
-    } catch (error) {
-      console.error('Error creating booking:', error);
-      toast.error('Failed to create booking. Please try again.');
+    } catch (error: any) {
+      toast.error(error.message || 'Failed to create booking');
     }
   };
 

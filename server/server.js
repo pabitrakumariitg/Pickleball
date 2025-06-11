@@ -36,6 +36,9 @@ app.use(express.json());
 // Cookie parser
 app.use(cookieParser());
 
+// Serve static files from the client/public directory
+app.use(express.static('client/public'));
+
 // File upload middleware
 app.use(fileUpload({
   useTempFiles: true,

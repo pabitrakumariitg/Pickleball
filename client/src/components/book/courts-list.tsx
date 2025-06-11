@@ -4,60 +4,38 @@ import { motion } from "framer-motion";
 import { MapPin, Clock, Users, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Court } from "@/types";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 
 export function CourtsList() {
   const router = useRouter();
   const [selectedCity, setSelectedCity] = useState<string>("all");
-  const courts: Court[] = [
-    {
-      id: "1",
-      name: "Akim Astro Turf",
-      location: "M4V4+F9, Kohima, Nagaland 797001",
-      price: 28000,
-      memberPrice: 18000,
-      image: "/court1.jpg",
-      isIndoor: true,
-      city: "Kohima",
-      available: true
-    },
-    {
-      id: "2",
-      name: "Aiko Greens",
-      location: "Purana Bazar, Dimapur, Nagaland 797112, India",
-      price: 22000,
-      memberPrice: 14000,
-      image: "/court2.jpg",
-      isIndoor: false,
-      city: "Dimapur",
-      available: true
-    },
-    {
-      id: "3",
-      name: "Niathu Resort",
-      location: "Chumukedima, 7th Mile, Dimapur, Nagaland 797103",
-      price: 25000,
-      memberPrice: 15000,
-      image: "/court3.jpg",
-      isIndoor: true,
-      city: "Dimapur",
-      available: true
-    },
-    {
-      id: "4",
-      name: "Noune Resort",
-      location: "Seithekiema-A Village, Seithekima-A, Dimapur, Nagaland 797103",
-      price: 23000,
-      memberPrice: 13000,
-      image: "/court4.jpg",
-      isIndoor: false,
-      city: "Dimapur",
-      available: true
-    }
-  ];
-  
-  const cities = ["all", ...Array.from(new Set(courts.map(court => court.city)))];
+  const [courts, setCourts] = useState<Court[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchCourts = async () => {
+      try {
+        const response = await fetch('/api/v1/courts');
+        if (!response.ok) {
+          throw new Error('Failed to fetch courts');
+        }
+        const data = await response.json();
+        setCourts(data.data);
+      } catch (err) {
+        console.error('Error fetching courts:', err);
+        setError('Failed to load courts');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchCourts();
+  }, []);
+
+  // const cities = ["all", ...Array.from(new Set(courts.map(court => court.city)))];
+  const cities = ["all"];
   const filteredCourts = selectedCity === "all" ? courts : courts.filter(court => court.city === selectedCity);
   const containerVariants = {
     hidden: {
@@ -87,6 +65,22 @@ export function CourtsList() {
   const handleBookCourt = (courtId: string) => {
     router.push(`/book/${courtId}`);
   };
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-[400px]">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="flex items-center justify-center min-h-[400px]">
+        <p className="text-lg text-muted-foreground">{error}</p>
+      </div>
+    );
+  }
 
   return <section id="courts" className="py-20 bg-secondary" data-unique-id="5e30db63-bdd3-4cc3-9bbf-2827c4a7ff24" data-file-name="components/book/courts-list.tsx">
     <div className="container mx-auto px-6" data-unique-id="6fd83dd1-e9a7-41a1-b19e-b52cac3cd876" data-file-name="components/book/courts-list.tsx" data-dynamic-text="true">
@@ -123,7 +117,7 @@ export function CourtsList() {
       <motion.div variants={containerVariants} initial="hidden" whileInView="visible" viewport={{
         once: true
       }} className="grid gap-8 md:grid-cols-2 lg:grid-cols-2" data-unique-id="09f59de5-7673-4ecb-944d-75e670ebaeae" data-file-name="components/book/courts-list.tsx" data-dynamic-text="true">
-        {filteredCourts.map(court => <motion.div key={court.id} variants={itemVariants} data-unique-id="b99fef26-d43f-4236-8116-7cee45267ad8" data-file-name="components/book/courts-list.tsx">
+        {filteredCourts.map(court => <motion.div key={court._id} variants={itemVariants} data-unique-id="b99fef26-d43f-4236-8116-7cee45267ad8" data-file-name="components/book/courts-list.tsx">
           <div className="card card-hover overflow-hidden border border-border" data-unique-id="d78ccb3e-c552-416e-9092-ae8a5e6403b0" data-file-name="components/book/courts-list.tsx">
             <div className="relative h-48 w-full overflow-hidden" data-unique-id="bb0ca589-a649-4f6a-a54e-be295ae3c815" data-file-name="components/book/courts-list.tsx">
               <img src={court.image} alt={court.name} className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" data-unique-id="54ee6057-039a-48f5-8af0-a9bd78836767" data-file-name="components/book/courts-list.tsx" />
@@ -140,7 +134,8 @@ export function CourtsList() {
                   <h3 className="text-xl font-semibold" data-unique-id="07ede1f5-be53-4847-b087-360f83d9bd04" data-file-name="components/book/courts-list.tsx" data-dynamic-text="true">{court.name}</h3>
                   <div className="mt-1 flex items-center text-sm text-foreground/70" data-unique-id="de77484d-1888-4856-8454-edb5f4c86040" data-file-name="components/book/courts-list.tsx" data-dynamic-text="true">
                     <MapPin className="mr-1 h-4 w-4" />
-                    {court.location}
+                    {/* {court.location} */}
+                    {court.price}
                   </div>
                 </div>
                 <div className="text-right" data-unique-id="03c3fb94-ba2c-455a-a5c8-e5cf0bf27bb2" data-file-name="components/book/courts-list.tsx">
@@ -165,7 +160,7 @@ export function CourtsList() {
                 </div>
               </div>
 
-              <Button variant="primary" className="w-full" onClick={() => handleBookCourt(court.id)} data-unique-id="6ff00be3-4750-41da-8702-eeb948148b63" data-file-name="components/book/courts-list.tsx">
+              <Button variant="primary" className="w-full" onClick={() => handleBookCourt(court._id)} data-unique-id="6ff00be3-4750-41da-8702-eeb948148b63" data-file-name="components/book/courts-list.tsx">
                 <span className="editable-text" data-unique-id="f4a6f11f-354f-42ce-912e-4136412f2fb1" data-file-name="components/book/courts-list.tsx">Book This Court</span>
               </Button>
             </div>

@@ -12,6 +12,11 @@ const {
   getUserBookings
 } = require('../controllers/booking.controller');
 
+// Put specific routes first
+router.get('/user', protect, getUserBookings);
+router.get('/my-bookings', protect, getMyBookings);
+
+// Then put parameter routes
 router
   .route('/')
   .get(protect, authorize('admin'), getBookings)
@@ -23,8 +28,6 @@ router
   .put(protect, updateBooking)
   .delete(protect, deleteBooking);
 
-router.get('/my-bookings', protect, getMyBookings);
 router.put('/:id/cancel', protect, cancelBooking);
-router.get('/user', protect, getUserBookings);
 
 module.exports = router; 

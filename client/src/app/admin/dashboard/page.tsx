@@ -1,39 +1,161 @@
-// Client-side guard for admin dashboard
 'use client';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-
-import { 
-  Users, 
-  Building2, 
-  Calendar, 
-  CreditCard, 
-  TrendingUp, 
-  Clock 
+import {
+  Users,
+  Building2,
+  Calendar,
+  CreditCard,
+  TrendingUp,
+  Clock
 } from 'lucide-react';
+import Image from 'next/image';
 
-// Mock data - replace with actual data from your API
-const stats = {
-  totalUsers: 1250,
-  totalCourts: 15,
-  totalBookings: 3420,
-  activeMemberships: 850,
-  monthlyRevenue: 45000,
-  upcomingEvents: 8
-};
+interface StatData {
+  totalUsers: number;
+  totalBookings: number;
+  activeMemberships: number;
+  monthlyRevenue: number;
+  upcomingEvents: number;
+}
 
-const recentBookings = [
-  { id: 1, user: 'John Doe', court: 'Court 1', date: '2024-03-20', time: '14:00', status: 'Confirmed' },
-  { id: 2, user: 'Jane Smith', court: 'Court 2', date: '2024-03-20', time: '15:30', status: 'Pending' },
-  { id: 3, user: 'Mike Johnson', court: 'Court 3', date: '2024-03-21', time: '10:00', status: 'Confirmed' },
-];
+interface User {
+  _id: string;
+  name: string;
+  email: string;
+}
+
+interface CourtType {
+  _id: string;
+  name: string;
+}
+
+interface Booking {
+  _id: string;
+  user: User;
+  court: CourtType;
+  startTime: string;
+  endTime: string;
+  status: string;
+}
 
 export default function DashboardPage() {
   const router = useRouter();
+  const [stats, setStats] = useState<StatData>({
+    totalUsers: 0,
+    totalBookings: 0,
+    activeMemberships: 0,
+    monthlyRevenue: 0,
+    upcomingEvents: 0
+  });
+  const [totalCourts, setTotalCourts] = useState<number>(0);
+  const [totalBookings, setTotalBookings] = useState<number>(0);
+  const [totalUsers, setTotalUsers] = useState<number>(0);
+  const [bookings, setBookings] = useState<Booking[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [courts, setCourts] = useState(null);
+
+  // Client-side auth guard
   useEffect(() => {
     const token = localStorage.getItem('token');
-    if (!token) router.replace('/admin/login');
+    if (!token) {
+      router.replace('/admin/login');
+      return;
+    }
   }, [router]);
+
+  useEffect(() => {
+    const fetchCourts = async () => {
+      try {
+        const token = localStorage.getItem('token');
+        if (!token) {
+          router.replace('/admin/login');
+          return;
+        }
+
+        const headers = {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        };
+
+        const response = await fetch('/api/v1/courts', { headers });
+        if (!response.ok) {
+          throw new Error('Failed to fetch courts');
+        }
+        const data = await response.json();
+        setTotalCourts(data.data.length);
+
+      } catch (err) {
+        console.error('Error fetching courts:', err);
+      }
+    };
+
+    const fetchBookings = async () => {
+      try {
+        const token = localStorage.getItem('token');
+        if (!token) {
+          router.replace('/admin/login');
+          return;
+        }
+
+        const headers = {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        };
+
+        const response = await fetch('/api/v1/bookings', { headers });
+        if (!response.ok) {
+          throw new Error('Failed to fetch bookings');
+        }
+        const data = await response.json();
+        console.log(data.data);
+        setTotalBookings(data.data.length);
+        setBookings(data.data);
+
+      } catch (err) {
+        console.error('Error fetching bookings:', err);
+      }
+    };
+
+    const fetchUserCount = async () => {
+      try {
+        const token = localStorage.getItem('token');
+        if (!token) {
+          router.replace('/admin/login');
+          return;
+        }
+
+        const headers = {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        };
+
+        const response = await fetch('/api/v1/admin/stats', { headers });
+        if (!response.ok) {
+          throw new Error('Failed to fetch stats');
+        }
+        const data = await response.json();
+        setTotalUsers(data.data.totalUsers || 0);
+      } catch (err) {
+        console.error('Error fetching stats:', err);
+      }
+    };
+
+    fetchCourts();
+    fetchBookings();
+    fetchUserCount();
+  }, [router]);
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto"></div>
+          <p className="mt-4 text-muted-foreground">Loading dashboard...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-8">
@@ -42,53 +164,15 @@ export default function DashboardPage() {
         <p className="text-muted-foreground">Welcome to your admin dashboard</p>
       </div>
 
-      {/* Stats Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        <StatCard
-          title="Total Users"
-          value={stats.totalUsers}
-          icon={Users}
-          trend="+12%"
-          trendUp={true}
-        />
-        <StatCard
-          title="Total Courts"
-          value={stats.totalCourts}
-          icon={Building2}
-          trend="+2"
-          trendUp={true}
-        />
-        <StatCard
-          title="Total Bookings"
-          value={stats.totalBookings}
-          icon={Calendar}
-          trend="+8%"
-          trendUp={true}
-        />
-        <StatCard
-          title="Active Memberships"
-          value={stats.activeMemberships}
-          icon={Users}
-          trend="+5%"
-          trendUp={true}
-        />
-        <StatCard
-          title="Monthly Revenue"
-          value={`$${stats.monthlyRevenue.toLocaleString()}`}
-          icon={CreditCard}
-          trend="+15%"
-          trendUp={true}
-        />
-        <StatCard
-          title="Upcoming Events"
-          value={stats.upcomingEvents}
-          icon={Calendar}
-          trend="+3"
-          trendUp={true}
-        />
+        <StatCard title="Total Users" value={totalUsers} icon={Users} trend="+12%" trendUp />
+        <StatCard title="Total Courts" value={totalCourts} icon={Building2} trend="+2" trendUp />
+        <StatCard title="Total Bookings" value={totalBookings} icon={Calendar} trend="+8%" trendUp />
+        <StatCard title="Active Memberships" value={stats.activeMemberships} icon={Users} trend="+5%" trendUp />
+        <StatCard title="Monthly Revenue" value={`₹${stats.monthlyRevenue.toLocaleString()}`} icon={CreditCard} trend="+15%" trendUp />
+        <StatCard title="Upcoming Events" value={stats.upcomingEvents} icon={Calendar} trend="+3" trendUp />
       </div>
 
-      {/* Recent Bookings */}
       <div className="bg-card rounded-lg shadow">
         <div className="p-6">
           <h2 className="text-lg font-semibold text-foreground mb-4">Recent Bookings</h2>
@@ -104,18 +188,25 @@ export default function DashboardPage() {
                 </tr>
               </thead>
               <tbody>
-                {recentBookings.map((booking) => (
-                  <tr key={booking.id} className="border-b border-border last:border-0">
-                    <td className="py-3 px-4 text-sm text-foreground">{booking.user}</td>
-                    <td className="py-3 px-4 text-sm text-foreground">{booking.court}</td>
-                    <td className="py-3 px-4 text-sm text-foreground">{booking.date}</td>
-                    <td className="py-3 px-4 text-sm text-foreground">{booking.time}</td>
+                {bookings.map((booking) => (
+                  <tr key={booking._id} className="border-b border-border last:border-0">
+                    <td className="py-3 px-4 text-sm text-foreground">{booking.user.name}</td>
+                    <td className="py-3 px-4 text-sm text-foreground">{booking.court.name}</td>
+                    <td className="py-3 px-4 text-sm text-foreground">
+                      {new Date(booking.startTime).toLocaleDateString('en-GB', {
+                        day: '2-digit',
+                        month: '2-digit',
+                        year: 'numeric'
+                      })}
+                    </td>
+                    <td className="py-3 px-4 text-sm text-foreground">
+                      {new Date(booking.startTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                    </td>
                     <td className="py-3 px-4 text-sm">
                       <span
-                        className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                          booking.status === 'Confirmed'
-                            ? 'bg-green-100 text-green-800'
-                            : 'bg-yellow-100 text-yellow-800'
+                        className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${booking.status === 'Confirmed'
+                          ? 'bg-green-100 text-green-800'
+                          : 'bg-yellow-100 text-yellow-800'
                         }`}
                       >
                         {booking.status}
@@ -162,14 +253,10 @@ function StatCard({
         ) : (
           <Clock className="h-4 w-4 text-red-500" />
         )}
-        <span
-          className={`ml-2 text-sm font-medium ${
-            trendUp ? 'text-green-500' : 'text-red-500'
-          }`}
-        >
+        <span className={`ml-2 text-sm font-medium ${trendUp ? 'text-green-500' : 'text-red-500'}`}>
           {trend}
         </span>
       </div>
     </div>
   );
-} 
+}
