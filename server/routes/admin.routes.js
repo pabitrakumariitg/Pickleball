@@ -1,11 +1,22 @@
 const express = require('express');
 const router = express.Router();
-const { protect, authorize } = require('../middleware/auth');
+const { protect, restrictTo } = require('../middlewares/auth.middleware');
 const Business = require('../models/business.model');
 const User = require('../models/user.model');
+const {
+  getAllUsers,
+  getUser,
+  createUser,
+  updateUser,
+  deleteUser
+} = require('../controllers/admin.controller');
+
+// Protect all routes after this middleware
+router.use(protect);
+router.use(restrictTo('Admin'));
 
 // Admin routes
-router.get('/dashboard', protect, authorize('admin'), async (req, res) => {
+router.get('/dashboard', async (req, res) => {
   try {
     const stats = await Business.aggregate([
       {
@@ -36,7 +47,7 @@ router.get('/dashboard', protect, authorize('admin'), async (req, res) => {
   }
 });
 
-router.get('/stats', protect, authorize('admin'), async (req, res) => {
+router.get('/stats', async (req, res) => {
   try {
     const [userStats, businessStats] = await Promise.all([
       User.aggregate([
@@ -84,7 +95,7 @@ router.get('/stats', protect, authorize('admin'), async (req, res) => {
 });
 
 // Get all businesses
-router.get('/businesses', protect, authorize('admin'), async (req, res) => {
+router.get('/businesses', async (req, res) => {
   try {
     const businesses = await Business.find()
       .select('-documents')
@@ -103,7 +114,7 @@ router.get('/businesses', protect, authorize('admin'), async (req, res) => {
 });
 
 // Update business status
-router.patch('/businesses/:id/status', protect, authorize('admin'), async (req, res) => {
+router.patch('/businesses/:id/status', async (req, res) => {
   try {
     const { status } = req.body;
     const business = await Business.findByIdAndUpdate(
@@ -132,7 +143,7 @@ router.patch('/businesses/:id/status', protect, authorize('admin'), async (req, 
 });
 
 // Get business documents
-router.get('/businesses/:id/documents', protect, authorize('admin'), async (req, res) => {
+router.get('/businesses/:id/documents', async (req, res) => {
   try {
     const business = await Business.findById(req.params.id)
       .select('documents');
@@ -157,7 +168,7 @@ router.get('/businesses/:id/documents', protect, authorize('admin'), async (req,
 });
 
 // Verify business documents
-router.post('/businesses/:id/verify-documents', protect, authorize('admin'), async (req, res) => {
+router.post('/businesses/:id/verify-documents', async (req, res) => {
   try {
     const { documentId, status, remarks } = req.body;
     const business = await Business.findById(req.params.id);
@@ -195,5 +206,15 @@ router.post('/businesses/:id/verify-documents', protect, authorize('admin'), asy
     });
   }
 });
+
+// User management routes
+router.route('/users')
+  .get(getAllUsers)
+  .post(createUser);
+
+router.route('/users/:id')
+  .get(getUser)
+  .put(updateUser)
+  .delete(deleteUser);
 
 module.exports = router; 

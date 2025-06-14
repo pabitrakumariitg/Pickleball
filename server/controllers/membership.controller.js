@@ -7,63 +7,52 @@ const { logger } = require('../utils/logger');
 // Purchase membership
 exports.purchaseMembership = async (req, res, next) => {
   try {
-    const { type, paymentMethod = 'cash' } = req.body;
+    const { type, price } = req.body;
+    const userId = req.user.id;
 
     // Check if user already has an active membership
     const existingMembership = await Membership.findOne({
-      userId: req.user.id,
-      status: 'active'
+      userId,
+      status: 'active',
+      endDate: { $gt: new Date() }
     });
 
     if (existingMembership) {
       return next(new AppError('You already have an active membership', 400));
     }
 
-    // Calculate price based on type
-    const price = type === 'monthly' ? 500 : 5000; // Example prices
+    // Calculate start and end dates
+    const startDate = new Date();
+    const endDate = new Date();
+    
+    if (type === 'monthly') {
+      endDate.setMonth(endDate.getMonth() + 1);
+    } else if (type === 'yearly') {
+      endDate.setFullYear(endDate.getFullYear() + 1);
+    }
 
-    // Create membership
+    // Create new membership
     const membership = await Membership.create({
-      userId: req.user.id,
+      userId,
       type,
       price,
-      status: 'pending'
+      startDate,
+      endDate,
+      status: 'active',
+      paymentStatus: 'paid',
+      benefits: getMembershipBenefits(type)
     });
 
-    // Create payment record
-    const payment = await Payment.create({
-      userId: req.user.id,
-      membershipId: membership._id,
-      amount: price,
-      paymentMethod,
-      status: 'pending',
-      transactionId: `MEM_${Date.now()}`,
-      paymentDetails: {
-        method: paymentMethod,
-        status: 'pending'
-      }
+    // Update user's membership status
+    await User.findByIdAndUpdate(userId, {
+      membershipStatus: 'active',
+      membershipType: type,
+      membershipExpiry: endDate
     });
-
-    // For demo purposes, auto-approve non-cash payments
-    if (paymentMethod !== 'cash') {
-      payment.status = 'success';
-      payment.paymentDetails.status = 'success';
-      await payment.save();
-
-      membership.status = 'active';
-      await membership.save();
-
-      await User.findByIdAndUpdate(req.user.id, {
-        membershipStatus: 'member'
-      });
-    }
 
     res.status(201).json({
       status: 'success',
-      data: {
-        membership,
-        payment
-      }
+      data: membership
     });
   } catch (error) {
     next(error);
@@ -114,25 +103,21 @@ exports.verifyPayment = async (req, res, next) => {
 // Get membership status
 exports.getMembershipStatus = async (req, res, next) => {
   try {
+    const userId = req.user.id;
+
     const membership = await Membership.findOne({
-      userId: req.user.id,
-      status: 'active'
-    });
+      userId,
+      status: 'active',
+      endDate: { $gt: new Date() }
+    }).sort('-createdAt');
 
     if (!membership) {
-      return res.status(200).json({
-        status: 'success',
-        data: {
-          membershipStatus: 'non-member'
-        }
-      });
+      return next(new AppError('No active membership found', 404));
     }
 
     res.status(200).json({
       status: 'success',
-      data: {
-        membership
-      }
+      data: membership
     });
   } catch (error) {
     next(error);
@@ -142,25 +127,33 @@ exports.getMembershipStatus = async (req, res, next) => {
 // Cancel membership
 exports.cancelMembership = async (req, res, next) => {
   try {
-    const membership = await Membership.findOne({
-      userId: req.user.id,
-      status: 'active'
-    });
+    const userId = req.user.id;
+
+    const membership = await Membership.findOneAndUpdate(
+      {
+        userId,
+        status: 'active',
+        endDate: { $gt: new Date() }
+      },
+      {
+        status: 'cancelled',
+        autoRenew: false
+      },
+      { new: true }
+    );
 
     if (!membership) {
       return next(new AppError('No active membership found', 404));
     }
 
-    await membership.cancel();
-
-    // Update user membership status
-    await User.findByIdAndUpdate(req.user.id, {
-      membershipStatus: 'non-member'
+    // Update user's membership status
+    await User.findByIdAndUpdate(userId, {
+      membershipStatus: 'cancelled'
     });
 
     res.status(200).json({
       status: 'success',
-      message: 'Membership cancelled successfully'
+      data: membership
     });
   } catch (error) {
     next(error);
@@ -170,23 +163,42 @@ exports.cancelMembership = async (req, res, next) => {
 // Extend membership
 exports.extendMembership = async (req, res, next) => {
   try {
-    const { months } = req.body;
-    const membership = await Membership.findOne({
-      userId: req.user.id,
-      status: 'active'
+    const { type, price } = req.body;
+    const userId = req.user.id;
+
+    // Find current active membership
+    const currentMembership = await Membership.findOne({
+      userId,
+      status: 'active',
+      endDate: { $gt: new Date() }
     });
 
-    if (!membership) {
+    if (!currentMembership) {
       return next(new AppError('No active membership found', 404));
     }
 
-    await membership.extend(months);
+    // Calculate new end date
+    const newEndDate = new Date(currentMembership.endDate);
+    
+    if (type === 'monthly') {
+      newEndDate.setMonth(newEndDate.getMonth() + 1);
+    } else if (type === 'yearly') {
+      newEndDate.setFullYear(newEndDate.getFullYear() + 1);
+    }
+
+    // Update membership
+    currentMembership.endDate = newEndDate;
+    currentMembership.price = price;
+    await currentMembership.save();
+
+    // Update user's membership expiry
+    await User.findByIdAndUpdate(userId, {
+      membershipExpiry: newEndDate
+    });
 
     res.status(200).json({
       status: 'success',
-      data: {
-        membership
-      }
+      data: currentMembership
     });
   } catch (error) {
     next(error);
@@ -196,17 +208,213 @@ exports.extendMembership = async (req, res, next) => {
 // Get membership history
 exports.getMembershipHistory = async (req, res, next) => {
   try {
-    const memberships = await Membership.find({
-      userId: req.user.id
-    })
-      .sort('-createdAt');
+    const userId = req.user.id;
+
+    const memberships = await Membership.find({ userId })
+      .sort('-createdAt')
+      .limit(10);
 
     res.status(200).json({
       status: 'success',
-      results: memberships.length,
-      data: {
-        memberships
+      data: memberships
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// Helper function to get membership benefits
+const getMembershipBenefits = (type) => {
+  const baseBenefits = [
+    'Access to all courts',
+    'Priority booking',
+    'Free equipment rental',
+    'Member-only events'
+  ];
+
+  if (type === 'monthly') {
+    return [...baseBenefits, '10% discount on lessons'];
+  } else if (type === 'yearly') {
+    return [
+      ...baseBenefits,
+      '2 months free',
+      'Exclusive tournaments',
+      'Personal coach consultation',
+      '20% discount on lessons',
+      'Free gear bag'
+    ];
+  }
+
+  return baseBenefits;
+};
+
+// Admin: Get all memberships
+exports.getAllMemberships = async (req, res, next) => {
+  try {
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+    const skip = (page - 1) * limit;
+
+    const memberships = await Membership.find()
+      .populate('userId', 'name email phone')
+      .sort('-createdAt')
+      .skip(skip)
+      .limit(limit);
+
+    const total = await Membership.countDocuments();
+
+    res.status(200).json({
+      status: 'success',
+      data: memberships,
+      pagination: {
+        page,
+        limit,
+        total,
+        pages: Math.ceil(total / limit)
       }
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// Admin: Get single membership
+exports.getMembership = async (req, res, next) => {
+  try {
+    const membership = await Membership.findById(req.params.id)
+      .populate('userId', 'name email phone');
+
+    if (!membership) {
+      return next(new AppError('Membership not found', 404));
+    }
+
+    res.status(200).json({
+      status: 'success',
+      data: membership
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// Admin: Update membership
+exports.updateMembership = async (req, res, next) => {
+  try {
+    const { type, status, startDate, endDate, price, paymentStatus } = req.body;
+
+    const membership = await Membership.findByIdAndUpdate(
+      req.params.id,
+      {
+        type,
+        status,
+        startDate,
+        endDate,
+        price,
+        paymentStatus
+      },
+      { new: true, runValidators: true }
+    ).populate('userId', 'name email phone');
+
+    if (!membership) {
+      return next(new AppError('Membership not found', 404));
+    }
+
+    // Update user's membership status if membership is being updated
+    if (status === 'active') {
+      await User.findByIdAndUpdate(membership.userId, {
+        membershipStatus: 'active',
+        membershipType: type,
+        membershipExpiry: endDate
+      });
+    } else if (status === 'cancelled' || status === 'expired') {
+      await User.findByIdAndUpdate(membership.userId, {
+        membershipStatus: status
+      });
+    }
+
+    res.status(200).json({
+      status: 'success',
+      data: membership
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// Admin: Delete membership
+exports.deleteMembership = async (req, res, next) => {
+  try {
+    const membership = await Membership.findById(req.params.id);
+
+    if (!membership) {
+      return next(new AppError('Membership not found', 404));
+    }
+
+    // Update user's membership status
+    await User.findByIdAndUpdate(membership.userId, {
+      membershipStatus: 'none',
+      membershipType: null,
+      membershipExpiry: null
+    });
+
+    await Membership.findByIdAndDelete(req.params.id);
+
+    res.status(204).json({
+      status: 'success',
+      data: null
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// Admin: Create membership for user
+exports.createMembershipForUser = async (req, res, next) => {
+  try {
+    const { userId, type, price, startDate, endDate } = req.body;
+
+    // Check if user exists
+    const user = await User.findById(userId);
+    if (!user) {
+      return next(new AppError('User not found', 404));
+    }
+
+    // Check if user already has an active membership
+    const existingMembership = await Membership.findOne({
+      userId,
+      status: 'active',
+      endDate: { $gt: new Date() }
+    });
+
+    if (existingMembership) {
+      return next(new AppError('User already has an active membership', 400));
+    }
+
+    // Create new membership
+    const membership = await Membership.create({
+      userId,
+      type,
+      price,
+      startDate: startDate || new Date(),
+      endDate: endDate || new Date(),
+      status: 'active',
+      paymentStatus: 'paid',
+      benefits: getMembershipBenefits(type)
+    });
+
+    // Update user's membership status
+    await User.findByIdAndUpdate(userId, {
+      membershipStatus: 'active',
+      membershipType: type,
+      membershipExpiry: endDate || new Date()
+    });
+
+    const populatedMembership = await Membership.findById(membership._id)
+      .populate('userId', 'name email phone');
+
+    res.status(201).json({
+      status: 'success',
+      data: populatedMembership
     });
   } catch (error) {
     next(error);

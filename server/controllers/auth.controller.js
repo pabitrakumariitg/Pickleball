@@ -44,7 +44,7 @@ exports.login = asyncHandler(async (req, res, next) => {
   // }
 
   // Check if password matches
-  const isMatch = await user.matchPassword(password);
+  const isMatch = await user.comparePassword(password);
 
   if (!isMatch) {
     return next(new ErrorResponse('Invalid credentials', 401));
@@ -107,7 +107,7 @@ exports.updatePassword = asyncHandler(async (req, res, next) => {
   const user = await User.findById(req.user.id).select('+password');
 
   // Check current password
-  if (!(await user.matchPassword(req.body.currentPassword))) {
+  if (!(await user.comparePassword(req.body.currentPassword))) {
     return next(new ErrorResponse('Password is incorrect', 401));
   }
 

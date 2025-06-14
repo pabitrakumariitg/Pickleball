@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { protect, authorize } = require('../middleware/auth');
+const { protect, restrictTo } = require('../middlewares/auth.middleware');
 const {
   getCourts,
   getCourt,
@@ -16,13 +16,13 @@ const {
 router
   .route('/')
   .get(getCourts)
-  .post(protect, authorize('business', 'admin'), createCourt);
+  .post(protect, restrictTo('Admin'), createCourt);
 
 router
   .route('/:id')
   .get(getCourt)
-  .put(protect, authorize('business', 'admin'), updateCourt)
-  .delete(protect, authorize('business', 'admin'), deleteCourt);
+  .put(protect, restrictTo('Admin'), updateCourt)
+  .delete(protect, restrictTo('Admin'), deleteCourt);
 
 router.get('/:id/bookings', protect, getCourtBookings);
 router.get('/:id/availability', getCourtAvailability);

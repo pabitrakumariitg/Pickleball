@@ -7,7 +7,8 @@ const userSchema = new mongoose.Schema({
   name: {
     type: String,
     required: [true, 'Please add a name'],
-    trim: true
+    trim: true,
+    maxlength: [50, 'Name cannot be more than 50 characters']
   },
   email: {
     type: String,
@@ -18,8 +19,24 @@ const userSchema = new mongoose.Schema({
       'Please add a valid email'
     ]
   },
+  phone: {
+    type: String,
+    required: [true, 'Please add a phone number'],
+    match: [/^[0-9]{10}$/, 'Please enter a valid 10-digit phone number']
+  },
+  role: {
+    type: String,
+    enum: ['Member', 'Admin', 'Partner'],
+    default: 'Member'
+  },
+  status: {
+    type: String,
+    enum: ['Active', 'Inactive', 'Suspended'],
+    default: 'Active'
+  },
   password: {
     type: String,
+    required: [true, 'Please add a password'],
     minlength: 6,
     select: false
   },
@@ -28,37 +45,45 @@ const userSchema = new mongoose.Schema({
     unique: true,
     sparse: true
   },
-  role: {
-    type: String,
-    enum: ['user', 'business', 'admin'],
-    default: 'user'
-  },
-  phone: {
-    type: String,
-    match: [/^[0-9]{10}$/, 'Please add a valid phone number']
-  },
   profilePicture: {
     type: String
   },
   resetPasswordToken: String,
   resetPasswordExpire: Date,
-  createdAt: {
+  joinDate: {
     type: Date,
     default: Date.now
   },
-  updatedAt: {
+  lastLogin: {
     type: Date,
     default: Date.now
+  },
+  passwordChangedAt: Date,
+  // Membership fields
+  membershipStatus: {
+    type: String,
+    enum: ['active', 'expired', 'cancelled', 'none'],
+    default: 'none'
+  },
+  membershipType: {
+    type: String,
+    enum: ['monthly', 'yearly'],
+    default: null
+  },
+  membershipExpiry: {
+    type: Date,
+    default: null
   }
 }, {
-  timestamps: true
+  timestamps: true,
+  toJSON: { virtuals: true },
+  toObject: { virtuals: true }
 });
 
-// Encrypt password using bcrypt only if password is provided
+// Encrypt password using bcrypt
 userSchema.pre('save', async function(next) {
-  if (!this.isModified('password') || !this.password) {
+  if (!this.isModified('password')) {
     next();
-    return;
   }
 
   const salt = await bcrypt.genSalt(10);
@@ -68,12 +93,12 @@ userSchema.pre('save', async function(next) {
 // Sign JWT and return
 userSchema.methods.getSignedJwtToken = function() {
   return jwt.sign({ id: this._id }, process.env.JWT_SECRET, {
-    expiresIn: process.env.JWT_EXPIRE
+    expiresIn: process.env.JWT_EXPIRE || '30d'
   });
 };
 
 // Match user entered password to hashed password in database
-userSchema.methods.matchPassword = async function(enteredPassword) {
+userSchema.methods.comparePassword = async function(enteredPassword) {
   return await bcrypt.compare(enteredPassword, this.password);
 };
 
@@ -92,6 +117,31 @@ userSchema.methods.getResetPasswordToken = function() {
   this.resetPasswordExpire = Date.now() + 10 * 60 * 1000;
 
   return resetToken;
+};
+
+// Check if password was changed after token was issued
+userSchema.methods.changedPasswordAfter = function(JWTTimestamp) {
+  if (this.passwordChangedAt) {
+    const changedTimestamp = parseInt(
+      this.passwordChangedAt.getTime() / 1000,
+      10
+    );
+    return JWTTimestamp < changedTimestamp;
+  }
+  return false;
+};
+
+// Check if user has active membership
+userSchema.methods.hasActiveMembership = function() {
+  if (this.membershipStatus !== 'active') {
+    return false;
+  }
+  
+  if (!this.membershipExpiry) {
+    return false;
+  }
+  
+  return this.membershipExpiry > new Date();
 };
 
 // Method to get public profile

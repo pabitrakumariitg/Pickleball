@@ -50,6 +50,7 @@ router.post('/login', loginValidation, validateRequest, userController.login);
 router.use(protect); // All routes after this middleware require authentication
 
 router.get('/profile', userController.getProfile);
+router.get('/membership-status', userController.getMembershipStatus);
 router.put(
   '/profile/update',
   updateProfileValidation,

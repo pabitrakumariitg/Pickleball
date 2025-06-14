@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { protect, authorize } = require('../middleware/auth');
+const { protect, restrictTo } = require('../middlewares/auth.middleware');
 const {
   getBookings,
   getBooking,
@@ -19,7 +19,7 @@ router.get('/my-bookings', protect, getMyBookings);
 // Then put parameter routes
 router
   .route('/')
-  .get(protect, authorize('admin'), getBookings)
+  .get(protect, restrictTo('Admin'), getBookings)
   .post(protect, createBooking);
 
 router

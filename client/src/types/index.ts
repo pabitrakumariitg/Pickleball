@@ -39,19 +39,17 @@ export type Event = {
 export interface Court {
   _id: string;
   name: string;
-  location: string;
+  venue: string;
+  type: 'indoor' | 'outdoor';
+  surface: 'concrete' | 'asphalt' | 'wood' | 'synthetic';
   price: number;
-  memberPrice: number;
-  image: string;
-  isIndoor: boolean;
-  city: string;
-  available: boolean;
-  description?: string;
-  amenities?: string[];
-  operatingHours?: {
-    start: string;
-    end: string;
-  };
+  capacity: number;
+  description: string;
+  openingTime: string;
+  closingTime: string;
+  status: 'active' | 'maintenance' | 'inactive';
+  amenities?: ('parking' | 'showers' | 'lockers' | 'equipment_rental' | 'cafe' | 'wifi')[];
+  image?: string;
 }
 
 // Membership type

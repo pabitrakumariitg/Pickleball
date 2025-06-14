@@ -85,29 +85,77 @@ export default function ProfilePage() {
         return;
       }
 
-      const response = await fetch(getApiUrl("api/v1/membership/status"), {
+      // First try the membership-specific endpoint
+      let response = await fetch(getApiUrl("api/v1/memberships/status"), {
         headers: {
           Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json'
         }
       });
 
-      if (!response.ok) {
-        if (response.status === 401) {
-          router.push('/login');
+      if (response.ok) {
+        const data = await response.json();
+        if (data.status === 'success' && data.data) {
+          setMembershipData(data.data);
           return;
         }
-        throw new Error("Failed to fetch membership status");
       }
 
-      const data = await response.json();
-      if (data.success) {
-        setMembershipData(data.data.membership);
+      // If membership endpoint fails or returns no data, try user membership status
+      response = await fetch(getApiUrl("api/v1/users/membership-status"), {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        if (data.status === 'success' && data.data.hasActiveMembership) {
+          // Create membership data from user info
+          setMembershipData({
+            type: data.data.membershipType,
+            status: data.data.membershipStatus,
+            endDate: data.data.membershipExpiry,
+            startDate: new Date().toISOString(), // We don't have this from user model
+            benefits: getMembershipBenefits(data.data.membershipType)
+          });
+          return;
+        }
       }
+
+      // If both fail, set to null (no membership)
+      setMembershipData(null);
     } catch (err) {
       console.error("Failed to fetch membership status:", err);
-      toast.error("Failed to load membership information");
+      // Don't show error toast for membership status - it's optional
+      setMembershipData(null);
     }
+  };
+
+  // Helper function to get membership benefits
+  const getMembershipBenefits = (type: string) => {
+    const baseBenefits = [
+      'Access to all courts',
+      'Priority booking',
+      'Free equipment rental',
+      'Member-only events'
+    ];
+
+    if (type === 'monthly') {
+      return [...baseBenefits, '10% discount on lessons'];
+    } else if (type === 'yearly') {
+      return [
+        ...baseBenefits,
+        '2 months free',
+        'Exclusive tournaments',
+        'Personal coach consultation',
+        '20% discount on lessons',
+        'Free gear bag'
+      ];
+    }
+
+    return baseBenefits;
   };
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -351,23 +399,63 @@ export default function ProfilePage() {
                 </div>
 
                 {/* Membership Status */}
-                {membershipData && (
-                  <div className="bg-primary/5 rounded-lg p-4">
-                    <div className="flex items-center gap-2 mb-2">
-                      <Tag className="h-5 w-5 text-primary" />
-                      <span className="font-medium">Membership Status</span>
-                    </div>
-                    <div className="flex items-center justify-between">
-                      <span className="text-sm text-gray-600">{membershipData.type}</span>
-                      <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                        Active
-                      </span>
-                    </div>
-                    <div className="text-sm text-gray-600 mt-2">
-                      Valid until: {format(new Date(membershipData.endDate), 'MMM d, yyyy')}
-                    </div>
+                <div className="bg-primary/5 rounded-lg p-4">
+                  <div className="flex items-center gap-2 mb-3">
+                    <Tag className="h-5 w-5 text-primary" />
+                    <span className="font-medium">Membership Status</span>
                   </div>
-                )}
+                  
+                  {membershipData ? (
+                    <div className="space-y-2">
+                      <div className="flex items-center justify-between">
+                        <span className="text-sm text-gray-600 capitalize">{membershipData.type} Membership</span>
+                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                          <CheckCircle className="h-3 w-3 mr-1" />
+                          Active
+                        </span>
+                      </div>
+                      <div className="text-sm text-gray-600">
+                        Valid until: {format(new Date(membershipData.endDate), 'MMM d, yyyy')}
+                      </div>
+                      {membershipData.benefits && membershipData.benefits.length > 0 && (
+                        <div className="mt-3">
+                          <p className="text-xs font-medium text-gray-700 mb-1">Benefits:</p>
+                          <ul className="text-xs text-gray-600 space-y-1">
+                            {membershipData.benefits.slice(0, 3).map((benefit, index) => (
+                              <li key={index} className="flex items-center">
+                                <CheckCircle className="h-3 w-3 text-green-500 mr-1 flex-shrink-0" />
+                                {benefit}
+                              </li>
+                            ))}
+                            {membershipData.benefits.length > 3 && (
+                              <li className="text-xs text-primary">+{membershipData.benefits.length - 3} more benefits</li>
+                            )}
+                          </ul>
+                        </div>
+                      )}
+                    </div>
+                  ) : (
+                    <div className="space-y-3">
+                      <div className="flex items-center justify-between">
+                        <span className="text-sm text-gray-600">No Active Membership</span>
+                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
+                          Inactive
+                        </span>
+                      </div>
+                      <p className="text-xs text-gray-500">
+                        Get exclusive benefits with a membership
+                      </p>
+                      <Button
+                        onClick={() => router.push('/membership')}
+                        size="sm"
+                        className="w-full text-xs"
+                      >
+                        <Plus className="h-3 w-3 mr-1" />
+                        Get Membership
+                      </Button>
+                    </div>
+                  )}
+                </div>
 
                 {/* Contact Information */}
                 <div className="space-y-4">

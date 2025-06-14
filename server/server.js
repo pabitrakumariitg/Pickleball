@@ -27,6 +27,7 @@ const bookingRoutes = require('./routes/booking.routes');
 const eventRoutes = require('./routes/event.routes');
 const membershipRoutes = require('./routes/membership.routes');
 const businessRoutes = require('./routes/business.routes');
+const userRoutes = require('./routes/user.routes');
 
 const app = express();
 
@@ -81,6 +82,7 @@ app.use(limiter);
 // Prevent http param pollution
 app.use(hpp());
 
+// Mount routers
 app.use('/api/v1/auth', authRoutes);
 app.use('/api/v1/admin', adminRoutes);
 app.use('/api/v1/courts', courtRoutes);
@@ -88,6 +90,7 @@ app.use('/api/v1/bookings', bookingRoutes);
 app.use('/api/v1/events', eventRoutes);
 app.use('/api/v1/memberships', membershipRoutes);
 app.use('/api/v1/businesses', businessRoutes);
+app.use('/api/v1/users', userRoutes);
 
 // Error handler
 app.use(errorHandler);

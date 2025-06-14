@@ -33,7 +33,7 @@ const membershipSchema = new mongoose.Schema({
   paymentStatus: {
     type: String,
     enum: ['pending', 'paid', 'failed'],
-    default: 'pending'
+    default: 'paid'
   },
   paymentId: {
     type: String,
@@ -63,35 +63,39 @@ const membershipSchema = new mongoose.Schema({
 membershipSchema.index({ userId: 1 });
 membershipSchema.index({ status: 1 });
 membershipSchema.index({ endDate: 1 });
+membershipSchema.index({ userId: 1, status: 1 });
 
 // Method to check if membership is active
 membershipSchema.methods.isActive = function() {
-  const now = new Date();
-  return this.status === 'active' && now <= this.endDate;
+  return this.status === 'active' && this.endDate > new Date();
 };
 
-// Method to calculate remaining days
+// Method to get remaining days
 membershipSchema.methods.getRemainingDays = function() {
+  if (!this.isActive()) {
+    return 0;
+  }
+  
   const now = new Date();
-  const end = new Date(this.endDate);
-  const diffTime = end - now;
-  return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+  const diffTime = this.endDate - now;
+  const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+  
+  return Math.max(0, diffDays);
 };
 
 // Method to extend membership
-membershipSchema.methods.extend = async function(months) {
-  const currentEndDate = new Date(this.endDate);
-  currentEndDate.setMonth(currentEndDate.getMonth() + months);
-  this.endDate = currentEndDate;
-  this.status = 'active';
-  await this.save();
+membershipSchema.methods.extend = function(months) {
+  const newEndDate = new Date(this.endDate);
+  newEndDate.setMonth(newEndDate.getMonth() + months);
+  this.endDate = newEndDate;
+  return this.save();
 };
 
 // Method to cancel membership
-membershipSchema.methods.cancel = async function() {
+membershipSchema.methods.cancel = function() {
   this.status = 'cancelled';
   this.autoRenew = false;
-  await this.save();
+  return this.save();
 };
 
 // Pre-save middleware to set end date based on type

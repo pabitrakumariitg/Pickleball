@@ -33,7 +33,7 @@ exports.getBooking = asyncHandler(async (req, res, next) => {
   }
 
   // Make sure user is booking owner or admin
-  if (booking.user.toString() !== req.user.id && req.user.role !== 'admin') {
+  if (booking.user.toString() !== req.user.id && req.user.role !== 'Admin') {
     return next(
       new ErrorResponse(
         `User ${req.user.id} is not authorized to view this booking`,
@@ -90,7 +90,7 @@ exports.updateBooking = asyncHandler(async (req, res, next) => {
   }
 
   // Make sure user is booking owner or admin
-  if (booking.user.toString() !== req.user.id && req.user.role !== 'admin') {
+  if (booking.user.toString() !== req.user.id && req.user.role !== 'Admin') {
     return next(
       new ErrorResponse(
         `User ${req.user.id} is not authorized to update this booking`,
@@ -126,7 +126,7 @@ exports.deleteBooking = asyncHandler(async (req, res, next) => {
   }
 
   // Make sure user is booking owner or admin
-  if (booking.user.toString() !== req.user.id && req.user.role !== 'admin') {
+  if (booking.user.toString() !== req.user.id && req.user.role !== 'Admin') {
     return next(
       new ErrorResponse(
         `User ${req.user.id} is not authorized to delete this booking`,
@@ -169,7 +169,7 @@ exports.cancelBooking = asyncHandler(async (req, res, next) => {
   }
 
   // Make sure user is booking owner or admin
-  if (booking.user.toString() !== req.user.id && req.user.role !== 'admin') {
+  if (booking.user.toString() !== req.user.id && req.user.role !== 'Admin') {
     return next(
       new ErrorResponse(
         `User ${req.user.id} is not authorized to cancel this booking`,

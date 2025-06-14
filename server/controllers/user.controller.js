@@ -175,3 +175,28 @@ exports.deleteAccount = async (req, res, next) => {
     next(error);
   }
 };
+
+// Get user membership status
+exports.getMembershipStatus = async (req, res, next) => {
+  try {
+    const user = await User.findById(req.user.id);
+    
+    if (!user) {
+      return next(new AppError('User not found', 404));
+    }
+
+    const membershipInfo = {
+      hasActiveMembership: user.hasActiveMembership(),
+      membershipStatus: user.membershipStatus,
+      membershipType: user.membershipType,
+      membershipExpiry: user.membershipExpiry
+    };
+
+    res.status(200).json({
+      status: 'success',
+      data: membershipInfo
+    });
+  } catch (error) {
+    next(error);
+  }
+};
