@@ -42,6 +42,7 @@ const config = {
     return config;
   },
   async rewrites() {
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
     return [
       {
         source: '/_next/:path*.map',
@@ -49,7 +50,7 @@ const config = {
       },
       {
         source: '/api/v1/:path*',
-        destination: 'http://localhost:5000/api/v1/:path*' // Adjust the port if your backend runs on a different port
+        destination: `${apiUrl}/api/v1/:path*`
       }
     ];
   },

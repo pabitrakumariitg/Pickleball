@@ -1,11 +1,12 @@
 import { NextResponse } from 'next/server';
+import { getApiUrl } from '@/config';
 
 export async function GET(
   request: Request,
   { params }: { params: { courtId: string } }
 ) {
   try {
-    const response = await fetch(`http://localhost:5000/api/v1/courts/${params.courtId}`, {
+    const response = await fetch(getApiUrl(`api/v1/courts/${params.courtId}`), {
       headers: {
         'Content-Type': 'application/json'
       }
