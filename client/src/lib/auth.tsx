@@ -23,7 +23,7 @@ interface AuthContextType {
   logout: () => Promise<void>;
   forgotPassword: (email: string) => Promise<void>;
   resetPassword: (token: string, password: string) => Promise<void>;
-  updateProfile: (data: { name?: string; email?: string }) => Promise<void>;
+  updateProfile: (data: { name?: string; email?: string; profilePicture?: string }) => Promise<void>;
   updatePassword: (currentPassword: string, newPassword: string) => Promise<void>;
 }
 
@@ -138,7 +138,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   };
 
-  const updateProfile = async (data: { name?: string; email?: string }) => {
+  const updateProfile = async (data: { name?: string; email?: string; profilePicture?: string }) => {
     try {
       setError(null);
       const response = await axios.put('/api/v1/auth/updatedetails', data);

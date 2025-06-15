@@ -11,6 +11,7 @@ import {
 } from 'lucide-react';
 import Image from 'next/image';
 import { getApiUrl } from '@/config';
+import { toast } from 'sonner';
 
 interface StatData {
   totalUsers: number;
@@ -33,8 +34,8 @@ interface CourtType {
 
 interface Booking {
   _id: string;
-  user: User;
-  court: CourtType;
+  user?: User;
+  court?: CourtType;
   startTime: string;
   endTime: string;
   status: string;
@@ -55,6 +56,9 @@ export default function DashboardPage() {
   const [bookings, setBookings] = useState<Booking[]>([]);
   const [loading, setLoading] = useState(false);
   const [courts, setCourts] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [totalMemberships, setTotalMemberships] = useState<number>(0);
 
   // Client-side auth guard
   useEffect(() => {
@@ -66,6 +70,46 @@ export default function DashboardPage() {
   }, [router]);
 
   useEffect(() => {
+
+    const fetchMemberships = async () => {
+      try {
+        setIsLoading(true);
+        setError(null);
+        const token = localStorage.getItem('token');
+        if (!token) {
+          router.replace('/admin/login');
+          return;
+        }
+
+        const headers = {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        };
+
+        const response = await fetch(getApiUrl('api/v1/memberships'), { headers });
+
+        if (!response.ok) {
+          if (response.status === 403) {
+            router.replace('/admin/login');
+            return;
+          }
+          throw new Error('Failed to fetch memberships');
+        }
+
+        const data = await response.json();
+        if (data.status === 'success') {
+          setTotalMemberships(data.data.length);
+        } else {
+          throw new Error('Invalid response format');
+        }
+      } catch (err) {
+        console.error('Error fetching memberships:', err);
+        setError('Failed to load memberships. Please try again.');
+        toast.error('Failed to load memberships');
+      } finally {
+        setIsLoading(false);
+      }
+    };
     const fetchCourts = async () => {
       try {
         const token = localStorage.getItem('token');
@@ -145,6 +189,7 @@ export default function DashboardPage() {
     fetchCourts();
     fetchBookings();
     fetchStats();
+    fetchMemberships();
   }, [router]);
 
   if (loading) {
@@ -166,12 +211,12 @@ export default function DashboardPage() {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        <StatCard title="Total Users" value={totalUsers} icon={Users} trend="+12%" trendUp />
-        <StatCard title="Total Courts" value={totalCourts} icon={Building2} trend="+2" trendUp />
-        <StatCard title="Total Bookings" value={totalBookings} icon={Calendar} trend="+8%" trendUp />
-        <StatCard title="Active Memberships" value={stats.activeMemberships} icon={Users} trend="+5%" trendUp />
-        <StatCard title="Monthly Revenue" value={`₹${stats.monthlyRevenue.toLocaleString()}`} icon={CreditCard} trend="+15%" trendUp />
-        <StatCard title="Upcoming Events" value={stats.upcomingEvents} icon={Calendar} trend="+3" trendUp />
+        <StatCard title="Total Users" value={totalUsers} icon={Users} />
+        <StatCard title="Total Courts" value={totalCourts} icon={Building2} />
+        <StatCard title="Total Bookings" value={totalBookings} icon={Calendar} />
+        <StatCard title="Active Memberships" value={totalMemberships} icon={Users} />
+        {/* <StatCard title="Monthly Revenue" value={`₹${stats.monthlyRevenue.toLocaleString()}`} icon={CreditCard} trend="+15%" trendUp /> */}
+        <StatCard title="Upcoming Events" value={stats.upcomingEvents} icon={Calendar} />
       </div>
 
       <div className="bg-card rounded-lg shadow">
@@ -189,32 +234,44 @@ export default function DashboardPage() {
                 </tr>
               </thead>
               <tbody>
-                {bookings.map((booking) => (
-                  <tr key={booking._id} className="border-b border-border last:border-0">
-                    <td className="py-3 px-4 text-sm text-foreground">{booking.user.name}</td>
-                    <td className="py-3 px-4 text-sm text-foreground">{booking.court.name}</td>
-                    <td className="py-3 px-4 text-sm text-foreground">
-                      {new Date(booking.startTime).toLocaleDateString('en-GB', {
-                        day: '2-digit',
-                        month: '2-digit',
-                        year: 'numeric'
-                      })}
-                    </td>
-                    <td className="py-3 px-4 text-sm text-foreground">
-                      {new Date(booking.startTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                    </td>
-                    <td className="py-3 px-4 text-sm">
-                      <span
-                        className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${booking.status === 'Confirmed'
-                          ? 'bg-green-100 text-green-800'
-                          : 'bg-yellow-100 text-yellow-800'
-                        }`}
-                      >
-                        {booking.status}
-                      </span>
+                {bookings.length === 0 ? (
+                  <tr>
+                    <td colSpan={5} className="py-8 px-4 text-center text-muted-foreground">
+                      No bookings found
                     </td>
                   </tr>
-                ))}
+                ) : (
+                  bookings.map((booking) => (
+                    <tr key={booking._id} className="border-b border-border last:border-0">
+                      <td className="py-3 px-4 text-sm text-foreground">
+                        {booking.user?.name || 'Unknown User'}
+                      </td>
+                      <td className="py-3 px-4 text-sm text-foreground">
+                        {booking.court?.name || 'Unknown Court'}
+                      </td>
+                      <td className="py-3 px-4 text-sm text-foreground">
+                        {new Date(booking.startTime).toLocaleDateString('en-GB', {
+                          day: '2-digit',
+                          month: '2-digit',
+                          year: 'numeric'
+                        })}
+                      </td>
+                      <td className="py-3 px-4 text-sm text-foreground">
+                        {new Date(booking.startTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                      </td>
+                      <td className="py-3 px-4 text-sm">
+                        <span
+                          className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${booking.status === 'Confirmed'
+                            ? 'bg-green-100 text-green-800'
+                            : 'bg-yellow-100 text-yellow-800'
+                            }`}
+                        >
+                          {booking.status}
+                        </span>
+                      </td>
+                    </tr>
+                  ))
+                )}
               </tbody>
             </table>
           </div>
@@ -228,14 +285,10 @@ function StatCard({
   title,
   value,
   icon: Icon,
-  trend,
-  trendUp,
 }: {
   title: string;
   value: string | number;
   icon: any;
-  trend: string;
-  trendUp: boolean;
 }) {
   return (
     <div className="bg-card rounded-lg shadow p-6">
@@ -248,16 +301,7 @@ function StatCard({
           <Icon className="h-6 w-6 text-primary" />
         </div>
       </div>
-      <div className="mt-4 flex items-center">
-        {trendUp ? (
-          <TrendingUp className="h-4 w-4 text-green-500" />
-        ) : (
-          <Clock className="h-4 w-4 text-red-500" />
-        )}
-        <span className={`ml-2 text-sm font-medium ${trendUp ? 'text-green-500' : 'text-red-500'}`}>
-          {trend}
-        </span>
-      </div>
+
     </div>
   );
 }

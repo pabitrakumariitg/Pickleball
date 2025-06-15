@@ -5,6 +5,8 @@ import { Plus, Search, Image as ImageIcon, Edit, Trash2 } from 'lucide-react';
 import { Court } from "@/types";
 import { getApiUrl } from '@/config';
 import { useRouter } from 'next/navigation';
+import PhotoUpload from '@/components/ui/PhotoUpload';
+import { CloudinaryPhoto } from '@/lib/cloudinary';
 
 interface CourtFormData {
   name: string;
@@ -18,7 +20,7 @@ interface CourtFormData {
   closingTime: string;
   status: 'active' | 'maintenance' | 'inactive';
   amenities?: ('parking' | 'showers' | 'lockers' | 'equipment_rental' | 'cafe' | 'wifi')[];
-  image?: File;
+  imageUrl?: string;
 }
 
 export default function CourtsPage() {
@@ -96,16 +98,13 @@ export default function CourtsPage() {
     }));
   };
 
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      setFormData(prev => ({ ...prev, image: file }));
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setImagePreview(reader.result as string);
-      };
-      reader.readAsDataURL(file);
-    }
+  const handleImageUpload = (photo: CloudinaryPhoto) => {
+    setFormData(prev => ({ ...prev, imageUrl: photo.url }));
+    setImagePreview(photo.url);
+  };
+
+  const handleImageError = (error: string) => {
+    setError(error);
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -117,8 +116,6 @@ export default function CourtsPage() {
         return;
       }
 
-      const formDataToSend = new FormData();
-      
       // Convert time strings to Date objects for the API
       const today = new Date();
       const [openingHour, openingMinute] = formData.openingTime.split(':');
@@ -130,28 +127,28 @@ export default function CourtsPage() {
       const closingDate = new Date(today);
       closingDate.setHours(parseInt(closingHour), parseInt(closingMinute), 0);
 
-      // Append all form data
-      Object.entries(formData).forEach(([key, value]) => {
-        if (key === 'openingTime') {
-          formDataToSend.append(key, openingDate.toISOString());
-        } else if (key === 'closingTime') {
-          formDataToSend.append(key, closingDate.toISOString());
-        } else if (key === 'amenities' && Array.isArray(value)) {
-          // Append each amenity as a separate value
-          value.forEach(amenity => {
-            formDataToSend.append('amenities[]', amenity);
-          });
-        } else if (value !== undefined && value !== '') {
-          formDataToSend.append(key, value.toString());
-        }
-      });
+      const courtData = {
+        name: formData.name,
+        venue: formData.venue,
+        type: formData.type,
+        surface: formData.surface,
+        price: formData.price,
+        capacity: formData.capacity,
+        description: formData.description,
+        openingTime: openingDate.toISOString(),
+        closingTime: closingDate.toISOString(),
+        status: formData.status,
+        amenities: formData.amenities,
+        image: formData.imageUrl
+      };
 
       const response = await fetch(getApiUrl('api/v1/courts'), {
         method: 'POST',
         headers: {
-          'Authorization': `Bearer ${token}`
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
         },
-        body: formDataToSend
+        body: JSON.stringify(courtData)
       });
 
       if (!response.ok) {
@@ -218,7 +215,8 @@ export default function CourtsPage() {
       openingTime,
       closingTime,
       status: court.status,
-      amenities: court.amenities || []
+      amenities: court.amenities || [],
+      imageUrl: court.image || ''
     });
     setImagePreview(court.image || null);
     setShowUpdateForm(true);
@@ -268,8 +266,6 @@ export default function CourtsPage() {
         return;
       }
 
-      const formDataToSend = new FormData();
-      
       // Convert time strings to Date objects for the API
       const today = new Date();
       const [openingHour, openingMinute] = formData.openingTime.split(':');
@@ -281,27 +277,28 @@ export default function CourtsPage() {
       const closingDate = new Date(today);
       closingDate.setHours(parseInt(closingHour), parseInt(closingMinute), 0);
 
-      // Append all form data
-      Object.entries(formData).forEach(([key, value]) => {
-        if (key === 'openingTime') {
-          formDataToSend.append(key, openingDate.toISOString());
-        } else if (key === 'closingTime') {
-          formDataToSend.append(key, closingDate.toISOString());
-        } else if (key === 'amenities' && Array.isArray(value)) {
-          value.forEach(amenity => {
-            formDataToSend.append('amenities[]', amenity);
-          });
-        } else if (value !== undefined && value !== '') {
-          formDataToSend.append(key, value.toString());
-        }
-      });
+      const courtData = {
+        name: formData.name,
+        venue: formData.venue,
+        type: formData.type,
+        surface: formData.surface,
+        price: formData.price,
+        capacity: formData.capacity,
+        description: formData.description,
+        openingTime: openingDate.toISOString(),
+        closingTime: closingDate.toISOString(),
+        status: formData.status,
+        amenities: formData.amenities,
+        image: formData.imageUrl
+      };
 
       const response = await fetch(getApiUrl(`api/v1/courts/${selectedCourt._id}`), {
         method: 'PUT',
         headers: {
-          'Authorization': `Bearer ${token}`
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
         },
-        body: formDataToSend
+        body: JSON.stringify(courtData)
       });
 
       if (!response.ok) {
@@ -602,35 +599,15 @@ export default function CourtsPage() {
                   <label className="block text-sm font-medium text-foreground mb-1">
                     Court Image
                   </label>
-                  <div className="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-dashed border-input rounded-md">
-                    <div className="space-y-1 text-center">
-                      {imagePreview ? (
-                        <img
-                          src={imagePreview}
-                          alt="Preview"
-                          className="mx-auto h-32 w-32 object-cover rounded-md"
-                        />
-                      ) : (
-                        <ImageIcon className="mx-auto h-12 w-12 text-muted-foreground" />
-                      )}
-                      <div className="flex text-sm text-muted-foreground">
-                        <label className="relative cursor-pointer rounded-md font-medium text-primary hover:text-primary/80">
-                          <span>Upload a file</span>
-                          <input
-                            type="file"
-                            name="image"
-                            onChange={handleImageChange}
-                            className="sr-only"
-                            accept="image/*"
-                          />
-                        </label>
-                        <p className="pl-1">or drag and drop</p>
-                      </div>
-                      <p className="text-xs text-muted-foreground">
-                        PNG, JPG, GIF up to 10MB
-                      </p>
-                    </div>
-                  </div>
+                  <PhotoUpload
+                    onUpload={handleImageUpload}
+                    onError={handleImageError}
+                    folder="court-images"
+                    description="Court image"
+                    maxSize={10 * 1024 * 1024} // 10MB
+                    showPreview={true}
+                    previewSize="md"
+                  />
                 </div>
 
                 <div className="flex justify-end gap-4 mt-6">

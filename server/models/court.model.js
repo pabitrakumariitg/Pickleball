@@ -7,6 +7,12 @@ const courtSchema = new mongoose.Schema({
     trim: true,
     maxlength: [50, 'Name cannot be more than 50 characters']
   },
+  venue: {
+    type: String,
+    required: [true, 'Please add a venue name'],
+    trim: true,
+    maxlength: [100, 'Venue name cannot be more than 100 characters']
+  },
   description: {
     type: String,
     required: [true, 'Please add a description'],
@@ -49,6 +55,10 @@ const courtSchema = new mongoose.Schema({
     type: String,
     enum: ['parking', 'showers', 'lockers', 'equipment_rental', 'cafe', 'wifi']
   }],
+  image: {
+    type: String,
+    default: null
+  },
   images: [{
     type: String
   }],

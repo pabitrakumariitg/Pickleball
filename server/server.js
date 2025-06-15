@@ -28,6 +28,7 @@ const eventRoutes = require('./routes/event.routes');
 const membershipRoutes = require('./routes/membership.routes');
 const businessRoutes = require('./routes/business.routes');
 const userRoutes = require('./routes/user.routes');
+const uploadRoutes = require('./routes/upload.routes');
 
 const app = express();
 
@@ -91,6 +92,7 @@ app.use('/api/v1/events', eventRoutes);
 app.use('/api/v1/memberships', membershipRoutes);
 app.use('/api/v1/businesses', businessRoutes);
 app.use('/api/v1/users', userRoutes);
+app.use('/api/v1/upload', uploadRoutes);
 
 // Error handler
 app.use(errorHandler);

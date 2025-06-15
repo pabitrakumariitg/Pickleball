@@ -20,15 +20,16 @@ export function EquipmentSection() {
   const equipment: Equipment[] = [{
     name: "Paddle",
     description: "Pickleball paddles are larger than ping-pong paddles but smaller than tennis rackets. They're typically made from wood, composite materials, or graphite. Beginners should look for a mid-weight paddle that balances power and control.",
-    image: "https://picsum.photos/200"
+    image: "/pickleball-pad.jpg"
   }, {
     name: "Ball",
     description: "Pickleball uses a perforated plastic ball similar to a wiffle ball. Indoor and outdoor pickleballs differ slightly - indoor balls have larger holes and are lighter, while outdoor balls are heavier and have smaller holes to resist wind.",
-    image: "https://picsum.photos/200"
-  }, {
+    image: "/pickleball-ball.jpg"
+  }, 
+  {
     name: "Court Shoes",
     description: "Court-specific athletic shoes provide the right support and grip for pickleball movements. Look for shoes with good lateral support, cushioning, and non-marking soles. Tennis or volleyball shoes work well for pickleball.",
-    image: "https://images.unsplash.com/photo-1460353581641-37baddab0fa2?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3"
+    image: "/pickleball-shoes.jpg"
   }];
   return <section ref={sectionRef} id="equipment" className="relative overflow-hidden py-20 bg-secondary" data-unique-id="9b1fc1e2-e7ed-4dee-a12f-f9f854b4997c" data-file-name="components/how-to-play/equipment-section.tsx" data-dynamic-text="true">
       {/* Decorative background elements */}
@@ -86,7 +87,7 @@ export function EquipmentSection() {
             delay: 0.2
           }} className="w-full md:w-1/2" data-unique-id="0512be6a-ea5c-45c6-ace8-11c1c9dedc86" data-file-name="components/how-to-play/equipment-section.tsx">
                 <div className="relative overflow-hidden rounded-lg" data-unique-id="15af9f26-5961-447f-ab89-a11da1b37b0a" data-file-name="components/how-to-play/equipment-section.tsx">
-                  <img src={item.image} alt={item.name} className="h-64 w-full object-cover" data-unique-id="afc62c45-b978-44c8-b50c-64ec9ca236a6" data-file-name="components/how-to-play/equipment-section.tsx" />
+                  <img src={item.image} alt={item.name} className="h-full w-full object-cover" data-unique-id="afc62c45-b978-44c8-b50c-64ec9ca236a6" data-file-name="components/how-to-play/equipment-section.tsx" />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end" data-unique-id="a181417d-dd2f-4890-bcfe-1224b7f576f8" data-file-name="components/how-to-play/equipment-section.tsx">
                     <h3 className="p-6 text-2xl font-bold text-white" data-unique-id="5896144e-c2d5-410a-a6df-a331d24f21a0" data-file-name="components/how-to-play/equipment-section.tsx" data-dynamic-text="true">{item.name}</h3>
                   </div>

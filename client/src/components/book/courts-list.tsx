@@ -135,8 +135,8 @@ export function CourtsList() {
                   <h3 className="text-xl font-semibold" data-unique-id="07ede1f5-be53-4847-b087-360f83d9bd04" data-file-name="components/book/courts-list.tsx" data-dynamic-text="true">{court.name}</h3>
                   <div className="mt-1 flex items-center text-sm text-foreground/70" data-unique-id="de77484d-1888-4856-8454-edb5f4c86040" data-file-name="components/book/courts-list.tsx" data-dynamic-text="true">
                     <MapPin className="mr-1 h-4 w-4" />
-                    {/* {court.location} */}
-                    {court.price}
+                    {court.venue}
+              
                   </div>
                 </div>
                 <div className="text-right" data-unique-id="03c3fb94-ba2c-455a-a5c8-e5cf0bf27bb2" data-file-name="components/book/courts-list.tsx">

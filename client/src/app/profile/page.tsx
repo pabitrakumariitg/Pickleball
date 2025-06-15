@@ -13,13 +13,15 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { format } from 'date-fns';
 import { toast } from 'sonner';
 import { getApiUrl } from '@/config';
+import ProfilePictureUpload from '@/components/ui/ProfilePictureUpload';
+import { CloudinaryPhoto } from '@/lib/cloudinary';
 
 interface Booking {
   _id: string;
   id: string;
   court: {
     name: string;
-    location: string;
+    venue: string;
   };
   startTime: string;
   endTime: string;
@@ -67,11 +69,8 @@ export default function ProfilePage() {
         email: user.email || "",
         phone: user.phone || ""
       });
-      // Load profile image from localStorage
-      const savedImage = localStorage.getItem('profileImage');
-      if (savedImage) {
-        setProfileImage(savedImage);
-      }
+      // Load profile image from user data or localStorage as fallback
+      setProfileImage(user.profilePicture || localStorage.getItem('profileImage'));
       fetchBookings();
       fetchMembershipStatus();
     }
@@ -158,18 +157,44 @@ export default function ProfilePage() {
     return baseBenefits;
   };
 
-  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        const base64String = reader.result as string;
-        setProfileImage(base64String);
-        localStorage.setItem('profileImage', base64String);
-        toast.success("Profile picture updated successfully");
-      };
-      reader.readAsDataURL(file);
+  const handleProfilePictureUpload = async (photo: CloudinaryPhoto) => {
+    setProfileImage(photo.url);
+    
+    // Update user profile with new image URL
+    try {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        router.push('/login');
+        return;
+      }
+
+      const response = await fetch(getApiUrl("api/v1/users/profile"), {
+        method: 'PUT',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          profilePicture: photo.url
+        })
+      });
+
+      if (response.ok) {
+        // Update user context
+        if (updateProfile) {
+          await updateProfile({
+            profilePicture: photo.url
+          });
+        }
+      }
+    } catch (error) {
+      console.error('Error updating profile picture:', error);
+      // Don't show error toast as the upload was successful
     }
+  };
+
+  const handleProfilePictureError = (error: string) => {
+    toast.error(error);
   };
 
   const fetchBookings = async () => {
@@ -275,8 +300,8 @@ export default function ProfilePage() {
       <div className="bg-white rounded-lg shadow-md p-6 mb-4">
         <div className="flex justify-between items-start mb-4">
           <div>
-            <h3 className="text-lg font-semibold">{booking.court.name}</h3>
-            <p className="text-gray-600">{booking.court.location}</p>
+            <h3 className="text-lg font-semibold">{booking.court?.name || 'Unknown Court'}</h3>
+            <p className="text-gray-600">{booking.court?.venue || 'Location not available'}</p>
           </div>
           <span className={`px-3 py-1 rounded-full text-sm ${
             booking.status === 'confirmed' ? 'bg-green-100 text-green-800' :
@@ -366,34 +391,13 @@ export default function ProfilePage() {
               <div className="space-y-6">
                 {/* Profile Image and Basic Info */}
                 <div className="text-center">
-                  <div className="relative inline-block">
-                    <div className="h-32 w-32 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-4">
-                      {profileImage ? (
-                        <Image
-                          src={profileImage}
-                          alt="Profile"
-                          width={128}
-                          height={128}
-                          className="rounded-full object-cover"
-                        />
-                      ) : (
-                        <User className="h-16 w-16 text-primary" />
-                      )}
-                    </div>
-                    <label
-                      htmlFor="profile-image"
-                      className="absolute bottom-0 right-0 p-1 bg-primary text-white rounded-full cursor-pointer hover:bg-primary/90"
-                    >
-                      <Camera className="h-4 w-4" />
-                    </label>
-                    <input
-                      type="file"
-                      id="profile-image"
-                      className="hidden"
-                      accept="image/*"
-                      onChange={handleImageUpload}
-                    />
-                  </div>
+                  <ProfilePictureUpload
+                    onUpload={handleProfilePictureUpload}
+                    onError={handleProfilePictureError}
+                    currentImage={profileImage}
+                    size="lg"
+                    className="mx-auto mb-4"
+                  />
                   <h2 className="text-xl font-semibold mt-4">{user?.name}</h2>
                   <p className="text-gray-600">{user?.email}</p>
                 </div>

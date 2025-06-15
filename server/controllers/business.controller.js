@@ -2,7 +2,7 @@ const Business = require('../models/business.model');
 const Court = require('../models/court.model');
 const { AppError } = require('../middlewares/errorHandler');
 const { logger } = require('../utils/logger');
-const cloudinary = require('../utils/cloudinary');
+const { uploadPhoto } = require('../utils/cloudinary');
 
 // Register business
 exports.registerBusiness = async (req, res, next) => {
@@ -111,17 +111,20 @@ exports.uploadDocuments = async (req, res, next) => {
     const { type } = req.body;
     const file = req.files.document;
 
-    // Upload to cloudinary
-    const result = await cloudinary.uploader.upload(file.tempFilePath, {
-      folder: 'business-documents',
-      resource_type: 'auto'
+    // Upload to cloudinary using the new utility function
+    const result = await uploadPhoto(file, 'business-documents', {
+      resource_type: 'auto',
+      context: {
+        description: `Business document - ${type}`,
+        uploaded_by: req.user.id
+      }
     });
 
     // Add document to business profile
     const business = await Business.findById(req.user.id);
     business.documents.push({
       type,
-      url: result.secure_url,
+      url: result.url,
       uploadedAt: Date.now()
     });
 

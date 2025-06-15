@@ -65,12 +65,12 @@ export function Subscribe() {
                             duration: 0.6,
                             delay: 0.4
                         }} className="flex flex-wrap justify-center gap-4" data-unique-id="5c6bec71-4dac-4834-83cd-19ae18229a91" data-file-name="components/home/cta-section.tsx">
-                            <Link href="/book" data-unique-id="ce4d8dfb-0bac-4fb7-b782-c228a992977c" data-file-name="components/home/cta-section.tsx">
+                            <Link href="/membership" data-unique-id="ce4d8dfb-0bac-4fb7-b782-c228a992977c" data-file-name="components/home/cta-section.tsx">
                                 <Button variant="accent" size="lg" motion data-unique-id="ecfef4c1-3835-4378-b253-faa03637f6e2" data-file-name="components/home/cta-section.tsx"><span className="editable-text" data-unique-id="96419b7b-dca9-43e7-b558-91617763d546" data-file-name="components/home/cta-section.tsx">
                                     Subscribe
                                 </span></Button>
                             </Link>
-                            <Link href="/book" data-unique-id="ce4d8dfb-0bac-4fb7-b782-c228a992977c" data-file-name="components/home/cta-section.tsx">
+                            <Link href="/instagram" data-unique-id="ce4d8dfb-0bac-4fb7-b782-c228a992977c" data-file-name="components/home/cta-section.tsx">
                                 <Button variant="accent" size="lg" motion data-unique-id="ecfef4c1-3835-4378-b253-faa03637f6e2" data-file-name="components/home/cta-section.tsx"><span className="editable-text" data-unique-id="96419b7b-dca9-43e7-b558-91617763d546" data-file-name="components/home/cta-section.tsx">
                                     Follow us On Instagram
                                 </span></Button>

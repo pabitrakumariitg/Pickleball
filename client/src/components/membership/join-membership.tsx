@@ -25,7 +25,7 @@ export default function JoinMembership() {
         <p className="mb-6 text-foreground/80 text-lg">
           Join today and be part of Nagaland’s growing pickleball community!
         </p>
-        <Link href="/membership/signup">
+        <Link href="/register">
           <button className="inline-flex items-center gap-2 px-8 py-3 rounded-full bg-primary text-primary-foreground text-lg font-semibold shadow hover:bg-primary/90 transition">
             Sign Up Now
             <ArrowRight className="w-5 h-5" />

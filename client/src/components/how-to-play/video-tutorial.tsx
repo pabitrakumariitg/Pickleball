@@ -1,22 +1,54 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { Play } from "lucide-react";
+
 export function VideoTutorial() {
   const sectionRef = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLDivElement>(null);
+  const [showVideo, setShowVideo] = useState(false);
+  const [isInView, setIsInView] = useState(false);
+  
   const {
     scrollYProgress
   } = useScroll({
     target: sectionRef,
     offset: ["start end", "end start"]
   });
+  
   const scale = useTransform(scrollYProgress, [0, 0.5], [0.9, 1]);
   const opacity = useTransform(scrollYProgress, [0, 0.3], [0, 1]);
 
-  // State for showing video player
-  const [showVideo, setShowVideo] = useState(false);
+  // Auto-play video when component comes into view
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting && !showVideo) {
+          setIsInView(true);
+          // Small delay to ensure smooth transition
+          setTimeout(() => {
+            setShowVideo(true);
+          }, 500);
+        }
+      },
+      {
+        threshold: 0.3, // Trigger when 30% of the component is visible
+        rootMargin: '0px 0px -100px 0px'
+      }
+    );
+
+    if (sectionRef.current) {
+      observer.observe(sectionRef.current);
+    }
+
+    return () => {
+      if (sectionRef.current) {
+        observer.unobserve(sectionRef.current);
+      }
+    };
+  }, [showVideo]);
+
   return <section ref={sectionRef} className="py-20 bg-background" data-unique-id="f732b1ad-9acb-4c31-98bc-906a971b05e4" data-file-name="components/how-to-play/video-tutorial.tsx">
       <div className="container mx-auto px-6" data-unique-id="bba19cf5-de74-4869-98c1-3e70e3d9e0c2" data-file-name="components/how-to-play/video-tutorial.tsx">
         <motion.div initial={{
@@ -33,7 +65,7 @@ export function VideoTutorial() {
           <h2 className="mb-4 text-3xl font-bold md:text-4xl" data-unique-id="f7e2f243-fe1c-421f-8956-c06a56b788a0" data-file-name="components/how-to-play/video-tutorial.tsx"><span className="editable-text" data-unique-id="9fb8cdd2-e8f6-4dba-a309-f7fefd296f20" data-file-name="components/how-to-play/video-tutorial.tsx">
             Video </span><span className="text-primary" data-unique-id="ca8223aa-8482-47c5-a3a6-47fb271c6f98" data-file-name="components/how-to-play/video-tutorial.tsx"><span className="editable-text" data-unique-id="27a4c7de-772d-4bed-9931-7a1e6d4d888e" data-file-name="components/how-to-play/video-tutorial.tsx">Tutorial</span></span>
           </h2>
-          <p className="mx-auto max-w-2xl text-lg text-foreground/70" data-unique-id="c0a7ca16-9da6-4e98-9802-07d39077ea57" data-file-name="components/how-to-play/video-tutorial.tsx"><span className="editable-text" data-unique-id="3bc359d3-4577-4d66-9bf3-4e69ac666ad8" data-file-name="components/how-to-play/video-tutorial.tsx">
+          <p className="mx-auto max-w-2xl text-lg text-foreground/70" data-unique-id="c0a7ca16-9d6a-4e98-9802-07d39077ea57" data-file-name="components/how-to-play/video-tutorial.tsx"><span className="editable-text" data-unique-id="3bc359d3-4577-4d66-9bf3-4e69ac666ad8" data-file-name="components/how-to-play/video-tutorial.tsx">
             Watch this comprehensive guide to learn the fundamentals of pickleball.
           </span></p>
         </motion.div>
@@ -54,7 +86,15 @@ export function VideoTutorial() {
                 </motion.button>
               </div>
             </div> : <div className="aspect-video" data-unique-id="2429f71b-e1ce-4475-9b6b-659785641d35" data-file-name="components/how-to-play/video-tutorial.tsx">
-              <iframe className="w-full h-full" src="https://www.youtube.com/embed/kqLRRNOpe8U?autoplay=1" title="Pickleball Tutorial" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen data-unique-id="0b55eadb-00bd-4fb6-aadb-8bde313dc00c" data-file-name="components/how-to-play/video-tutorial.tsx"></iframe>
+              <iframe 
+                className="w-full h-full" 
+                src="https://www.youtube.com/embed/kqLRRNOpe8U?autoplay=1&mute=1&rel=0&modestbranding=1" 
+                title="Pickleball Tutorial" 
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                allowFullScreen 
+                data-unique-id="0b55eadb-00bd-4fb6-aadb-8bde313dc00c" 
+                data-file-name="components/how-to-play/video-tutorial.tsx"
+              ></iframe>
             </div>}
         </motion.div>
 

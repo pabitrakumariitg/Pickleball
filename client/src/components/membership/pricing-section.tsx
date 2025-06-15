@@ -7,7 +7,11 @@ import { Button } from "@/components/ui/button";
 import { MembershipTier } from "@/types";
 import { cn } from "@/lib/utils";
 
-export function PricingSection() {
+interface PricingSectionProps {
+  onSelectPlan?: (tier: MembershipTier) => void;
+}
+
+export function PricingSection({ onSelectPlan }: PricingSectionProps) {
   const [billingCycle, setBillingCycle] = useState<"monthly" | "annual">("annual");
   const membershipTiers: MembershipTier[] = [{
     id: "individual",
@@ -34,6 +38,12 @@ export function PricingSection() {
     benefits: ["Try us out for 30 days!", "30-day access to all facilities", "No long-term commitment", "Access to open play sessions", "Equipment rental included"],
     isPopular: false
   }];
+
+  const handleSelectPlan = (tier: MembershipTier) => {
+    if (onSelectPlan) {
+      onSelectPlan(tier);
+    }
+  };
 
   // Animation variants
   const containerVariants = {
@@ -68,7 +78,7 @@ export function PricingSection() {
       x: 28
     }
   };
-  return <section className="py-20 bg-background" data-unique-id="73d02262-d6cc-4d35-9543-846bd0c9386f" data-file-name="components/membership/pricing-section.tsx">
+  return <section className="py-20 bg-background" data-section="pricing" data-unique-id="73d02262-d6cc-4d35-9543-846bd0c9386f" data-file-name="components/membership/pricing-section.tsx">
     <div className="container mx-auto px-6" data-unique-id="b4c9f826-53a2-41e0-aa2a-5bb4e6f6ac9b" data-file-name="components/membership/pricing-section.tsx" data-dynamic-text="true">
       <div className="mb-16 text-center" data-unique-id="174e450b-d5f5-4c3b-ac38-08dacb332a14" data-file-name="components/membership/pricing-section.tsx" data-dynamic-text="true">
         <motion.h2 initial={{
@@ -162,7 +172,12 @@ export function PricingSection() {
                 </div>
 
                 {(tier.id === "visitor" && billingCycle === "monthly") || (tier.id !== "visitor" && billingCycle === "annual") ? (
-                  <Button variant={tier.isPopular ? "primary" : "outline"} className="mb-6 w-full" motion>
+                  <Button 
+                    variant={tier.isPopular ? "primary" : "outline"} 
+                    className="mb-6 w-full" 
+                    motion
+                    onClick={() => handleSelectPlan(tier)}
+                  >
                     Get Started
                   </Button>
                 ) : (

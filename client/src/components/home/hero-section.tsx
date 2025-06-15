@@ -74,12 +74,16 @@ export function HeroSection() {
             duration: 0.7,
             delay: 0.6
           }} className="flex flex-wrap gap-4" data-unique-id="bb263209-9c8d-435a-8e38-18046ab95d63" data-file-name="components/home/hero-section.tsx">
-            <Button motion variant="cta" size="lg" className="group" icon={<ChevronRight className="transition-transform group-hover:translate-x-1" />} iconPosition="right" data-unique-id="9e53adfb-b67a-43a1-8225-7eb32f6ab81f" data-file-name="components/home/hero-section.tsx"><span className="editable-text" data-unique-id="abf03461-147f-4874-830b-d93de87d7b13" data-file-name="components/home/hero-section.tsx">
-              Book a Court
-            </span></Button>
-            <Button motion variant="outline" size="lg" className="border-primary" data-unique-id="cbdb438f-1a80-4004-b0e5-92478941efae" data-file-name="components/home/hero-section.tsx"><span className="editable-text" data-unique-id="2523558b-5b26-4cd8-8dd1-f5e74f7bd78e" data-file-name="components/home/hero-section.tsx">
-              Join Now
-            </span></Button>
+            <Link href="/book">
+              <Button motion variant="cta" size="lg" className="group" icon={<ChevronRight className="transition-transform group-hover:translate-x-1" />} iconPosition="right" data-unique-id="9e53adfb-b67a-43a1-8225-7eb32f6ab81f" data-file-name="components/home/hero-section.tsx"><span className="editable-text" data-unique-id="abf03461-147f-4874-830b-d93de87d7b13" data-file-name="components/home/hero-section.tsx">
+                Book a Court
+              </span></Button>
+            </Link>
+            <Link href="/register">
+              <Button motion variant="outline" size="lg" className="border-primary" data-unique-id="cbdb438f-1a80-4004-b0e5-92478941efae" data-file-name="components/home/hero-section.tsx"><span className="editable-text" data-unique-id="2523558b-5b26-4cd8-8dd1-f5e74f7bd78e" data-file-name="components/home/hero-section.tsx">
+                Join Now
+              </span></Button>
+            </Link>
           </motion.div>
 
           {/* Stats */}

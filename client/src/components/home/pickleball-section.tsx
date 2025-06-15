@@ -3,6 +3,7 @@
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useRef } from "react";
 import { Button } from "@/components/ui/button";
+import Link from "next/link";
 export function PickleballSection() {
   const sectionRef = useRef<HTMLDivElement>(null);
   const {
@@ -90,9 +91,12 @@ export function PickleballSection() {
             duration: 0.5,
             delay: 0.4
           }} className="mt-8" data-unique-id="8dc2877d-39de-482d-b643-3d745ecc8b4f" data-file-name="components/home/pickleball-section.tsx">
+              
+              <Link href="/how-to-play">
               <Button variant="primary" size="lg" motion data-unique-id="1360b602-9b3c-4b80-81d5-d77b72323f42" data-file-name="components/home/pickleball-section.tsx"><span className="editable-text" data-unique-id="a06bcc48-e562-4f27-8b51-9261c8261632" data-file-name="components/home/pickleball-section.tsx">
                 Learn the Rules
               </span></Button>
+              </Link>
             </motion.div>
           </motion.div>
         </div>

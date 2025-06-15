@@ -7,14 +7,14 @@ import Link from "next/link";
 export function UpdatesHero() {
   return <section className="relative overflow-hidden bg-gradient-to-b from-background to-secondary pt-24 pb-16 md:pb-24 md:pt-32" data-unique-id="227c84fc-71b8-4884-b932-adfeaa2c159e" data-file-name="components/updates/hero.tsx" data-dynamic-text="true">
     {/* Background pattern */}
-    <div className="absolute inset-0 -z-10 opacity-5" data-unique-id="e5e853c6-18fb-4e45-a470-cfbf4eaf96a9" data-file-name="components/updates/hero.tsx">
+    {/* <div className="absolute inset-0 -z-10 opacity-5" data-unique-id="e5e853c6-18fb-4e45-a470-cfbf4eaf96a9" data-file-name="components/updates/hero.tsx">
       <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" data-unique-id="33cc8ddc-1771-4e31-abcb-3234be89c345" data-file-name="components/updates/hero.tsx">
         <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
           <path d="M 40 0 L 0 0 0 40" fill="none" stroke="currentColor" strokeWidth="1" />
         </pattern>
         <rect width="100%" height="100%" fill="url(#grid)" />
       </svg>
-    </div>
+    </div> */}
 
     <div className="container mx-auto px-6" data-unique-id="15d98c36-7fee-4a81-8239-581847e79f3d" data-file-name="components/updates/hero.tsx">
       <div className="mx-auto max-w-3xl text-center" data-unique-id="f1595ddb-a6b2-4f08-be4a-bb909cb9fb29" data-file-name="components/updates/hero.tsx">
