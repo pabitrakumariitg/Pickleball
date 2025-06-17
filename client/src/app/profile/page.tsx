@@ -61,6 +61,7 @@ export default function ProfilePage() {
   const [membershipData, setMembershipData] = useState<MembershipData | null>(null);
   const router = useRouter();
   const [activeTab, setActiveTab] = useState('bookings');
+  const [profileSaved, setProfileSaved] = useState(false);
 
   useEffect(() => {
     if (user) {
@@ -245,7 +246,7 @@ export default function ProfilePage() {
         return;
       }
 
-      const response = await fetch(getApiUrl("api/v1/users/profile"), {
+      const response = await fetch(getApiUrl("api/v1/users/profile/update"), {
         method: 'PUT',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -253,7 +254,6 @@ export default function ProfilePage() {
         },
         body: JSON.stringify({
           name: formData.name,
-          email: formData.email,
           phone: formData.phone
         })
       });
@@ -270,11 +270,11 @@ export default function ProfilePage() {
       if (data.success) {
         toast.success("Profile updated successfully");
         setIsEditing(false);
+        setProfileSaved(true);
         // Update the user context if needed
         if (updateProfile) {
           await updateProfile({
-            name: formData.name,
-            email: formData.email
+            name: formData.name
           });
         }
       }
@@ -465,15 +465,17 @@ export default function ProfilePage() {
                 <div className="space-y-4">
                   <h3 className="font-medium flex items-center justify-between">
                     Contact Information
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => setIsEditing(!isEditing)}
-                      className="text-primary"
-                    >
-                      <Edit2 className="h-4 w-4 mr-1" />
-                      {isEditing ? 'Cancel' : 'Edit'}
-                    </Button>
+                    {!profileSaved && (
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => setIsEditing(!isEditing)}
+                        className="text-primary"
+                      >
+                        <Edit2 className="h-4 w-4 mr-1" />
+                        {isEditing ? 'Cancel' : 'Edit'}
+                      </Button>
+                    )}
                   </h3>
 
                   {isEditing ? (
@@ -492,9 +494,10 @@ export default function ProfilePage() {
                         <input
                           type="email"
                           value={formData.email}
-                          onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                          className="w-full mt-1 px-3 py-2 border rounded-md"
+                          disabled
+                          className="w-full mt-1 px-3 py-2 border rounded-md bg-gray-100 text-gray-500 cursor-not-allowed"
                         />
+                        <p className="text-xs text-gray-500 mt-1">Email cannot be changed</p>
                       </div>
                       <div>
                         <label className="text-sm font-medium">Phone</label>

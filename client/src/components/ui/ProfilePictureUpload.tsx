@@ -5,6 +5,9 @@ import { Camera, X, Loader2, User } from 'lucide-react';
 import { uploadProfilePicture, validateFile, createImagePreview, CloudinaryPhoto } from '@/lib/cloudinary';
 import { toast } from 'sonner';
 
+// Default profile image URL
+const DEFAULT_PROFILE_IMAGE = '/profile.jpg';
+
 interface ProfilePictureUploadProps {
   onUpload: (photo: CloudinaryPhoto) => void;
   onError?: (error: string) => void;
@@ -96,21 +99,21 @@ export default function ProfilePictureUpload({
     }
   };
 
-  const displayImage = preview || currentImage;
+  const displayImage = preview || currentImage || DEFAULT_PROFILE_IMAGE;
 
   return (
     <div className={`relative inline-block ${className}`}>
       <div className={`relative ${getSizeClasses()}`}>
         <div className={`${getSizeClasses()} rounded-full bg-primary/10 flex items-center justify-center overflow-hidden`}>
-          {displayImage ? (
-            <img
-              src={displayImage}
-              alt="Profile"
-              className="h-full w-full object-cover"
-            />
-          ) : (
-            <User className={`${getSizeClasses()} text-primary`} />
-          )}
+          <img
+            src={displayImage}
+            alt="Profile"
+            className="h-full w-full object-cover"
+            onError={(e) => {
+              const target = e.target as HTMLImageElement;
+              target.src = DEFAULT_PROFILE_IMAGE;
+            }}
+          />
         </div>
 
         {!disabled && (
