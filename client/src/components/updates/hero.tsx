@@ -56,7 +56,7 @@ export function UpdatesHero() {
           delay: 0.5
         }} className="mb-8 text-lg text-foreground/80" data-unique-id="d29dda5b-2554-4ea5-aaad-6939c5974aa6" data-file-name="components/updates/hero.tsx">
           <span className="editable-text" data-unique-id="2a83c094-28a2-4a05-928d-f901259296dd" data-file-name="components/updates/hero.tsx">
-            Stay in the loop with all things pickleball in Nagaland! From tournament results to upcoming clinics, this is your go-to source for the latest updates from Pickleball Association Nagaland.
+            Stay in the loop with all things pickleball in Nagaland! From tournament results to upcoming clinics, this is your go-to source for the latest updates from Nagaland Pickleball Association.
 
           </span>
         </motion.p>

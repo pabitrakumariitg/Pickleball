@@ -7,9 +7,12 @@ import { Court } from "@/types";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { getApiUrl } from "@/config";
+import { useAuth } from "@/lib/auth";
+import { toast } from "sonner";
 
 export function CourtsList() {
   const router = useRouter();
+  const { user } = useAuth();
   const [selectedCity, setSelectedCity] = useState<string>("all");
   const [courts, setCourts] = useState<Court[]>([]);
   const [loading, setLoading] = useState(true);
@@ -37,7 +40,7 @@ export function CourtsList() {
 
   // const cities = ["all", ...Array.from(new Set(courts.map(court => court.city)))];
   const cities = ["all"];
-  const filteredCourts = selectedCity === "all" ? courts : courts.filter(court => court.city === selectedCity);
+  const filteredCourts = selectedCity === "all" ? courts : courts.filter(court => court.venue === selectedCity);
   const containerVariants = {
     hidden: {
       opacity: 0
@@ -64,6 +67,11 @@ export function CourtsList() {
   };
 
   const handleBookCourt = (courtId: string) => {
+    if (!user) {
+      toast.error("Please login to book a court");
+      router.push('/login');
+      return;
+    }
     router.push(`/book/${courtId}`);
   };
 
@@ -123,8 +131,8 @@ export function CourtsList() {
             <div className="relative h-48 w-full overflow-hidden" data-unique-id="bb0ca589-a649-4f6a-a54e-be295ae3c815" data-file-name="components/book/courts-list.tsx">
               <img src={court.image} alt={court.name} className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" data-unique-id="54ee6057-039a-48f5-8af0-a9bd78836767" data-file-name="components/book/courts-list.tsx" />
               <div className="absolute top-4 right-4" data-unique-id="539a6db7-0a85-4647-af93-5d1e638136db" data-file-name="components/book/courts-list.tsx">
-                <span className={`rounded-full px-3 py-1 text-xs font-medium ${court.isIndoor ? "bg-primary/80 text-primary-foreground" : "bg-accent/80 text-accent-foreground"}`} data-unique-id="c765c22f-f534-4993-8fe0-1fb6f9887ac0" data-file-name="components/book/courts-list.tsx" data-dynamic-text="true">
-                  {court.isIndoor ? "Indoor" : "Outdoor"}
+                <span className={`rounded-full px-3 py-1 text-xs font-medium ${court.type === 'indoor' ? "bg-primary/80 text-primary-foreground" : "bg-accent/80 text-accent-foreground"}`} data-unique-id="c765c22f-f534-4993-8fe0-1fb6f9887ac0" data-file-name="components/book/courts-list.tsx" data-dynamic-text="true">
+                  {court.type === 'indoor' ? "Indoor" : "Outdoor"}
                 </span>
               </div>
             </div>
@@ -140,9 +148,8 @@ export function CourtsList() {
                   </div>
                 </div>
                 <div className="text-right" data-unique-id="03c3fb94-ba2c-455a-a5c8-e5cf0bf27bb2" data-file-name="components/book/courts-list.tsx">
-                  <div className="text-sm text-foreground/70" data-unique-id="9e426373-1c90-4da8-a2cb-03b2b41bba96" data-file-name="components/book/courts-list.tsx"><span className="editable-text" data-unique-id="c7044aea-6244-47c5-8c18-4bb14a3db575" data-file-name="components/book/courts-list.tsx">Per hour</span></div>
+                  <div className="text-sm text-foreground/70" data-unique-id="e426373-1c90-4da8-a2cb-03b2b41bba96" data-file-name="components/book/courts-list.tsx"><span className="editable-text" data-unique-id="c7044aea-6244-47c5-8c18-4bb14a3db575" data-file-name="components/book/courts-list.tsx">Per hour</span></div>
                   <div className="text-lg font-semibold" data-unique-id="734bc1d0-d40d-41bc-8cc2-5df4d49a3c44" data-file-name="components/book/courts-list.tsx" data-dynamic-text="true"><span className="editable-text" data-unique-id="8053a84c-0d68-4877-8f8c-154ceefdd129" data-file-name="components/book/courts-list.tsx">₹</span>{court.price / 100}</div>
-                  <div className="text-xs text-primary" data-unique-id="8591ca0c-5821-4b10-9901-6e07750741f8" data-file-name="components/book/courts-list.tsx" data-dynamic-text="true"><span className="editable-text" data-unique-id="b8539e36-5d77-46ad-b5b5-67cbdc2e9bb7" data-file-name="components/book/courts-list.tsx">Members: ₹</span>{court.memberPrice / 100}</div>
                 </div>
               </div>
 

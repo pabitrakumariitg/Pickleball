@@ -46,7 +46,7 @@ export default function AdminLogin() {
           <div className="relative w-24 h-24">
             <Image
               src="/NPA-logo.png"
-              alt="Pickleball Association Nagaland Logo"
+              alt="Nagaland Pickleball Association Logo"
               fill
               className="object-contain"
               priority

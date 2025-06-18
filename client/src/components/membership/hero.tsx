@@ -44,7 +44,7 @@ export function MembershipHero() {
           duration: 0.7,
           delay: 0.4
         }} className="mb-4 text-4xl font-bold md:text-5xl lg:text-6xl" data-unique-id="726a8426-eb1b-4da2-81ae-6630c1154d4b" data-file-name="components/membership/hero.tsx"><span className="editable-text" data-unique-id="91bc4d22-5f2f-496c-b5ba-464425d85c98" data-file-name="components/membership/hero.tsx">
-            Join the</span><span className="text-primary" data-unique-id="f8e3e4c3-6185-4757-8e6f-7903378de607" data-file-name="components/membership/hero.tsx"><span className="editable-text" data-unique-id="4a0e6e7d-338f-4ed2-a296-ce6484dcb27c" data-file-name="components/membership/hero.tsx"> Pickleball Association Nagaland</span></span>
+            Join the</span><span className="text-primary" data-unique-id="f8e3e4c3-6185-4757-8e6f-7903378de607" data-file-name="components/membership/hero.tsx"><span className="editable-text" data-unique-id="4a0e6e7d-338f-4ed2-a296-ce6484dcb27c" data-file-name="components/membership/hero.tsx"> Nagaland Pickleball Association</span></span>
         </motion.h1>
 
         <motion.p initial={{

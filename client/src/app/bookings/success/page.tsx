@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { CheckCircle, ArrowLeft } from 'lucide-react';
 import { useRouter } from 'next/navigation';
@@ -9,10 +9,28 @@ import { Card } from '@/components/ui/card';
 
 export default function BookingSuccessPage() {
   const router = useRouter();
+  const [hasBooking, setHasBooking] = useState(false);
 
   useEffect(() => {
+    // Check if user has a recent booking
+    const lastBookingId = localStorage.getItem('lastBookingId');
+    if (!lastBookingId) {
+      // Redirect to home if no recent booking
+      router.push('/');
+      return;
+    }
+    setHasBooking(true);
+    
     // You can integrate with analytics here
-  }, []);
+  }, [router]);
+
+  if (!hasBooking) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center">

@@ -82,7 +82,7 @@ export function TeamSection() {
           Meet Our </span><span className="text-primary" data-unique-id="015cb5f8-e2ea-4f37-af7f-f0f8fa19178c" data-file-name="components/about/team-section.tsx"><span className="editable-text" data-unique-id="63f8da9d-4e95-4124-9d22-1dffb88c92dd" data-file-name="components/about/team-section.tsx">Team</span></span>
         </h2>
         <p className="mx-auto max-w-2xl text-lg text-foreground/70" data-unique-id="68269cb7-656c-4541-b1b2-58c7f8fb0f23" data-file-name="components/about/team-section.tsx"><span className="editable-text" data-unique-id="720a9777-78e5-4253-9c0c-2afd8ae1961d" data-file-name="components/about/team-section.tsx">
-          Get to know the passionate individuals leading Pickleball Association Nagaland
+          Get to know the passionate individuals leading Nagaland Pickleball Association
           and driving our mission forward.
         </span></p>
       </motion.div>

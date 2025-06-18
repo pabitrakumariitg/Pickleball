@@ -9,9 +9,10 @@ import { cn } from "@/lib/utils";
 
 interface PricingSectionProps {
   onSelectPlan?: (tier: MembershipTier) => void;
+  hasActiveMembership?: boolean;
 }
 
-export function PricingSection({ onSelectPlan }: PricingSectionProps) {
+export function PricingSection({ onSelectPlan, hasActiveMembership = false }: PricingSectionProps) {
   const [billingCycle, setBillingCycle] = useState<"monthly" | "annual">("annual");
   const membershipTiers: MembershipTier[] = [{
     id: "individual",
@@ -177,8 +178,9 @@ export function PricingSection({ onSelectPlan }: PricingSectionProps) {
                     className="mb-6 w-full" 
                     motion
                     onClick={() => handleSelectPlan(tier)}
+                    disabled={hasActiveMembership}
                   >
-                    Get Started
+                    {hasActiveMembership ? "Already a Member" : "Get Started"}
                   </Button>
                 ) : (
                   <div className="mb-6 rounded-md bg-muted p-2 text-center text-sm">
@@ -186,6 +188,12 @@ export function PricingSection({ onSelectPlan }: PricingSectionProps) {
                       ? "Available as monthly only"
                       : "Available as annual only"
                     }
+                  </div>
+                )}
+
+                {hasActiveMembership && (
+                  <div className="mb-4 rounded-md bg-green-50 border border-green-200 p-2 text-center text-sm text-green-700">
+                    You already have an active membership
                   </div>
                 )}
 

@@ -98,7 +98,7 @@ export default function ContactPage() {
             duration: 0.7,
             delay: 0.3
           }} className="mb-8 text-lg text-foreground/80" data-unique-id="77dd913a-7bef-4b11-b47b-21e0a415c647" data-file-name="components/about/hero.tsx"><span className="editable-text" data-unique-id="a29be9fa-8438-4912-ad47-5349d3a790f5" data-file-name="components/about/hero.tsx">
-              Get in Touch with Pickleball Association Nagaland
+              Get in Touch with Nagaland Pickleball Association
               <br />
               Have questions? Want to collaborate or share your pickleball passion?
               <br />
@@ -311,7 +311,7 @@ export default function ContactPage() {
             }} className="rounded-md" data-unique-id="bddce85a-ce1d-4489-8b53-e58b1eea3a78" data-file-name="app/contact/page.tsx" />
             <div className="absolute inset-0 bg-primary/10 flex items-center justify-center" data-unique-id="8cc2c742-879b-4e8b-bfb0-3b3a978ebde0" data-file-name="app/contact/page.tsx">
               <div className="bg-white p-4 rounded-lg shadow-lg" data-unique-id="5ddb4c78-d2c9-4e66-83c3-3ec4d270160c" data-file-name="app/contact/page.tsx">
-                <h3 className="font-bold" data-unique-id="01d2be87-577c-46eb-a82e-8a025e6259ec" data-file-name="app/contact/page.tsx"><span className="editable-text" data-unique-id="10c7bae7-843d-4478-a450-d12d56ecc127" data-file-name="app/contact/page.tsx">Pickleball Association Nagaland</span></h3>
+                <h3 className="font-bold" data-unique-id="01d2be87-577c-46eb-a82e-8a025e6259ec" data-file-name="app/contact/page.tsx"><span className="editable-text" data-unique-id="10c7bae7-843d-4478-a450-d12d56ecc127" data-file-name="app/contact/page.tsx">Nagaland Pickleball Association</span></h3>
                 <p className="text-sm text-muted-foreground" data-unique-id="d201d6e4-4bdc-41ba-a931-ea55ac3ee76a" data-file-name="app/contact/page.tsx"><span className="editable-text" data-unique-id="6344df64-b885-4e95-b59d-8cc4b8d32fab" data-file-name="app/contact/page.tsx">123 Main Street, Kohima, Nagaland</span></p>
               </div>
             </div>

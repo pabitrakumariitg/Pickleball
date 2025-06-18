@@ -1,5 +1,20 @@
 const mongoose = require('mongoose');
 
+const timeSlotSchema = new mongoose.Schema({
+  startTime: {
+    type: String,
+    required: [true, 'Start time is required']
+  },
+  endTime: {
+    type: String,
+    required: [true, 'End time is required']
+  },
+  price: {
+    type: Number,
+    required: [true, 'Price is required']
+  }
+});
+
 const bookingSchema = new mongoose.Schema({
   user: {
     type: mongoose.Schema.Types.ObjectId,
@@ -18,6 +33,10 @@ const bookingSchema = new mongoose.Schema({
   endTime: {
     type: Date,
     required: [true, 'End time is required']
+  },
+  timeSlots: {
+    type: [timeSlotSchema],
+    default: []
   },
   status: {
     type: String,
@@ -98,6 +117,16 @@ bookingSchema.methods.getStatus = function() {
   }
   
   return this.status;
+};
+
+// Method to get number of time slots
+bookingSchema.methods.getSlotCount = function() {
+  return this.timeSlots.length;
+};
+
+// Method to get total price from time slots
+bookingSchema.methods.getTotalFromSlots = function() {
+  return this.timeSlots.reduce((total, slot) => total + slot.price, 0);
 };
 
 module.exports = mongoose.model('Booking', bookingSchema);

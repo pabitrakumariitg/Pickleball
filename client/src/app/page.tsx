@@ -8,7 +8,7 @@ import { InteractiveCourt } from "@/components/interactive-court";
 import { Metadata } from "next";
 import { MarqueeDemo } from "@/components/home/marquee-text";
 export const metadata: Metadata = {
-  title: "Home | Pickleball Association Nagaland",
+  title: "Home | Nagaland Pickleball Association",
   description: "Discover the fastest-growing sport in Nagaland. PAN promotes pickleball through community events, coaching, and accessible court facilities."
 };
 export default function HomePage() {

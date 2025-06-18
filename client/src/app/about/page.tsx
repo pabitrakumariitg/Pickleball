@@ -7,8 +7,8 @@ import { PartnerSection } from "@/components/about/partner-section";
 import { CTASection } from "@/components/home/cta-section";
 import { AboutCTA } from "@/components/about/about-cta";
 export const metadata: Metadata = {
-  title: "About Us | Pickleball Association Nagaland",
-  description: "Learn about Pickleball Association Nagaland, our mission, vision, team, and history."
+  title: "About Us | Nagaland Pickleball Association",
+  description: "Learn about Nagaland Pickleball Association, our mission, vision, team, and history."
 };
 export default function AboutPage() {
   return <>

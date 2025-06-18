@@ -14,17 +14,17 @@ export const viewport = {
 
 export const metadata: Metadata = {
   title: {
-    default: "Pickleball Association Nagaland",
-    template: "%s | Pickleball Association Nagaland"
+    default: "Nagaland Pickleball Association",
+    template: "%s | Nagaland Pickleball Association"
   },
   description: "Promoting pickleball across Nagaland through community events, coaching, and accessible court facilities.",
   applicationName: "PAN",
   keywords: ["pickleball", "nagaland", "sports", "community", "courts", "tournaments"],
   authors: [{
-    name: "Pickleball Association Nagaland"
+    name: "Nagaland Pickleball Association"
   }],
-  creator: "Pickleball Association Nagaland",
-  publisher: "Pickleball Association Nagaland",
+  creator: "Nagaland Pickleball Association",
+  publisher: "Nagaland Pickleball Association",
   icons: {
     icon: [{
       url: "/NPA-logo.png",

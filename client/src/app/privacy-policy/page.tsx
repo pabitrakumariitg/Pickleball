@@ -86,7 +86,7 @@ export default function PrivacyPolicyPage() {
                     Last updated: May 1, 2025
                   </span></p>
                   <p className="mb-4" data-unique-id="7a3321ad-a05c-4a0d-88c6-fa444b06b0f1" data-file-name="app/privacy-policy/page.tsx"><span className="editable-text" data-unique-id="f68a327e-7f7e-4108-81ca-94e298a946f2" data-file-name="app/privacy-policy/page.tsx">
-                    Pickleball Association Nagaland ("PAN", "we", "our", or "us") is committed to protecting your privacy. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you visit our website or use our services.
+                    Nagaland Pickleball Association ("PAN", "we", "our", or "us") is committed to protecting your privacy. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you visit our website or use our services.
                   </span></p>
                   <p data-unique-id="d87ec070-f560-406f-b284-63eab2b3c94e" data-file-name="app/privacy-policy/page.tsx"><span className="editable-text" data-unique-id="4bea7495-3095-451c-a0ef-220a9ad3bdd9" data-file-name="app/privacy-policy/page.tsx">
                     Please read this privacy policy carefully. If you do not agree with the terms of this privacy policy, please do not access the site.
@@ -200,7 +200,7 @@ export default function PrivacyPolicyPage() {
                     If you have any questions about this Privacy Policy, please contact us at:
                   </span></p>
                   <address className="not-italic" data-unique-id="9e4fcd85-a00c-4aba-98de-9915f4f6aed6" data-file-name="app/privacy-policy/page.tsx">
-                    <p data-unique-id="61e36659-6482-4f8b-a214-54f4cf47c05d" data-file-name="app/privacy-policy/page.tsx"><span className="editable-text" data-unique-id="f9544868-e74b-4793-8b42-c7c74558128d" data-file-name="app/privacy-policy/page.tsx">Pickleball Association Nagaland</span></p>
+                    <p data-unique-id="61e36659-6482-4f8b-a214-54f4cf47c05d" data-file-name="app/privacy-policy/page.tsx"><span className="editable-text" data-unique-id="f9544868-e74b-4793-8b42-c7c74558128d" data-file-name="app/privacy-policy/page.tsx">Nagaland Pickleball Association</span></p>
                     <p data-unique-id="5ea0ebfc-5915-4861-883d-c260c32a1ab2" data-file-name="app/privacy-policy/page.tsx"><span className="editable-text" data-unique-id="1baf0f35-5c22-494b-b2d9-751e52207c4f" data-file-name="app/privacy-policy/page.tsx">123 Main Street, Kohima, Nagaland, 797001</span></p>
                     <p data-unique-id="fb0d2ab8-c0db-4e69-b5f9-ab9bda161b20" data-file-name="app/privacy-policy/page.tsx"><span className="editable-text" data-unique-id="ef788f74-e5e4-474a-a133-53d40aee32f4" data-file-name="app/privacy-policy/page.tsx">Email: privacy@pickleballnagaland.org</span></p>
                     <p data-unique-id="a8b25edf-ae9f-4ee7-8949-a21e81761c48" data-file-name="app/privacy-policy/page.tsx"><span className="editable-text" data-unique-id="737946f3-ede1-43f7-8af6-35ff7d234a2f" data-file-name="app/privacy-policy/page.tsx">Phone: +91 12345 67890</span></p>

@@ -52,7 +52,7 @@ export function TestimonialsSection() {
             What Our </span><span className="text-primary" data-unique-id="255ff1a8-8499-4b07-8021-611929fd821d" data-file-name="components/membership/testimonials-section.tsx"><span className="editable-text" data-unique-id="4ed9e889-b676-4d0c-80ea-3a3aaeb6259c" data-file-name="components/membership/testimonials-section.tsx">Members</span></span><span className="editable-text" data-unique-id="c5f022dc-566f-4f5b-9fd2-26dde6b87ab4" data-file-name="components/membership/testimonials-section.tsx"> Say
           </span></h2>
           <p className="mx-auto max-w-2xl text-lg text-foreground/70" data-unique-id="7681290a-93f2-4e44-97fd-12d225acd935" data-file-name="components/membership/testimonials-section.tsx"><span className="editable-text" data-unique-id="4cf5df0c-38bc-4467-87b8-cde2ab93d77c" data-file-name="components/membership/testimonials-section.tsx">
-            Hear from our community about their experiences with Pickleball Association Nagaland.
+            Hear from our community about their experiences with Nagaland Pickleball Association.
           </span></p>
         </motion.div>
 

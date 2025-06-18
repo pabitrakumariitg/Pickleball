@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Check, ArrowRight, Calendar, Users, Star, Shield } from 'lucide-react';
+import { Check, ArrowRight, Calendar, Users, Star, Shield, X } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { getApiUrl } from '@/config';
 import { Metadata } from "next";
@@ -13,6 +13,7 @@ import { CTASection } from "@/components/home/cta-section";
 import { MembershipBenefits } from "@/components/membership/membership-benifits";
 import JoinMembership from "@/components/membership/join-membership";
 import { MembershipTier } from "@/types";
+import { ProtectedRoute } from "@/components/auth/ProtectedRoute";
 
 interface Membership {
   _id: string;
@@ -31,8 +32,8 @@ interface User {
 }
 
 // export const metadata: Metadata = {
-//   title: "Membership | Pickleball Association Nagaland",
-//   description: "Join the Pickleball Association Nagaland with our flexible membership options for individuals, families, and juniors."
+//   title: "Membership | Nagaland Pickleball Association",
+//   description: "Join the Nagaland Pickleball Association with our flexible membership options for individuals, families, and juniors."
 // };
 
 export default function MembershipPage() {
@@ -43,6 +44,8 @@ export default function MembershipPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [showPurchaseFlow, setShowPurchaseFlow] = useState(false);
+  const [hasActiveMembership, setHasActiveMembership] = useState(false);
+  const [membershipStatus, setMembershipStatus] = useState<any>(null);
 
   const memberships: Membership[] = [
     {
@@ -100,19 +103,80 @@ export default function MembershipPage() {
 
       const data = await response.json();
       setUser(data.data);
+      
+      // Check membership status
+      await checkMembershipStatus(token);
     } catch (err) {
       console.error('Error fetching user profile:', err);
       // Don't set error for profile fetch failure
     }
   };
 
+  const checkMembershipStatus = async (token: string) => {
+    try {
+      // First try the membership-specific endpoint
+      let response = await fetch(getApiUrl("api/v1/memberships/status"), {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        if (data.status === 'success' && data.data) {
+          setMembershipStatus(data.data);
+          setHasActiveMembership(data.data.status === 'active');
+          return;
+        }
+      }
+
+      // If membership endpoint fails or returns no data, try user membership status
+      response = await fetch(getApiUrl("api/v1/users/membership-status"), {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        if (data.status === 'success' && data.data.hasActiveMembership) {
+          setHasActiveMembership(true);
+          setMembershipStatus({
+            type: data.data.membershipType,
+            status: data.data.membershipStatus,
+            endDate: data.data.membershipExpiry
+          });
+          return;
+        }
+      }
+
+      // If both fail, set to false (no active membership)
+      setHasActiveMembership(false);
+      setMembershipStatus(null);
+    } catch (err) {
+      console.error("Failed to fetch membership status:", err);
+      setHasActiveMembership(false);
+      setMembershipStatus(null);
+    }
+  };
+
   const handleMembershipSelect = (membership: Membership) => {
+    if (hasActiveMembership) {
+      setError('You already have an active membership! You cannot purchase another membership while your current one is still active.');
+      return;
+    }
     setSelectedMembership(membership);
     setStep(2);
     setShowPurchaseFlow(true);
   };
 
   const handlePlanSelection = (tier: MembershipTier) => {
+    if (hasActiveMembership) {
+      setError('You already have an active membership! You cannot purchase another membership while your current one is still active.');
+      return;
+    }
     // Convert the tier from PricingSection to the Membership format
     const membership: Membership = {
       _id: tier.id,
@@ -155,7 +219,15 @@ export default function MembershipPage() {
 
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(errorData.message || 'Failed to purchase membership');
+        const errorMessage = errorData.message || errorData.error || 'Failed to purchase membership';
+        
+        // Handle specific membership error
+        if (errorMessage.includes('already have an active membership')) {
+          setError('You already have an active membership! You cannot purchase another membership while your current one is still active.');
+        } else {
+          setError(errorMessage);
+        }
+        return;
       }
 
       const data = await response.json();
@@ -396,14 +468,63 @@ export default function MembershipPage() {
 
   // Main membership page with all components
   return (
-    <div>
-      <MembershipHero />
-      <MembershipBenefits />
-      <PricingSection onSelectPlan={handlePlanSelection} />
-      <TestimonialsSection />
-      <FAQSection />
-      <JoinMembership />
-      <CTASection />
-    </div>
+    <ProtectedRoute>
+      <div>
+        <MembershipHero />
+        
+        {/* Membership Status Banner */}
+        {hasActiveMembership && membershipStatus && (
+          <div className="bg-green-50 border border-green-200 py-6">
+            <div className="container mx-auto px-6">
+              <div className="flex items-center justify-center">
+                <div className="bg-green-100 rounded-full p-2 mr-4">
+                  <Check className="w-6 h-6 text-green-600" />
+                </div>
+                <div className="text-center">
+                  <h3 className="text-lg font-semibold text-green-800 mb-1">
+                    You have an active membership!
+                  </h3>
+                  <p className="text-green-700">
+                    {membershipStatus.type} membership • Expires {new Date(membershipStatus.endDate).toLocaleDateString()}
+                  </p>
+                  <p className="text-sm text-green-600 mt-1">
+                    You cannot purchase another membership while your current one is active.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Error Message */}
+        {error && (
+          <div className="bg-red-50 border border-red-200 py-4">
+            <div className="container mx-auto px-6">
+              <div className="flex items-center justify-center">
+                <div className="bg-red-100 rounded-full p-2 mr-4">
+                  <X className="w-6 h-6 text-red-600" />
+                </div>
+                <div className="text-center">
+                  <p className="text-red-700">{error}</p>
+                  <button 
+                    onClick={() => setError(null)}
+                    className="text-sm text-red-600 underline mt-1"
+                  >
+                    Dismiss
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+        
+        <MembershipBenefits />
+        <PricingSection onSelectPlan={handlePlanSelection} hasActiveMembership={hasActiveMembership} />
+        <TestimonialsSection />
+        <FAQSection />
+        <JoinMembership hasActiveMembership={hasActiveMembership} />
+        <CTASection />
+      </div>
+    </ProtectedRoute>
   );
 }

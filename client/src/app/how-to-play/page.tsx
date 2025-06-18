@@ -7,7 +7,7 @@ import { TipsSection } from "@/components/how-to-play/tips-section";
 import { VideoTutorial } from "@/components/how-to-play/video-tutorial";
 import { CTASection } from "@/components/home/cta-section";
 export const metadata: Metadata = {
-  title: "How to Play | Pickleball Association Nagaland",
+  title: "How to Play | Nagaland Pickleball Association",
   description: "Learn the basics of pickleball including rules, scoring, equipment, and strategy guides."
 };
 export default function HowToPlayPage() {

@@ -13,10 +13,10 @@ interface PageProps {
 const getNewsItem = (slug: string) => {
   const news = [{
     id: "1",
-    title: "Pickleball Association Nagaland Expands to Five New Districts",
+    title: "Nagaland Pickleball Association Expands to Five New Districts",
     excerpt: "PAN announces exciting expansion plans to bring pickleball courts to five additional districts across Nagaland.",
     content: `
-        <p>In an exciting development for pickleball enthusiasts across Nagaland, the Pickleball Association Nagaland (PAN) has announced plans to expand its presence to five new districts in the coming months. This expansion will include the construction of new courts, training programs for local coaches, and community outreach initiatives to introduce the sport to new players. The move comes after a successful two-year period that saw membership increase by over 200%.</p>
+        <p>In an exciting development for pickleball enthusiasts across Nagaland, the Nagaland Pickleball Association (PAN) has announced plans to expand its presence to five new districts in the coming months. This expansion will include the construction of new courts, training programs for local coaches, and community outreach initiatives to introduce the sport to new players. The move comes after a successful two-year period that saw membership increase by over 200%.</p>
         
         <p>"We're thrilled to bring pickleball to even more communities across Nagaland," said Kevi Meyase, President of PAN. "Our vision has always been to make this wonderful sport accessible to every corner of our state, and this expansion represents a significant step toward that goal."</p>
         
@@ -87,7 +87,7 @@ const getNewsItem = (slug: string) => {
         
         <h3>Growing Recognition</h3>
         
-        <p>The Pickleball Association Nagaland has worked tirelessly to promote the sport throughout the state, an effort that's beginning to gain recognition beyond local borders.</p>
+        <p>The Nagaland Pickleball Association has worked tirelessly to promote the sport throughout the state, an effort that's beginning to gain recognition beyond local borders.</p>
         
         <p>"Being invited to compete in this regional championship validates our efforts to develop pickleball in Nagaland," said Sashimenla Ao, Tournament Director at PAN. "Our players have shown tremendous dedication, and we're confident they'll make Nagaland proud."</p>
         
@@ -105,7 +105,7 @@ const getNewsItem = (slug: string) => {
     title: "New Youth Development Program Launched for Aspiring Pickleball Players",
     excerpt: "PAN introduces specialized training program for players aged 8-16 to develop the next generation of talent.",
     content: `
-        <p>The Pickleball Association Nagaland is proud to announce the launch of its Youth Development Program, a comprehensive training initiative designed specifically for players between the ages of 8 and 16. The program aims to identify and nurture young talent, fostering not only technical skills but also sportsmanship, discipline, and a lifelong love for the sport.</p>
+        <p>The Nagaland Pickleball Association is proud to announce the launch of its Youth Development Program, a comprehensive training initiative designed specifically for players between the ages of 8 and 16. The program aims to identify and nurture young talent, fostering not only technical skills but also sportsmanship, discipline, and a lifelong love for the sport.</p>
         
         <p>"Investing in youth development is essential for the long-term growth of pickleball in our region," explained Imkong Tzudir, Head Coach at PAN. "This structured program provides a clear pathway for young players to progress from beginners to competitive athletes."</p>
         
@@ -151,12 +151,12 @@ export async function generateMetadata({
   const newsItem = getNewsItem(params.slug);
   if (!newsItem) {
     return {
-      title: "News Article Not Found | Pickleball Association Nagaland",
+      title: "News Article Not Found | Nagaland Pickleball Association",
       description: "The requested news article could not be found."
     };
   }
   return {
-    title: `${newsItem.title} | News | Pickleball Association Nagaland`,
+    title: `${newsItem.title} | News | Nagaland Pickleball Association`,
     description: newsItem.excerpt
   };
 }
@@ -259,7 +259,7 @@ export default function NewsArticlePage({
                 
                 <Link href="/updates/news/pan-expands-to-five-new-districts" className="group block" data-unique-id="fbea4a66-a890-4373-887e-7b9850da6553" data-file-name="app/updates/news/[slug]/page.tsx">
                   <h4 className="font-medium group-hover:text-primary transition-colors" data-unique-id="9344fcee-97e7-451e-8a58-5ae43bfda9ed" data-file-name="app/updates/news/[slug]/page.tsx"><span className="editable-text" data-unique-id="742aac60-87c9-4687-93cb-a8b1e1dc0432" data-file-name="app/updates/news/[slug]/page.tsx">
-                    Pickleball Association Nagaland Expands to Five New Districts
+                    Nagaland Pickleball Association Expands to Five New Districts
                   </span></h4>
                   <p className="text-sm text-foreground/70 mt-1" data-unique-id="d814f9fe-eb53-4e1e-aa86-da546bde8454" data-file-name="app/updates/news/[slug]/page.tsx"><span className="editable-text" data-unique-id="dc3e5116-77d6-407e-9639-d3c3e9235259" data-file-name="app/updates/news/[slug]/page.tsx">
                     May 20, 2025

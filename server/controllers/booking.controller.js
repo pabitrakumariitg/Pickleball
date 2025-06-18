@@ -61,15 +61,50 @@ exports.createBooking = asyncHandler(async (req, res, next) => {
     return next(new ErrorResponse(`Court not found with id of ${req.body.court}`, 404));
   }
 
-  // Check if court is available
+  // Check if court is available for the entire time range
   const isAvailable = await court.isAvailable(req.body.startTime, req.body.endTime);
   if (!isAvailable) {
-    return next(new ErrorResponse('Court is not available for the selected time slot', 400));
+    return next(new ErrorResponse('Court is not available for the selected time slots', 400));
   }
 
-  // Calculate total amount
-  const duration = (new Date(req.body.endTime) - new Date(req.body.startTime)) / (1000 * 60 * 60);
-  req.body.totalAmount = court.price * duration;
+  // Validate time slots if provided
+  if (req.body.timeSlots && req.body.timeSlots.length > 0) {
+    // Validate that time slots are consecutive
+    const sortedSlots = req.body.timeSlots.sort((a, b) => a.startTime.localeCompare(b.startTime));
+    
+    for (let i = 0; i < sortedSlots.length - 1; i++) {
+      const currentSlot = sortedSlots[i];
+      const nextSlot = sortedSlots[i + 1];
+      
+      if (currentSlot.endTime !== nextSlot.startTime) {
+        return next(new ErrorResponse('Time slots must be consecutive', 400));
+      }
+    }
+
+    // Validate that the total matches the calculated amount
+    const calculatedTotal = sortedSlots.reduce((total, slot) => total + slot.price, 0);
+    if (Math.abs(calculatedTotal - req.body.totalAmount) > 0.01) {
+      return next(new ErrorResponse('Total amount does not match time slot prices', 400));
+    }
+
+    // Validate that start and end times match the first and last slots
+    const firstSlot = sortedSlots[0];
+    const lastSlot = sortedSlots[sortedSlots.length - 1];
+    
+    const bookingStartTime = new Date(req.body.startTime);
+    const bookingEndTime = new Date(req.body.endTime);
+    const firstSlotTime = new Date(`${bookingStartTime.toISOString().split('T')[0]}T${firstSlot.startTime}`);
+    const lastSlotTime = new Date(`${bookingEndTime.toISOString().split('T')[0]}T${lastSlot.endTime}`);
+    
+    if (Math.abs(bookingStartTime.getTime() - firstSlotTime.getTime()) > 60000 || // 1 minute tolerance
+        Math.abs(bookingEndTime.getTime() - lastSlotTime.getTime()) > 60000) {
+      return next(new ErrorResponse('Booking time range does not match time slots', 400));
+    }
+  } else {
+    // Calculate total amount for single slot booking
+    const duration = (new Date(req.body.endTime) - new Date(req.body.startTime)) / (1000 * 60 * 60);
+    req.body.totalAmount = court.price * duration;
+  }
 
   const booking = await Booking.create(req.body);
 

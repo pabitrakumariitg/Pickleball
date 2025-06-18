@@ -23,7 +23,7 @@ const getEvent = (id: string) => {
     prizes: "Trophies and cash prizes for each division",
     registrationDeadline: "June 5, 2025",
     image: "https://images.unsplash.com/photo-1511067007398-7e4b90cfa4bc?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3",
-    organizer: "Pickleball Association Nagaland",
+    organizer: "Nagaland Pickleball Association",
     contact: "tournaments@pickleballnagaland.org"
   }, {
     id: "2",
@@ -83,7 +83,7 @@ const getEvent = (id: string) => {
     prizes: "Medals for winners and runners-up in each division",
     registrationDeadline: "July 12, 2025",
     image: "https://images.unsplash.com/photo-1517466787929-bc90951d0974?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3",
-    organizer: "Pickleball Association Nagaland",
+    organizer: "Nagaland Pickleball Association",
     contact: "seniors@pickleballnagaland.org"
   }, {
     id: "6",
@@ -98,7 +98,7 @@ const getEvent = (id: string) => {
     prizes: "Trophies and cash prizes totaling over ₹100,000",
     registrationDeadline: "August 1, 2025",
     image: "https://images.unsplash.com/photo-1518611012118-696072aa579a?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3",
-    organizer: "Pickleball Association Nagaland",
+    organizer: "Nagaland Pickleball Association",
     contact: "championships@pickleballnagaland.org"
   }];
   return events.find(event => event.id === id);
@@ -109,12 +109,12 @@ export async function generateMetadata({
   const event = getEvent(params.id);
   if (!event) {
     return {
-      title: "Event Not Found | Pickleball Association Nagaland",
+      title: "Event Not Found | Nagaland Pickleball Association",
       description: "The requested event could not be found."
     };
   }
   return {
-    title: `${event.title} | Events | Pickleball Association Nagaland`,
+    title: `${event.title} | Events | Nagaland Pickleball Association`,
     description: event.description
   };
 }

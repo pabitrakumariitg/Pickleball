@@ -95,7 +95,7 @@ export default function TermsConditionsPage() {
                     Last updated: May 1, 2025
                   </span></p>
                   <p className="mb-4" data-unique-id="db0ebbe7-c7f5-402c-bc08-9aa208b580a4" data-file-name="app/terms-conditions/page.tsx"><span className="editable-text" data-unique-id="b4bde78d-5c20-43bd-809b-762a6477a3c7" data-file-name="app/terms-conditions/page.tsx">
-                    These Terms and Conditions constitute a legally binding agreement made between you, whether personally or on behalf of an entity ("you") and Pickleball Association Nagaland ("PAN", "we", "us", or "our"), concerning your access to and use of our website, services, and facilities.
+                    These Terms and Conditions constitute a legally binding agreement made between you, whether personally or on behalf of an entity ("you") and Nagaland Pickleball Association ("PAN", "we", "us", or "our"), concerning your access to and use of our website, services, and facilities.
                   </span></p>
                   <p className="mb-4" data-unique-id="55f76f67-aff3-4d39-a4a1-35f38daec9db" data-file-name="app/terms-conditions/page.tsx"><span className="editable-text" data-unique-id="48c624ab-ebe5-491c-8c6e-e2cbfdbdd3dc" data-file-name="app/terms-conditions/page.tsx">
                     By accessing our website, booking courts, registering for membership, or participating in our events, you agree to be bound by these Terms and Conditions. If you disagree with any part of these terms, you do not have permission to access our services.
@@ -228,7 +228,7 @@ export default function TermsConditionsPage() {
                     If you have any questions about these Terms and Conditions, please contact us at:
                   </span></p>
                   <address className="not-italic" data-unique-id="75f931cb-98d4-4b36-801a-33bc507e3ca9" data-file-name="app/terms-conditions/page.tsx">
-                    <p data-unique-id="343aa4ae-b22d-48c1-a452-cf58408c6335" data-file-name="app/terms-conditions/page.tsx"><span className="editable-text" data-unique-id="aaf5690c-9abe-427c-ad19-2a84a86274c4" data-file-name="app/terms-conditions/page.tsx">Pickleball Association Nagaland</span></p>
+                    <p data-unique-id="343aa4ae-b22d-48c1-a452-cf58408c6335" data-file-name="app/terms-conditions/page.tsx"><span className="editable-text" data-unique-id="aaf5690c-9abe-427c-ad19-2a84a86274c4" data-file-name="app/terms-conditions/page.tsx">Nagaland Pickleball Association</span></p>
                     <p data-unique-id="40c111cb-9d0e-42ba-8b2b-caf862065a43" data-file-name="app/terms-conditions/page.tsx"><span className="editable-text" data-unique-id="0df752da-4e57-4955-8f4c-774346657a54" data-file-name="app/terms-conditions/page.tsx">123 Main Street, Kohima, Nagaland, 797001</span></p>
                     <p data-unique-id="d8dcf8d1-6ea6-4747-a2c3-bcf2c6cffa4d" data-file-name="app/terms-conditions/page.tsx"><span className="editable-text" data-unique-id="fe37cf06-ee35-4e7f-bd7b-e5645a2c7363" data-file-name="app/terms-conditions/page.tsx">Email: legal@pickleballnagaland.org</span></p>
                     <p data-unique-id="19efcc1c-a868-4865-aaec-50a1749adf9e" data-file-name="app/terms-conditions/page.tsx"><span className="editable-text" data-unique-id="23891daa-89e6-4079-b6d8-7431a0bb526f" data-file-name="app/terms-conditions/page.tsx">Phone: +91 12345 67890</span></p>

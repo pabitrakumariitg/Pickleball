@@ -54,7 +54,7 @@ export function AboutHero() {
           duration: 0.7,
           delay: 0.3
         }} className="mb-8 text-lg text-foreground/80" data-unique-id="77dd913a-7bef-4b11-b47b-21e0a415c647" data-file-name="components/about/hero.tsx"><span className="editable-text" data-unique-id="a29be9fa-8438-4912-ad47-5349d3a790f5" data-file-name="components/about/hero.tsx">
-            Founded in 2025, Pickleball Association Nagaland (PAN) is dedicated to promoting pickleball as a fun, inclusive, and competitive sport across the state. Inspired by the global rise of pickleball and the efforts of the All India Pickleball Association (AIPA), we aim to make Nagaland a hub for this exciting sport.
+            Founded in 2025, Nagaland Pickleball Association (PAN) is dedicated to promoting pickleball as a fun, inclusive, and competitive sport across the state. Inspired by the global rise of pickleball and the efforts of the All India Pickleball Association (AIPA), we aim to make Nagaland a hub for this exciting sport.
 
           </span></motion.p>
 

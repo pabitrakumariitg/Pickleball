@@ -2,11 +2,12 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { Menu, X, ChevronDown, Sun, Moon, User, LogOut } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useTheme } from "next-themes";
 import { useAuth } from "@/lib/auth";
+import { toast } from "sonner";
 
 const navItems = [{
   name: "Home",
@@ -16,7 +17,8 @@ const navItems = [{
   href: "/updates"
 }, {
   name: "Membership",
-  href: "/membership"
+  href: "/membership",
+  requiresAuth: true
 }, {
   name: "How to Play",
   href: "/how-to-play"
@@ -38,6 +40,7 @@ export function Navbar() {
   } = useTheme();
   const { user, logout } = useAuth();
   const pathname = usePathname();
+  const router = useRouter();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -66,6 +69,15 @@ export function Navbar() {
       setIsUserMenuOpen(false);
     } catch (error) {
       console.error('Logout failed:', error);
+    }
+  };
+
+  const handleNavItemClick = (item: any, e: React.MouseEvent) => {
+    if (item.requiresAuth && !user) {
+      e.preventDefault();
+      toast.error("Please login to access membership features");
+      router.push('/login');
+      return;
     }
   };
 
@@ -102,7 +114,11 @@ export function Navbar() {
             }} transition={{
               duration: 0.3
             }}>
-              <Link href={item.href} className={`relative px-3 py-2 text-sm font-medium transition-colors hover:text-primary ${pathname === item.href ? "text-primary" : "text-foreground/90"}`}>
+              <Link 
+                href={item.href} 
+                onClick={(e) => handleNavItemClick(item, e)}
+                className={`relative px-3 py-2 text-sm font-medium transition-colors hover:text-primary ${pathname === item.href ? "text-primary" : "text-foreground/90"}`}
+              >
                 {item.name}
                 {pathname === item.href && <motion.span className="absolute inset-x-1 -bottom-px h-0.5 bg-primary" layoutId="navbar-active-indicator" transition={{
                   type: "spring",
@@ -172,6 +188,13 @@ export function Navbar() {
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
+              onClick={(e) => {
+                if (!user) {
+                  e.preventDefault();
+                  toast.error("Please login to book a court");
+                  router.push('/login');
+                }
+              }}
               className="ml-4 rounded-full bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary-hover"
             >
               Book a Court
@@ -206,7 +229,15 @@ export function Navbar() {
         duration: 0.3
       }} className="md:hidden" data-unique-id="fde6fa62-8440-44dd-952f-0cdbe5040b70" data-file-name="components/layout/navbar.tsx">
         <div className="bg-background/95 backdrop-blur-md px-4 pt-2 pb-4 shadow-md" data-unique-id="a5000700-de55-4e4b-9641-04a39d517e8a" data-file-name="components/layout/navbar.tsx" data-dynamic-text="true">
-          {navItems.map(item => <Link key={item.name} href={item.href} className={`block py-3 text-base font-medium transition-colors hover:text-primary ${pathname === item.href ? "text-primary" : "text-foreground/90"}`} data-unique-id="f2c5345e-df8a-4fdb-8248-5c81cb6461cd" data-file-name="components/layout/navbar.tsx" data-dynamic-text="true">
+          {navItems.map(item => <Link 
+            key={item.name} 
+            href={item.href} 
+            onClick={(e) => handleNavItemClick(item, e)}
+            className={`block py-3 text-base font-medium transition-colors hover:text-primary ${pathname === item.href ? "text-primary" : "text-foreground/90"}`} 
+            data-unique-id="f2c5345e-df8a-4fdb-8248-5c81cb6461cd" 
+            data-file-name="components/layout/navbar.tsx" 
+            data-dynamic-text="true"
+          >
             {item.name}
           </Link>)}
 
@@ -244,9 +275,22 @@ export function Navbar() {
           )}
 
           <Link href="/book" data-unique-id="1cf52be6-73d0-4416-8198-61cd70d79c7f" data-file-name="components/layout/navbar.tsx">
-            <button className="mt-3 w-full rounded-full bg-primary px-4 py-2 text-base font-medium text-primary-foreground transition-colors hover:bg-primary-hover" data-unique-id="65468ebc-c9f8-4e9c-9175-f196f2199daf" data-file-name="components/layout/navbar.tsx"><span className="editable-text" data-unique-id="32cdaa22-dd60-4d43-a21a-a1380a32c354" data-file-name="components/layout/navbar.tsx">
-              Book a Court
-            </span></button>
+            <button 
+              onClick={(e) => {
+                if (!user) {
+                  e.preventDefault();
+                  toast.error("Please login to book a court");
+                  router.push('/login');
+                }
+              }}
+              className="mt-3 w-full rounded-full bg-primary px-4 py-2 text-base font-medium text-primary-foreground transition-colors hover:bg-primary-hover" 
+              data-unique-id="65468ebc-c9f8-4e9c-9175-f196f2199daf" 
+              data-file-name="components/layout/navbar.tsx"
+            >
+              <span className="editable-text" data-unique-id="32cdaa22-dd60-4d43-a21a-a1380a32c354" data-file-name="components/layout/navbar.tsx">
+                Book a Court
+              </span>
+            </button>
           </Link>
         </div>
       </motion.div>}

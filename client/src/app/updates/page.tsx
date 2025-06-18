@@ -6,8 +6,8 @@ import { CTASection } from "@/components/home/cta-section";
 import { CommunitySpotlight } from "@/components/updates/community-spotlight";
 import { Subscribe } from "@/components/updates/subscribe";
 export const metadata: Metadata = {
-  title: "Events & Updates | Pickleball Association Nagaland",
-  description: "Stay informed about the latest pickleball events, tournaments, and news from Pickleball Association Nagaland."
+  title: "Events & Updates | Nagaland Pickleball Association",
+  description: "Stay informed about the latest pickleball events, tournaments, and news from Nagaland Pickleball Association."
 };
 export default function UpdatesPage() {
   return <>

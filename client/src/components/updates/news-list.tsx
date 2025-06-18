@@ -96,7 +96,7 @@ export function NewsList() {
           </h2>
           <p className="mx-auto max-w-2xl text-lg text-foreground/70">
             Stay informed about the latest developments, announcements, and
-            achievements from the Pickleball Association Nagaland.
+            achievements from the Nagaland Pickleball Association.
           </p>
         </motion.div>
 

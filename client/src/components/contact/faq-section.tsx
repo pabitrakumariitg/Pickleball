@@ -46,7 +46,7 @@ export function FAQSection() {
           </h2>
           <p className="mx-auto max-w-2xl text-lg text-foreground/70" data-unique-id="ddb18bfa-ecfc-4230-8deb-460ebcc93db1" data-file-name="components/contact/faq-section.tsx"><span className="editable-text" data-unique-id="446341f4-0973-40c0-85f1-96599b5938b6" data-file-name="components/contact/faq-section.tsx">
             Find answers to common questions about contacting and working with the
-            Pickleball Association Nagaland.
+            Nagaland Pickleball Association.
           </span></p>
         </motion.div>
 

@@ -1,7 +1,7 @@
 import { SiteConfig } from "@/types"
 
 export const siteConfig: SiteConfig = {
-  name: "Pickleball Association Nagaland",
+  name: "Nagaland Pickleball Association",
   description: "Promoting pickleball across Nagaland through community events, coaching, and accessible court facilities.",
   mainNav: [
     {
