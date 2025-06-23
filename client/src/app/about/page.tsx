@@ -14,8 +14,8 @@ export default function AboutPage() {
   return <>
     <AboutHero />
     <OurMission />
-    <TeamSection />
-    <StatsSection />
+    {/* <TeamSection /> */}
+    {/* <StatsSection /> */}
 
     <AboutCTA />
   </>;

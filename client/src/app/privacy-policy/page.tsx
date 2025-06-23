@@ -86,7 +86,7 @@ export default function PrivacyPolicyPage() {
                   Last updated: May 1, 2025
                 </span></p>
                 <p className="mb-4" data-unique-id="7a3321ad-a05c-4a0d-88c6-fa444b06b0f1" data-file-name="app/privacy-policy/page.tsx"><span className="editable-text" data-unique-id="f68a327e-7f7e-4108-81ca-94e298a946f2" data-file-name="app/privacy-policy/page.tsx">
-                  Nagaland Pickleball Association ("PAN", "we", "our", or "us") is committed to protecting your privacy. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you visit our website or use our services.
+                  Nagaland Pickleball Association ("NPA", "we", "our", or "us") is committed to protecting your privacy. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you visit our website or use our services.
                 </span></p>
                 <p data-unique-id="d87ec070-f560-406f-b284-63eab2b3c94e" data-file-name="app/privacy-policy/page.tsx"><span className="editable-text" data-unique-id="4bea7495-3095-451c-a0ef-220a9ad3bdd9" data-file-name="app/privacy-policy/page.tsx">
                   Please read this privacy policy carefully. If you do not agree with the terms of this privacy policy, please do not access the site.

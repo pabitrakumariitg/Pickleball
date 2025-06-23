@@ -22,7 +22,7 @@ export function FAQSection() {
     question: "How can I apply for a partnership or sponsorship?",
     answer: "For partnership or sponsorship opportunities, please send us an email at partnerships@pickleballnagaland.org with details about your organization and proposal. Our team will review your request and get back to you."
   }, {
-    question: "I want to volunteer with PAN. How do I get started?",
+    question: "I want to volunteer with NPA. How do I get started?",
     answer: "We're always looking for volunteers! Please fill out our volunteer form on the website or send an email to volunteer@pickleballnagaland.org with your information, availability, and areas of interest."
   }];
   const toggleFAQ = (index: number) => {

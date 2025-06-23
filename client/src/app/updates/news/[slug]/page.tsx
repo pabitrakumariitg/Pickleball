@@ -14,11 +14,11 @@ const getNewsItem = (slug: string) => {
   const news = [{
     id: "1",
     title: "Nagaland Pickleball Association Expands to Five New Districts",
-    excerpt: "PAN announces exciting expansion plans to bring pickleball courts to five additional districts across Nagaland.",
+    excerpt: "NPA announces exciting expansion plans to bring pickleball courts to five additional districts across Nagaland.",
     content: `
-        <p>In an exciting development for pickleball enthusiasts across Nagaland, the Nagaland Pickleball Association (PAN) has announced plans to expand its presence to five new districts in the coming months. This expansion will include the construction of new courts, training programs for local coaches, and community outreach initiatives to introduce the sport to new players. The move comes after a successful two-year period that saw membership increase by over 200%.</p>
+        <p>In an exciting development for pickleball enthusiasts across Nagaland, the Nagaland Pickleball Association (NPA) has announced plans to expand its presence to five new districts in the coming months. This expansion will include the construction of new courts, training programs for local coaches, and community outreach initiatives to introduce the sport to new players. The move comes after a successful two-year period that saw membership increase by over 200%.</p>
         
-        <p>"We're thrilled to bring pickleball to even more communities across Nagaland," said Kevi Meyase, President of PAN. "Our vision has always been to make this wonderful sport accessible to every corner of our state, and this expansion represents a significant step toward that goal."</p>
+        <p>"We're thrilled to bring pickleball to even more communities across Nagaland," said Kevi Meyase, President of NPA. "Our vision has always been to make this wonderful sport accessible to every corner of our state, and this expansion represents a significant step toward that goal."</p>
         
         <h3>New Districts Receiving Courts</h3>
         
@@ -49,9 +49,9 @@ const getNewsItem = (slug: string) => {
         
         <h3>Looking Forward</h3>
         
-        <p>"This expansion is just the beginning," noted Arenla Jamir, Vice President of PAN. "Our five-year strategic plan includes bringing pickleball to every district in Nagaland and establishing a competition pathway from grassroots to national level representation."</p>
+        <p>"This expansion is just the beginning," noted Arenla Jamir, Vice President of NPA. "Our five-year strategic plan includes bringing pickleball to every district in Nagaland and establishing a competition pathway from grassroots to national level representation."</p>
         
-        <p>The association has launched a fundraising campaign to support this expansion, with opportunities for businesses and individuals to sponsor courts, programs, or equipment. Those interested in contributing or learning more about the expansion can contact PAN directly at expansion@pickleballnagaland.org.</p>
+        <p>The association has launched a fundraising campaign to support this expansion, with opportunities for businesses and individuals to sponsor courts, programs, or equipment. Those interested in contributing or learning more about the expansion can contact NPA directly at expansion@pickleballnagaland.org.</p>
       `,
     date: "2025-05-20",
     author: "Kevishe Thong",
@@ -61,7 +61,7 @@ const getNewsItem = (slug: string) => {
   }, {
     id: "2",
     title: "National Pickleball Team to Represent Nagaland at Regional Championships",
-    excerpt: "Selected players from PAN will compete at the upcoming Northeast India Regional Pickleball Championships.",
+    excerpt: "Selected players from NPA will compete at the upcoming Northeast India Regional Pickleball Championships.",
     content: `
         <p>A team of twelve talented pickleball players from across Nagaland has been selected to represent the state at the upcoming Northeast India Regional Pickleball Championships to be held in Guwahati next month. The team, comprising both veterans and rising stars, has been undergoing intensive training sessions at the Kohima Sports Complex under the guidance of Head Coach Imkong Tzudir.</p>
         
@@ -89,7 +89,7 @@ const getNewsItem = (slug: string) => {
         
         <p>The Nagaland Pickleball Association has worked tirelessly to promote the sport throughout the state, an effort that's beginning to gain recognition beyond local borders.</p>
         
-        <p>"Being invited to compete in this regional championship validates our efforts to develop pickleball in Nagaland," said Sashimenla Ao, Tournament Director at PAN. "Our players have shown tremendous dedication, and we're confident they'll make Nagaland proud."</p>
+        <p>"Being invited to compete in this regional championship validates our efforts to develop pickleball in Nagaland," said Sashimenla Ao, Tournament Director at NPA. "Our players have shown tremendous dedication, and we're confident they'll make Nagaland proud."</p>
         
         <p>The Northeast India Regional Pickleball Championships will take place from June 10-12, 2025, featuring teams from Assam, Manipur, Meghalaya, Arunachal Pradesh, Tripura, Mizoram, and Sikkim, in addition to Nagaland.</p>
         
@@ -103,11 +103,11 @@ const getNewsItem = (slug: string) => {
   }, {
     id: "3",
     title: "New Youth Development Program Launched for Aspiring Pickleball Players",
-    excerpt: "PAN introduces specialized training program for players aged 8-16 to develop the next generation of talent.",
+    excerpt: "NPA introduces specialized training program for players aged 8-16 to develop the next generation of talent.",
     content: `
         <p>The Nagaland Pickleball Association is proud to announce the launch of its Youth Development Program, a comprehensive training initiative designed specifically for players between the ages of 8 and 16. The program aims to identify and nurture young talent, fostering not only technical skills but also sportsmanship, discipline, and a lifelong love for the sport.</p>
         
-        <p>"Investing in youth development is essential for the long-term growth of pickleball in our region," explained Imkong Tzudir, Head Coach at PAN. "This structured program provides a clear pathway for young players to progress from beginners to competitive athletes."</p>
+        <p>"Investing in youth development is essential for the long-term growth of pickleball in our region," explained Imkong Tzudir, Head Coach at NPA. "This structured program provides a clear pathway for young players to progress from beginners to competitive athletes."</p>
         
         <h3>Program Structure</h3>
         
@@ -119,13 +119,13 @@ const getNewsItem = (slug: string) => {
           <li><strong>Performance Level (ages 14-16):</strong> Advanced techniques, competitive play, and tournament preparation</li>
         </ul>
         
-        <p>Each tier includes weekly training sessions led by certified coaches, periodic skills assessments, and appropriate competitive opportunities. Training will take place at dedicated youth sessions across PAN's facilities in Kohima, Dimapur, and Mokokchung.</p>
+        <p>Each tier includes weekly training sessions led by certified coaches, periodic skills assessments, and appropriate competitive opportunities. Training will take place at dedicated youth sessions across NPA's facilities in Kohima, Dimapur, and Mokokchung.</p>
         
         <h3>Accessibility and Inclusion</h3>
         
         <p>A key focus of the program is making pickleball accessible to all young people, regardless of background or economic status.</p>
         
-        <p>"We've established a scholarship fund to ensure that financial constraints don't prevent talented young players from participating," said Kevi Meyase, President of PAN. "Additionally, we're providing all necessary equipment during training sessions, removing another potential barrier to entry."</p>
+        <p>"We've established a scholarship fund to ensure that financial constraints don't prevent talented young players from participating," said Kevi Meyase, President of NPA. "Additionally, we're providing all necessary equipment during training sessions, removing another potential barrier to entry."</p>
         
         <p>The association has also developed modified training methods to accommodate children with different abilities, ensuring an inclusive environment for all participants.</p>
         
@@ -133,9 +133,9 @@ const getNewsItem = (slug: string) => {
         
         <p>Beyond developing athletic skills, the program emphasizes character development, teamwork, and healthy lifestyle habits.</p>
         
-        <p>"While we certainly hope to develop future champions, our primary goal is to instill a lifelong love of physical activity and sport in these young people," noted Arenla Jamir, Vice President of PAN. "The skills and values they learn through pickleball will benefit them throughout their lives."</p>
+        <p>"While we certainly hope to develop future champions, our primary goal is to instill a lifelong love of physical activity and sport in these young people," noted Arenla Jamir, Vice President of NPA. "The skills and values they learn through pickleball will benefit them throughout their lives."</p>
         
-        <p>Registration for the Youth Development Program is now open, with sessions beginning on June 1, 2025. Interested parents and young players can register online at the PAN website or in person at any PAN facility. An orientation session for parents will be held on May 25th at the Kohima Sports Complex.</p>
+        <p>Registration for the Youth Development Program is now open, with sessions beginning on June 1, 2025. Interested parents and young players can register online at the NPA website or in person at any NPA facility. An orientation session for parents will be held on May 25th at the Kohima Sports Complex.</p>
       `,
     date: "2025-05-08",
     author: "Sashimenla Ao",

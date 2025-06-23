@@ -18,7 +18,7 @@ export function EventsSection() {
     id: "2",
     title: "Beginner's Clinic",
     date: "June 22, 2025",
-    location: "PAN Training Center, Dimapur",
+    location: "NPA Training Center, Dimapur",
     description: "Learn the basics of pickleball in this 3-hour instructional clinic.",
     image: "https://images.unsplash.com/photo-1554068865-24cecd4e34b8?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3"
   }, {

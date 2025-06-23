@@ -57,7 +57,7 @@ export function MembershipHero() {
           duration: 0.7,
           delay: 0.5
         }} className="mb-8 text-lg text-foreground/80" data-unique-id="a712873e-a0b3-4665-a7fe-3cfffb30e304" data-file-name="components/membership/hero.tsx"><span className="editable-text" data-unique-id="49c088fd-350c-4489-931b-73964fb7a5d4" data-file-name="components/membership/hero.tsx">
-          Become a member of PAN and unlock a world of pickleball perks! Our membership plans are designed to suit players of all levels, offering exclusive benefits to enhance your experience.
+          Become a member of NPA and unlock a world of pickleball perks! Our membership plans are designed to suit players of all levels, offering exclusive benefits to enhance your experience.
           </span></motion.p>
 
         <motion.div initial={{

@@ -95,7 +95,7 @@ export default function TermsConditionsPage() {
                     Last updated: May 1, 2025
                   </span></p>
                   <p className="mb-4" data-unique-id="db0ebbe7-c7f5-402c-bc08-9aa208b580a4" data-file-name="app/terms-conditions/page.tsx"><span className="editable-text" data-unique-id="b4bde78d-5c20-43bd-809b-762a6477a3c7" data-file-name="app/terms-conditions/page.tsx">
-                    These Terms and Conditions constitute a legally binding agreement made between you, whether personally or on behalf of an entity ("you") and Nagaland Pickleball Association ("PAN", "we", "us", or "our"), concerning your access to and use of our website, services, and facilities.
+                    These Terms and Conditions constitute a legally binding agreement made between you, whether personally or on behalf of an entity ("you") and Nagaland Pickleball Association ("NPA", "we", "us", or "our"), concerning your access to and use of our website, services, and facilities.
                   </span></p>
                   <p className="mb-4" data-unique-id="55f76f67-aff3-4d39-a4a1-35f38daec9db" data-file-name="app/terms-conditions/page.tsx"><span className="editable-text" data-unique-id="48c624ab-ebe5-491c-8c6e-e2cbfdbdd3dc" data-file-name="app/terms-conditions/page.tsx">
                     By accessing our website, booking courts, registering for membership, or participating in our events, you agree to be bound by these Terms and Conditions. If you disagree with any part of these terms, you do not have permission to access our services.
@@ -105,7 +105,7 @@ export default function TermsConditionsPage() {
                 <section id="intellectual-property" className="mb-10" data-unique-id="f46dbe83-bf97-4ad2-8ba2-3ce123eb4d9f" data-file-name="app/terms-conditions/page.tsx">
                   <h2 className="text-2xl font-bold mb-4" data-unique-id="d7208ac6-4867-46e0-b96e-78ad4186e059" data-file-name="app/terms-conditions/page.tsx"><span className="editable-text" data-unique-id="5f606902-7980-42cf-adc1-88f5acd84314" data-file-name="app/terms-conditions/page.tsx">Intellectual Property Rights</span></h2>
                   <p className="mb-4" data-unique-id="1713b359-251e-44e7-b6c0-34a8fc4e0b6a" data-file-name="app/terms-conditions/page.tsx"><span className="editable-text" data-unique-id="f0833faf-5742-4dc3-8336-76568a355343" data-file-name="app/terms-conditions/page.tsx">
-                    Unless otherwise indicated, the website and all its contents, including but not limited to text, images, logos, button icons, images, audio clips, digital downloads, data compilations, and software, are the property of PAN or our content suppliers and protected by applicable copyright laws.
+                    Unless otherwise indicated, the website and all its contents, including but not limited to text, images, logos, button icons, images, audio clips, digital downloads, data compilations, and software, are the property of NPA or our content suppliers and protected by applicable copyright laws.
                   </span></p>
                   <p className="mb-4" data-unique-id="33ff0254-f7b0-450b-8997-b1d030edb026" data-file-name="app/terms-conditions/page.tsx"><span className="editable-text" data-unique-id="6cd123be-30a5-45df-be0d-f35cf8de9664" data-file-name="app/terms-conditions/page.tsx">
                     You must not:
@@ -135,13 +135,13 @@ export default function TermsConditionsPage() {
                 <section id="membership-terms" className="mb-10" data-unique-id="7c9e0dc4-2598-4670-8b90-a45c3c6f4085" data-file-name="app/terms-conditions/page.tsx">
                   <h2 className="text-2xl font-bold mb-4" data-unique-id="f587505d-01fa-4de1-a98e-5a5680c65ef2" data-file-name="app/terms-conditions/page.tsx"><span className="editable-text" data-unique-id="347a5a29-5c22-4cc5-8a18-b4cf8f6b299c" data-file-name="app/terms-conditions/page.tsx">Membership Terms</span></h2>
                   <p className="mb-4" data-unique-id="84e663d5-8d31-4ed0-95cb-06b4291cba63" data-file-name="app/terms-conditions/page.tsx"><span className="editable-text" data-unique-id="98f5872c-29fa-4ee2-9442-f82579557404" data-file-name="app/terms-conditions/page.tsx">
-                    Membership to PAN is subject to the following terms:
+                    Membership to NPA is subject to the following terms:
                   </span></p>
                   <ul className="list-disc pl-6 mb-4 space-y-2" data-unique-id="201639be-54a0-4519-9852-fce029c4fe56" data-file-name="app/terms-conditions/page.tsx">
                     <li data-unique-id="28621a2a-1a56-4061-9bf1-1f289347660b" data-file-name="app/terms-conditions/page.tsx"><span className="editable-text" data-unique-id="31956b2f-2088-462f-91a7-be31a139d977" data-file-name="app/terms-conditions/page.tsx">Membership fees must be paid in full at the time of registration</span></li>
                     <li data-unique-id="5f36af6c-0510-453d-9c33-e159eff35e68" data-file-name="app/terms-conditions/page.tsx"><span className="editable-text" data-unique-id="6f6e7263-bf5c-4ef9-b08c-6c86bfa55e5b" data-file-name="app/terms-conditions/page.tsx">Membership is non-transferable and non-refundable</span></li>
                     <li data-unique-id="f3d58a4d-f209-4623-889d-6cee6ea9eecd" data-file-name="app/terms-conditions/page.tsx"><span className="editable-text" data-unique-id="b280bb1c-09f6-4c5a-af27-f55ff3ee0a14" data-file-name="app/terms-conditions/page.tsx">Members must adhere to our code of conduct at all times</span></li>
-                    <li data-unique-id="eda02a76-8621-4b6c-83fc-31533f04e963" data-file-name="app/terms-conditions/page.tsx"><span className="editable-text" data-unique-id="d205176a-43d4-43c7-a319-e840dc294d69" data-file-name="app/terms-conditions/page.tsx">PAN reserves the right to revoke membership for violation of our terms</span></li>
+                    <li data-unique-id="eda02a76-8621-4b6c-83fc-31533f04e963" data-file-name="app/terms-conditions/page.tsx"><span className="editable-text" data-unique-id="d205176a-43d4-43c7-a319-e840dc294d69" data-file-name="app/terms-conditions/page.tsx">NPA reserves the right to revoke membership for violation of our terms</span></li>
                     <li data-unique-id="383da190-afa5-4d32-8be0-7ce274210183" data-file-name="app/terms-conditions/page.tsx"><span className="editable-text" data-unique-id="1cdd766a-a0e3-430b-97a8-d6829c167b2c" data-file-name="app/terms-conditions/page.tsx">Membership benefits are subject to change with reasonable notice</span></li>
                   </ul>
                 </section>
@@ -156,7 +156,7 @@ export default function TermsConditionsPage() {
                     <li data-unique-id="b488c17e-3446-4dda-b67f-2ea0c6567477" data-file-name="app/terms-conditions/page.tsx"><span className="editable-text" data-unique-id="cd4c3b9d-deff-44ad-a638-06b15f79e4bf" data-file-name="app/terms-conditions/page.tsx">Payment is required at the time of booking</span></li>
                     <li data-unique-id="6fb747cd-ebcb-4e4b-82e2-b7206ac34f2e" data-file-name="app/terms-conditions/page.tsx"><span className="editable-text" data-unique-id="59f86f41-9a69-440e-84a7-72142789d1dc" data-file-name="app/terms-conditions/page.tsx">Cancellations must be made at least 24 hours in advance for a full refund</span></li>
                     <li data-unique-id="cc773123-a08e-496c-9724-95f353183811" data-file-name="app/terms-conditions/page.tsx"><span className="editable-text" data-unique-id="e291f78e-4d9d-4025-8a07-74e376e65ef1" data-file-name="app/terms-conditions/page.tsx">Cancellations made less than 24 hours in advance will not be refunded</span></li>
-                    <li data-unique-id="1f31e617-b97b-4cc1-8e04-b1055a47c210" data-file-name="app/terms-conditions/page.tsx"><span className="editable-text" data-unique-id="31d04e72-0962-427e-bbaf-16c227a2d9bf" data-file-name="app/terms-conditions/page.tsx">PAN reserves the right to cancel bookings due to maintenance, weather conditions, or other circumstances beyond our control</span></li>
+                    <li data-unique-id="1f31e617-b97b-4cc1-8e04-b1055a47c210" data-file-name="app/terms-conditions/page.tsx"><span className="editable-text" data-unique-id="31d04e72-0962-427e-bbaf-16c227a2d9bf" data-file-name="app/terms-conditions/page.tsx">NPA reserves the right to cancel bookings due to maintenance, weather conditions, or other circumstances beyond our control</span></li>
                   </ul>
                 </section>
                 
@@ -178,7 +178,7 @@ export default function TermsConditionsPage() {
                 <section id="liability" className="mb-10" data-unique-id="7d843dca-1009-42b3-8bad-cc09af73c3f6" data-file-name="app/terms-conditions/page.tsx">
                   <h2 className="text-2xl font-bold mb-4" data-unique-id="b688ba16-c0a1-4fdb-afd9-25309495139d" data-file-name="app/terms-conditions/page.tsx"><span className="editable-text" data-unique-id="ccaaedd9-0847-43de-a647-29cdbbda628c" data-file-name="app/terms-conditions/page.tsx">Limitation of Liability</span></h2>
                   <p className="mb-4" data-unique-id="a5dfca00-58b7-42a2-a132-e6ba6e689a47" data-file-name="app/terms-conditions/page.tsx"><span className="editable-text" data-unique-id="e419b7a9-e869-4649-ad09-f932846d6aba" data-file-name="app/terms-conditions/page.tsx">
-                    PAN shall not be liable for any indirect, incidental, special, consequential, or punitive damages resulting from:
+                    NPA shall not be liable for any indirect, incidental, special, consequential, or punitive damages resulting from:
                   </span></p>
                   <ul className="list-disc pl-6 mb-4 space-y-2" data-unique-id="91e5fcb8-15e8-414b-85b9-acf1c073764c" data-file-name="app/terms-conditions/page.tsx">
                     <li data-unique-id="56c6a666-5dda-432b-aac2-3b1b9b1cb606" data-file-name="app/terms-conditions/page.tsx"><span className="editable-text" data-unique-id="00d7b1e5-5abe-4fed-9d11-b4c4a4d10879" data-file-name="app/terms-conditions/page.tsx">Your use or inability to use our services</span></li>
@@ -194,7 +194,7 @@ export default function TermsConditionsPage() {
                 <section id="indemnification" className="mb-10" data-unique-id="870eea7f-5f4d-486a-a644-043a454a0aa0" data-file-name="app/terms-conditions/page.tsx">
                   <h2 className="text-2xl font-bold mb-4" data-unique-id="5c7473c7-3b4a-46cd-b9bd-8409fa665bca" data-file-name="app/terms-conditions/page.tsx"><span className="editable-text" data-unique-id="99437a61-7bad-4816-be68-12e33c2035de" data-file-name="app/terms-conditions/page.tsx">Indemnification</span></h2>
                   <p className="mb-4" data-unique-id="017bf8e8-31cc-4d93-8558-fdc34927666c" data-file-name="app/terms-conditions/page.tsx"><span className="editable-text" data-unique-id="f4783590-5511-4942-8661-74d7ee1bb786" data-file-name="app/terms-conditions/page.tsx">
-                    You agree to indemnify, defend, and hold harmless PAN and our affiliates, directors, officers, employees, and agents from and against all claims, demands, actions, causes of action, damages, losses, costs, and expenses arising out of your use of our services or violation of these Terms and Conditions.
+                    You agree to indemnify, defend, and hold harmless NPA and our affiliates, directors, officers, employees, and agents from and against all claims, demands, actions, causes of action, damages, losses, costs, and expenses arising out of your use of our services or violation of these Terms and Conditions.
                   </span></p>
                 </section>
                 

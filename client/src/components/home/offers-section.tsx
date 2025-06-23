@@ -72,7 +72,7 @@ export function OffersSection() {
             What We </span><span className="text-primary" data-unique-id="ac119ef1-b32c-4784-b096-243d6112eaa5" data-file-name="components/home/offers-section.tsx"><span className="editable-text" data-unique-id="f7396e05-79ef-4e66-82c6-dcc949cd357f" data-file-name="components/home/offers-section.tsx">Offer</span></span>
           </h2>
           <p className="mx-auto max-w-2xl text-lg text-foreground/70" data-unique-id="4871facb-e544-4874-a3e1-33ffd4e98c0d" data-file-name="components/home/offers-section.tsx"><span className="editable-text" data-unique-id="27bdc21c-b561-40ca-aa68-178024e3a7b6" data-file-name="components/home/offers-section.tsx">
-            PAN provides comprehensive programs and facilities to support
+            NPA provides comprehensive programs and facilities to support
             players at every stage of their pickleball journey.
           </span></p>
         </motion.div>

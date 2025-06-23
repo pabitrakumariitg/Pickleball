@@ -41,7 +41,7 @@ export function AboutHero() {
           duration: 0.7,
           delay: 0.2
         }} className="mb-4 text-4xl font-bold md:text-5xl lg:text-6xl" data-unique-id="630d7f21-1ff2-4354-b630-1df7062390c9" data-file-name="components/about/hero.tsx"><span className="editable-text" data-unique-id="6b3267b5-94ae-4f54-80c1-a2f127b05463" data-file-name="components/about/hero.tsx">
-            About </span><span className="text-primary" data-unique-id="0f6b76ad-ecf1-47f1-b729-5bc49f12874a" data-file-name="components/about/hero.tsx"><span className="editable-text" data-unique-id="8f9f9d00-36bf-4684-8233-da959bc1da95" data-file-name="components/about/hero.tsx">PAN</span></span>
+            About </span><span className="text-primary" data-unique-id="0f6b76ad-ecf1-47f1-b729-5bc49f12874a" data-file-name="components/about/hero.tsx"><span className="editable-text" data-unique-id="8f9f9d00-36bf-4684-8233-da959bc1da95" data-file-name="components/about/hero.tsx">NPA</span></span>
         </motion.h1>
 
         <motion.p initial={{
@@ -54,7 +54,7 @@ export function AboutHero() {
           duration: 0.7,
           delay: 0.3
         }} className="mb-8 text-lg text-foreground/80" data-unique-id="77dd913a-7bef-4b11-b47b-21e0a415c647" data-file-name="components/about/hero.tsx"><span className="editable-text" data-unique-id="a29be9fa-8438-4912-ad47-5349d3a790f5" data-file-name="components/about/hero.tsx">
-            Founded in 2025, Nagaland Pickleball Association (PAN) is dedicated to promoting pickleball as a fun, inclusive, and competitive sport across the state. Inspired by the global rise of pickleball and the efforts of the All India Pickleball Association (AIPA), we aim to make Nagaland a hub for this exciting sport.
+            Founded in 2025, Nagaland Pickleball Association (NPA) is dedicated to promoting pickleball as a fun, inclusive, and competitive sport across the state. Inspired by the global rise of pickleball and the efforts of the All India Pickleball Association (AIPA), we aim to make Nagaland a hub for this exciting sport.
 
           </span></motion.p>
 

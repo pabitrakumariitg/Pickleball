@@ -18,7 +18,7 @@ export const metadata: Metadata = {
     template: "%s | Nagaland Pickleball Association"
   },
   description: "Promoting pickleball across Nagaland through community events, coaching, and accessible court facilities.",
-  applicationName: "PAN",
+  applicationName: "NPA",
   keywords: ["pickleball", "nagaland", "sports", "community", "courts", "tournaments"],
   authors: [{
     name: "Nagaland Pickleball Association"
@@ -49,7 +49,7 @@ export const metadata: Metadata = {
   appleWebApp: {
     capable: true,
     statusBarStyle: "default",
-    title: "PAN"
+    title: "NPA"
   },
   formatDetection: {
     telephone: false

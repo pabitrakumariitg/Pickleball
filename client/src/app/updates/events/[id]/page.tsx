@@ -17,7 +17,7 @@ const getEvent = (id: string) => {
     time: "9:00 AM - 6:00 PM",
     location: "City Sports Complex, Kohima",
     description: "Annual open tournament with categories for all skill levels. Join us for a weekend of competitive play and community building.",
-    fullDescription: "The Kohima Open Tournament is one of PAN's flagship events, bringing together players from across Nagaland and neighboring states. With divisions for all skill levels from beginner to advanced, this tournament offers something for everyone. Singles matches will be held on Saturday, with doubles and mixed doubles on Sunday. Entry fees include a tournament t-shirt, lunch both days, and eligibility for door prizes. Register early as spots fill quickly!",
+    fullDescription: "The Kohima Open Tournament is one of NPA's flagship events, bringing together players from across Nagaland and neighboring states. With divisions for all skill levels from beginner to advanced, this tournament offers something for everyone. Singles matches will be held on Saturday, with doubles and mixed doubles on Sunday. Entry fees include a tournament t-shirt, lunch both days, and eligibility for door prizes. Register early as spots fill quickly!",
     participants: "120+ expected",
     entryFee: "₹1,000 per player",
     prizes: "Trophies and cash prizes for each division",
@@ -30,7 +30,7 @@ const getEvent = (id: string) => {
     title: "Beginner's Clinic",
     date: "June 22, 2025",
     time: "10:00 AM - 1:00 PM",
-    location: "PAN Training Center, Dimapur",
+    location: "NPA Training Center, Dimapur",
     description: "Learn the basics of pickleball in this 3-hour instructional clinic. Equipment provided. Perfect for those new to the sport.",
     fullDescription: "This comprehensive clinic is designed for those who have little to no experience with pickleball. Our trained coaches will guide you through the basics of the game, including rules, scoring, basic strokes, and strategy. The small group format ensures plenty of individual attention. All equipment will be provided, just bring comfortable athletic clothing, court shoes, and water. By the end of the clinic, you'll be ready to join our beginner open play sessions!",
     participants: "Maximum 16",
@@ -38,7 +38,7 @@ const getEvent = (id: string) => {
     prizes: "Participation certificate and discount coupon for equipment",
     registrationDeadline: "June 20, 2025",
     image: "https://images.unsplash.com/photo-1554068865-24cecd4e34b8?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3",
-    organizer: "PAN Training Division",
+    organizer: "NPA Training Division",
     contact: "training@pickleballnagaland.org"
   }, {
     id: "3",
@@ -68,7 +68,7 @@ const getEvent = (id: string) => {
     prizes: "Medals for all participants, trophies for tournament winners",
     registrationDeadline: "July 1, 2025",
     image: "https://images.unsplash.com/photo-1502014822147-1aedfb0676e0?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3",
-    organizer: "PAN Youth Development Program",
+    organizer: "NPA Youth Development Program",
     contact: "youth@pickleballnagaland.org"
   }, {
     id: "5",

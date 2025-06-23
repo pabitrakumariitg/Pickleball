@@ -15,7 +15,7 @@ export function TestimonialsSection() {
     id: 1,
     name: "Kevi Zhimomi",
     role: "Family Membership",
-    quote: "Joining PAN was the best decision for our family. The kids love the junior programs, and my wife and I enjoy the mixed doubles nights. The community is so welcoming!",
+    quote: "Joining NPA was the best decision for our family. The kids love the junior programs, and my wife and I enjoy the mixed doubles nights. The community is so welcoming!",
     image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&auto=format&fit=crop&q=60&ixlib=rb-4.0.3"
   }, {
     id: 2,

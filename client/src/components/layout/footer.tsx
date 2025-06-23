@@ -7,24 +7,32 @@ export function Footer() {
       <div className="container mx-auto px-6 py-12" data-unique-id="09b65fcc-be8c-45f2-9fa9-46122f849c89" data-file-name="components/layout/footer.tsx">
         <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4" data-unique-id="3a1fc580-6b89-4901-8741-a65e23b10b57" data-file-name="components/layout/footer.tsx" data-dynamic-text="true">
           {/* Column 1: About */}
-          <div data-unique-id="96c6fb3e-1706-4fbd-847c-3198e83f8e01" data-file-name="components/layout/footer.tsx">
-            <h3 className="mb-4 text-xl font-bold" data-unique-id="b75d8a56-a2b4-41b4-84a8-fa8ded416849" data-file-name="components/layout/footer.tsx"><span className="editable-text" data-unique-id="59fa2487-e32a-420e-89f4-7ab179564176" data-file-name="components/layout/footer.tsx">PAN</span></h3>
-            <p className="mb-4 text-primary-foreground/90" data-unique-id="03f4f24f-2f23-492a-8d41-0117b7c4460c" data-file-name="components/layout/footer.tsx"><span className="editable-text" data-unique-id="97b60056-aee2-44e1-98b6-4c2999b0ca46" data-file-name="components/layout/footer.tsx">
-              Promoting pickleball across Nagaland through community events, 
-              coaching, and accessible court facilities.
-            </span></p>
-            <div className="flex space-x-4" data-unique-id="156a7ecb-6eaf-4914-9311-53e50c26e19f" data-file-name="components/layout/footer.tsx">
-              <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="hover:text-accent transition-colors" aria-label="Facebook" data-unique-id="50bc1c6f-3887-414d-85de-024dcdc38c05" data-file-name="components/layout/footer.tsx">
-                <Facebook size={20} />
-              </a>
-              <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="hover:text-accent transition-colors" aria-label="Instagram" data-unique-id="e227c84b-9d78-4816-b127-038475925195" data-file-name="components/layout/footer.tsx">
-                <Instagram size={20} />
-              </a>
-              <a href="https://whatsapp.com" target="_blank" rel="noopener noreferrer" className="hover:text-accent transition-colors" aria-label="WhatsApp" data-unique-id="139ba3e3-0315-49c2-bf40-7f827e6c4434" data-file-name="components/layout/footer.tsx">
-                <MessageCircle size={20} />
-              </a>
-            </div>
-          </div>
+          {/* Column 1: About */}
+<div>
+  <h3 className="mb-4 text-xl font-bold">NPA</h3>
+  <p className="mb-4 text-primary-foreground/90">
+    Promoting pickleball across Nagaland through community events, 
+    coaching, and accessible court facilities.
+  </p>
+  <p className="mb-2 text-primary-foreground/80 text-sm">
+    132B Darogapathar, Dimapur, Nagaland 797115
+  </p>
+  <p className="mb-4 text-primary-foreground/80 text-sm">
+    Ph: <a href="tel:8837402472" className="hover:text-accent transition-colors">8837402472</a>
+  </p>
+  <div className="flex space-x-4">
+    <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="hover:text-accent transition-colors" aria-label="Facebook">
+      <Facebook size={20} />
+    </a>
+    <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="hover:text-accent transition-colors" aria-label="Instagram">
+      <Instagram size={20} />
+    </a>
+    <a href="https://whatsapp.com" target="_blank" rel="noopener noreferrer" className="hover:text-accent transition-colors" aria-label="WhatsApp">
+      <MessageCircle size={20} />
+    </a>
+  </div>
+</div>
+
 
           {/* Column 2: Quick Links */}
           <div data-unique-id="a7a52b9e-8a20-47ae-aa0e-4edf8ba1bcf8" data-file-name="components/layout/footer.tsx">
