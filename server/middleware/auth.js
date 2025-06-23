@@ -1,5 +1,6 @@
 const jwt = require('jsonwebtoken');
 const User = require('../models/user.model');
+const Business = require('../models/business.model');
 
 // Protect routes
 exports.protect = async (req, res, next) => {
@@ -23,17 +24,24 @@ exports.protect = async (req, res, next) => {
     try {
       // Verify token
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
+      console.log('Decoded JWT:', decoded); // Debug log
 
-      // Get user from token
-      req.user = await User.findById(decoded.id).select('-password');
+      // Try to find user in User model
+      let user = await User.findById(decoded.id).select('-password');
+      if (!user) {
+        // Try to find user in Business model
+        user = await Business.findById(decoded.id).select('-password');
+      }
+      console.log('User found:', user); // Debug log
 
-      if (!req.user) {
+      if (!user) {
         return res.status(401).json({
           success: false,
           error: 'User not found'
         });
       }
 
+      req.user = user;
       next();
     } catch (err) {
       return res.status(401).json({

@@ -11,7 +11,11 @@ const instance = axios.create({
 // Add a request interceptor
 instance.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem('token');
+    // Use businessToken for business endpoints, else use user token
+    const isBusinessApi = config.url?.startsWith('/api/v1/businesses');
+    const token = isBusinessApi
+      ? localStorage.getItem('businessToken')
+      : localStorage.getItem('token');
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }

@@ -29,3 +29,31 @@
 {"level":"info","message":"Photo uploaded successfully: court-images/obizy0lslnahvwhnrffz by user 6847adeaf9ab5e3ecbca13da","service":"pickleball-association","timestamp":"2025-06-16 00:43:47"}
 {"level":"info","message":"Photo uploaded successfully: court-images/xjqpxhowve7fnwbvoqtj by user 6847adeaf9ab5e3ecbca13da","service":"pickleball-association","timestamp":"2025-06-16 00:45:06"}
 {"level":"info","message":"Photo uploaded successfully: court-images/xcdcknvymrkrdm2i8va3 by user 6847adeaf9ab5e3ecbca13da","service":"pickleball-association","timestamp":"2025-06-16 00:46:34"}
+{"level":"info","message":"Token verified for user/business ID: 68591806c5092cac4c4c6495, role: business","service":"pickleball-association","timestamp":"2025-06-23 14:34:06"}
+{"level":"error","message":"Business 68591806c5092cac4c4c6495 has inactive status: pending","service":"pickleball-association","timestamp":"2025-06-23 14:34:06"}
+{"level":"info","message":"Token verified for user/business ID: 68591806c5092cac4c4c6495, role: business","service":"pickleball-association","timestamp":"2025-06-23 14:34:06"}
+{"level":"error","message":"Business 68591806c5092cac4c4c6495 has inactive status: pending","service":"pickleball-association","timestamp":"2025-06-23 14:34:07"}
+{"level":"error","message":"No token provided in request","service":"pickleball-association","timestamp":"2025-06-23 14:34:33"}
+{"level":"error","message":"No token provided in request","service":"pickleball-association","timestamp":"2025-06-23 14:34:34"}
+{"level":"info","message":"Token verified for user/business ID: 6847adeaf9ab5e3ecbca13da, role: undefined","service":"pickleball-association","timestamp":"2025-06-23 14:34:52"}
+{"level":"info","message":"Token verified for user/business ID: 6847adeaf9ab5e3ecbca13da, role: undefined","service":"pickleball-association","timestamp":"2025-06-23 14:34:52"}
+{"level":"info","message":"Token verified for user/business ID: 6847adeaf9ab5e3ecbca13da, role: undefined","service":"pickleball-association","timestamp":"2025-06-23 14:34:52"}
+{"level":"info","message":"Access granted to undefined with ID: 6847adeaf9ab5e3ecbca13da","service":"pickleball-association","timestamp":"2025-06-23 14:34:52"}
+{"level":"info","message":"Access granted to undefined with ID: 6847adeaf9ab5e3ecbca13da","service":"pickleball-association","timestamp":"2025-06-23 14:34:52"}
+{"level":"info","message":"Access granted to undefined with ID: 6847adeaf9ab5e3ecbca13da","service":"pickleball-association","timestamp":"2025-06-23 14:34:52"}
+{"level":"info","message":"Token verified for user/business ID: 6847adeaf9ab5e3ecbca13da, role: undefined","service":"pickleball-association","timestamp":"2025-06-23 14:34:52"}
+{"level":"info","message":"Access granted to undefined with ID: 6847adeaf9ab5e3ecbca13da","service":"pickleball-association","timestamp":"2025-06-23 14:34:53"}
+{"level":"info","message":"Token verified for user/business ID: 6847adeaf9ab5e3ecbca13da, role: undefined","service":"pickleball-association","timestamp":"2025-06-23 14:34:53"}
+{"level":"info","message":"Token verified for user/business ID: 6847adeaf9ab5e3ecbca13da, role: undefined","service":"pickleball-association","timestamp":"2025-06-23 14:34:53"}
+{"level":"info","message":"Access granted to undefined with ID: 6847adeaf9ab5e3ecbca13da","service":"pickleball-association","timestamp":"2025-06-23 14:34:53"}
+{"level":"info","message":"Access granted to undefined with ID: 6847adeaf9ab5e3ecbca13da","service":"pickleball-association","timestamp":"2025-06-23 14:34:53"}
+{"level":"info","message":"Token verified for user/business ID: 6847adeaf9ab5e3ecbca13da, role: undefined","service":"pickleball-association","timestamp":"2025-06-23 14:34:55"}
+{"level":"info","message":"Access granted to undefined with ID: 6847adeaf9ab5e3ecbca13da","service":"pickleball-association","timestamp":"2025-06-23 14:34:55"}
+{"level":"info","message":"Token verified for user/business ID: 6847adeaf9ab5e3ecbca13da, role: undefined","service":"pickleball-association","timestamp":"2025-06-23 14:34:56"}
+{"level":"info","message":"Access granted to undefined with ID: 6847adeaf9ab5e3ecbca13da","service":"pickleball-association","timestamp":"2025-06-23 14:34:56"}
+{"level":"info","message":"Token verified for user/business ID: 6847adeaf9ab5e3ecbca13da, role: undefined","service":"pickleball-association","timestamp":"2025-06-23 14:34:57"}
+{"level":"info","message":"Access granted to undefined with ID: 6847adeaf9ab5e3ecbca13da","service":"pickleball-association","timestamp":"2025-06-23 14:34:57"}
+{"level":"info","message":"Token verified for user/business ID: 68591806c5092cac4c4c6495, role: business","service":"pickleball-association","timestamp":"2025-06-23 14:35:14"}
+{"level":"info","message":"Access granted to business with ID: 68591806c5092cac4c4c6495","service":"pickleball-association","timestamp":"2025-06-23 14:35:14"}
+{"level":"info","message":"Token verified for user/business ID: 68591806c5092cac4c4c6495, role: business","service":"pickleball-association","timestamp":"2025-06-23 14:35:14"}
+{"level":"info","message":"Access granted to business with ID: 68591806c5092cac4c4c6495","service":"pickleball-association","timestamp":"2025-06-23 14:35:14"}

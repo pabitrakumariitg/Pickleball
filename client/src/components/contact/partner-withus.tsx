@@ -52,7 +52,7 @@ export function PartnerWithUs() {
                         }} className="mb-10 text-lg opacity-90" data-unique-id="cb3326f8-d689-4b9a-a147-ebd3c458498a" data-file-name="components/home/cta-section.tsx"><span className="editable-text" data-unique-id="dec055bb-28af-4fb2-9c92-ed85e261d39f" data-file-name="components/home/cta-section.tsx">
                                 Interested in sponsoring a tournament or building a court?
                                 <br />
-                                Email us at <span className="text-highlight"> sponsor@pickleballnagaland.org</span> to explore partnership opportunities.
+                                Email us at <span className="text-highlight"> nagalandpickleball@gmail.com</span> to explore partnership opportunities.
                                 <br />
                                 Let’s grow the pickleball community together!
 

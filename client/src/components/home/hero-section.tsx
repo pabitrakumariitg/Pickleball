@@ -84,6 +84,11 @@ export function HeroSection() {
                 Join Now
               </span></Button>
             </Link>
+            <Link href="/business/auth/login">
+              <Button motion variant="outline" size="lg" className="border-primary" data-unique-id="cbdb438f-1a80-4004-b0e5-92478941efae" data-file-name="components/home/hero-section.tsx"><span className="editable-text" data-unique-id="2523558b-5b26-4cd8-8dd1-f5e74f7bd78e" data-file-name="components/home/hero-section.tsx">
+                Business Join
+              </span></Button>
+            </Link>
           </motion.div>
 
           {/* Stats */}

@@ -1,8 +1,11 @@
 const express = require('express');
 const router = express.Router();
-const { protect, authorize } = require('../middleware/auth');
+const { protect, restrictTo } = require('../middlewares/auth.middleware');
 const {
   registerBusiness,
+  loginBusiness,
+  forgotPasswordBusiness,
+  resetPasswordBusiness,
   getBusinessProfile,
   updateBusinessProfile,
   getDashboard,
@@ -14,10 +17,13 @@ const {
 
 // Public routes
 router.post('/register', registerBusiness);
+router.post('/login', loginBusiness);
+router.post('/forgot-password', forgotPasswordBusiness);
+router.put('/reset-password/:token', resetPasswordBusiness);
 
 // Protected routes
 router.use(protect);
-router.use(authorize('business'));
+router.use(restrictTo('business'));
 
 router.get('/dashboard', getDashboard);
 router.get('/profile', getBusinessProfile);

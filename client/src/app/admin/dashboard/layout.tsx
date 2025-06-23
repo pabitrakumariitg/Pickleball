@@ -23,7 +23,7 @@ const navigation = [
   { name: 'Bookings', href: '/admin/dashboard/bookings', icon: Calendar },
   { name: 'Courts & Venues', href: '/admin/dashboard/courts', icon: Building2 },
   { name: 'Users', href: '/admin/dashboard/users', icon: Users },
-  // { name: 'Partners', href: '/admin/dashboard/partners', icon: Handshake },
+  { name: 'Businesses', href: '/admin/dashboard/businesses', icon: Building2 },
   { name: 'Memberships', href: '/admin/dashboard/memberships', icon: Ticket },
   { name: 'Events', href: '/admin/dashboard/events', icon: CalendarDays },
   { name: 'Payments', href: '/admin/dashboard/payments', icon: CreditCard },

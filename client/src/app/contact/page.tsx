@@ -149,7 +149,7 @@ export default function ContactPage() {
                   </div>
                   <div data-unique-id="8eae0ab4-d36d-4e55-8520-4e9c736f15ce" data-file-name="app/contact/page.tsx">
                     <h3 className="font-semibold text-lg" data-unique-id="607d67f5-d320-40f4-82dd-864dfa82b5fb" data-file-name="app/contact/page.tsx"><span className="editable-text" data-unique-id="0dda2dc9-7802-4dda-8bb0-19150b500212" data-file-name="app/contact/page.tsx">Our Location</span></h3>
-                    <p className="text-muted-foreground">Kohima Sports Complex, Kohima, Nagaland 797001</p>
+                    <p className="text-muted-foreground">132B Darogapathar , Dimapur , Nagaland 797115</p>
                   </div>
                 </div>
 
@@ -161,7 +161,7 @@ export default function ContactPage() {
                   </div>
                   <div data-unique-id="ab30ce5f-694d-40a1-8463-4b10008c520c" data-file-name="app/contact/page.tsx">
                     <h3 className="font-semibold text-lg" data-unique-id="b2a2e418-4922-43df-b278-379227c0a4d9" data-file-name="app/contact/page.tsx"><span className="editable-text" data-unique-id="653a2b3f-8476-4fda-8ded-d97a5cd3557d" data-file-name="app/contact/page.tsx">Phone Number</span></h3>
-                    <p className="text-muted-foreground">+91 123-456-7890</p>
+                    <p className="text-muted-foreground">+91 8837402472</p>
                   </div>
                 </div>
 
@@ -173,7 +173,7 @@ export default function ContactPage() {
                   </div>
                   <div data-unique-id="036095b1-4c31-4961-8aa7-b915ecfee246" data-file-name="app/contact/page.tsx">
                     <h3 className="font-semibold text-lg" data-unique-id="588c9f74-ef09-4c45-b952-7bddafd980f1" data-file-name="app/contact/page.tsx"><span className="editable-text" data-unique-id="0eb44d36-383f-4ed9-abd6-219e3e9a24ae" data-file-name="app/contact/page.tsx">Email Address</span></h3>
-                    <p className="text-muted-foreground">contact@pickleballnagaland.org</p>
+                    <p className="text-muted-foreground">nagalandpickleball@gmail.com</p>
                   </div>
                 </div>
 
@@ -312,7 +312,8 @@ export default function ContactPage() {
             <div className="absolute inset-0 bg-primary/10 flex items-center justify-center" data-unique-id="8cc2c742-879b-4e8b-bfb0-3b3a978ebde0" data-file-name="app/contact/page.tsx">
               <div className="bg-white p-4 rounded-lg shadow-lg" data-unique-id="5ddb4c78-d2c9-4e66-83c3-3ec4d270160c" data-file-name="app/contact/page.tsx">
                 <h3 className="font-bold" data-unique-id="01d2be87-577c-46eb-a82e-8a025e6259ec" data-file-name="app/contact/page.tsx"><span className="editable-text" data-unique-id="10c7bae7-843d-4478-a450-d12d56ecc127" data-file-name="app/contact/page.tsx">Nagaland Pickleball Association</span></h3>
-                <p className="text-sm text-muted-foreground" data-unique-id="d201d6e4-4bdc-41ba-a931-ea55ac3ee76a" data-file-name="app/contact/page.tsx"><span className="editable-text" data-unique-id="6344df64-b885-4e95-b59d-8cc4b8d32fab" data-file-name="app/contact/page.tsx">123 Main Street, Kohima, Nagaland</span></p>
+                <p className="text-sm text-muted-foreground" data-unique-id="d201d6e4-4bdc-41ba-a931-ea55ac3ee76a" data-file-name="app/contact/page.tsx"><span className="editable-text" data-unique-id="6344df64-b885-4e95-b59d-8cc4b8d32fab" data-file-name="app/contact/page.tsx">132B Darogapathar , Dimapur , Nagaland 797115
+                </span></p>
               </div>
             </div>
           </div>

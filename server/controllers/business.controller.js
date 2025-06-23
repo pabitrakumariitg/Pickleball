@@ -3,6 +3,14 @@ const Court = require('../models/court.model');
 const { AppError } = require('../middlewares/errorHandler');
 const { logger } = require('../utils/logger');
 const { uploadPhoto } = require('../utils/cloudinary');
+const bcrypt = require('bcryptjs');
+const crypto = require('crypto');
+const sendEmail = require('../utils/sendEmail');
+const jwt = require('jsonwebtoken');
+const config = require('../config/config');
+const { protect, authorize } = require('../middlewares/auth.middleware');
+
+
 
 // Register business
 exports.registerBusiness = async (req, res, next) => {
@@ -14,7 +22,8 @@ exports.registerBusiness = async (req, res, next) => {
       company,
       phone,
       address,
-      bankDetails
+      bankDetails,
+      ownerName
     } = req.body;
 
     // Check if business already exists
@@ -30,7 +39,8 @@ exports.registerBusiness = async (req, res, next) => {
       company,
       phone,
       address,
-      bankDetails
+      bankDetails,
+      ownerName
     });
 
     // Remove password from output
@@ -38,6 +48,44 @@ exports.registerBusiness = async (req, res, next) => {
 
     res.status(201).json({
       status: 'success',
+      data: {
+        business
+      }
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// Login business
+exports.loginBusiness = async (req, res, next) => {
+  try {
+    const { email, password } = req.body;
+
+    // Check if email and password exist
+    if (!email || !password) {
+      return next(new AppError('Please provide email and password', 400));
+    }
+
+    // Check if business exists and password is correct
+    const business = await Business.findOne({ email }).select('+password');
+    if (!business || !(await business.comparePassword(password))) {
+      return next(new AppError('Incorrect email or password', 401));
+    }
+
+    // Generate JWT token
+    const token = jwt.sign(
+      { id: business._id, role: business.role },
+      process.env.JWT_SECRET,
+      { expiresIn: config.jwt.expiresIn }
+    );
+
+    // Remove password from output
+    business.password = undefined;
+
+    res.status(200).json({
+      status: 'success',
+      token,
       data: {
         business
       }
@@ -143,6 +191,7 @@ exports.uploadDocuments = async (req, res, next) => {
 
 // Get business dashboard
 exports.getDashboard = async (req, res, next) => {
+  console.log("getDashboard", req.user);
   try {
     const business = await Business.findById(req.user.id)
       .populate({
@@ -177,6 +226,7 @@ exports.getDashboard = async (req, res, next) => {
       }
     });
   } catch (error) {
+    console.log(error);
     next(error);
   }
 };
@@ -262,5 +312,105 @@ exports.getEarnings = async (req, res, next) => {
     });
   } catch (error) {
     next(error);
+  }
+};
+
+// Forgot password (business)
+exports.forgotPasswordBusiness = async (req, res, next) => {
+  try {
+    const { email } = req.body;
+    const business = await Business.findOne({ email });
+    if (!business) {
+      return next(new AppError('No business found with that email', 404));
+    }
+    // Generate reset token
+    const resetToken = crypto.randomBytes(32).toString('hex');
+    const resetTokenHash = crypto.createHash('sha256').update(resetToken).digest('hex');
+    business.resetPasswordToken = resetTokenHash;
+    business.resetPasswordExpire = Date.now() + 60 * 60 * 1000; // 1 hour
+    await business.save({ validateBeforeSave: false });
+    const resetUrl = `${process.env.FRONTEND_URL || 'http://localhost:3000'}/business/reset-password/${resetToken}`;
+    const message = `You requested a password reset. Please use the following link to reset your password: ${resetUrl}`;
+    await sendEmail({
+      email: business.email,
+      subject: 'Pickleball Business Password Reset',
+      message
+    });
+    res.status(200).json({ status: 'success', message: 'Reset email sent' });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// Reset password (business)
+exports.resetPasswordBusiness = async (req, res, next) => {
+  try {
+    const resetTokenHash = crypto.createHash('sha256').update(req.params.token).digest('hex');
+    const business = await Business.findOne({
+      resetPasswordToken: resetTokenHash,
+      resetPasswordExpire: { $gt: Date.now() }
+    });
+    if (!business) {
+      return next(new AppError('Invalid or expired token', 400));
+    }
+    business.password = req.body.password;
+    business.resetPasswordToken = undefined;
+    business.resetPasswordExpire = undefined;
+    await business.save();
+    res.status(200).json({ status: 'success', message: 'Password reset successful' });
+  } catch (error) {
+    next(error);
+  }
+};
+
+exports.protect = async (req, res, next) => {
+  try {
+    let token;
+
+    if (
+      req.headers.authorization &&
+      req.headers.authorization.startsWith('Bearer')
+    ) {
+      token = req.headers.authorization.split(' ')[1];
+    }
+
+    if (!token) {
+      return res.status(401).json({
+        success: false,
+        error: 'Not authorized to access this route'
+      });
+    }
+
+    try {
+      // Verify token
+      const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
+      // Try to find user in User model
+      let user = await User.findById(decoded.id).select('-password');
+      if (!user) {
+        // Try to find user in Business model
+        user = await Business.findById(decoded.id).select('-password');
+      }
+
+      if (!user) {
+        return res.status(401).json({
+          success: false,
+          error: 'User not found'
+        });
+      }
+
+      req.user = user;
+      next();
+    } catch (err) {
+      return res.status(401).json({
+        success: false,
+        error: 'Not authorized to access this route'
+      });
+    }
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: 'Error in authentication'
+    });
   }
 }; 

@@ -1,9 +1,15 @@
 const mongoose = require('mongoose');
+const bcrypt = require('bcrypt');
 
 const businessSchema = new mongoose.Schema({
   name: {
     type: String,
     required: [true, 'Business name is required'],
+    trim: true
+  },
+  ownerName: {
+    type: String,
+    required: [true, 'Owner name is required'],
     trim: true
   },
   email: {
@@ -97,6 +103,10 @@ const businessSchema = new mongoose.Schema({
     accountHolderName: {
       type: String,
       trim: true
+    },
+    upiId: {
+      type: String,
+      trim: true
     }
   },
   commission: {
@@ -175,6 +185,20 @@ businessSchema.methods.verifyDocument = async function(documentType) {
     await this.save();
   }
 };
+
+// Password comparison method
+businessSchema.methods.comparePassword = async function(candidatePassword) {
+  return await bcrypt.compare(candidatePassword, this.password);
+};
+
+// Hash password before saving
+businessSchema.pre('save', async function(next) {
+  if (!this.isModified('password')) return next();
+  
+  const salt = await bcrypt.genSalt(10);
+  this.password = await bcrypt.hash(this.password, salt);
+  next();
+});
 
 const Business = mongoose.model('Business', businessSchema);
 
