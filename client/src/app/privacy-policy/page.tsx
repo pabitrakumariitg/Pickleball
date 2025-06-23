@@ -8,7 +8,7 @@ export default function PrivacyPolicyPage() {
   return (
     <div className="max-w-2xl mx-auto py-12 px-4">
       <h1 className="text-3xl font-bold mb-4">Privacy Policy – Pickleball Nagaland</h1>
-      <p className="mb-2 text-sm text-gray-500">Effective Date: [Insert Date]</p>
+      <p className="mb-2 text-sm text-gray-500">Effective Date: 23-06-2025</p>
       <p className="mb-4">Pickleball Nagaland respects your privacy and is committed to protecting the personal information you share with us. This Privacy Policy outlines how we collect, use, and safeguard your data.</p>
       <h2 className="text-xl font-semibold mt-6 mb-2">1. Information We Collect</h2>
       <ul className="list-disc pl-6 mb-4">
