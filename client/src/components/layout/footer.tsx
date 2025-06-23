@@ -9,7 +9,7 @@ export function Footer() {
           {/* Column 1: About */}
           {/* Column 1: About */}
 <div>
-  <h3 className="mb-4 text-xl font-bold">NPA</h3>
+  <img src="/NPA-logo.png" alt="NPA Logo" className="h-14" />
   <p className="mb-4 text-primary-foreground/90">
     Promoting pickleball across Nagaland through community events, 
     coaching, and accessible court facilities.

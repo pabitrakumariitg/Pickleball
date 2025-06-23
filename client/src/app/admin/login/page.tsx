@@ -43,7 +43,7 @@ export default function AdminLogin() {
     <div className="min-h-screen flex items-center justify-center bg-background">
       <div className="w-full max-w-md p-8 space-y-8 bg-card rounded-lg shadow-lg">
         <div className="flex flex-col items-center space-y-4">
-          <div className="relative w-24 h-24">
+          <div className="relative w-full h-15">
             <Image
               src="/NPA-logo.png"
               alt="Nagaland Pickleball Association Logo"

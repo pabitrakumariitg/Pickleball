@@ -98,7 +98,7 @@ export function Navbar() {
             {/* <h1 className="text-2xl font-bold text-primary" data-unique-id="08067a52-b706-490d-8182-0e4783b6055a" data-file-name="components/layout/navbar.tsx">
                 <span className="text-accent" data-unique-id="a56f3aac-f47b-4e79-a314-b83c71bf7c67" data-file-name="components/layout/navbar.tsx"><span className="editable-text" data-unique-id="ae9dc40e-8d3d-45b4-9b29-af44c86debd0" data-file-name="components/layout/navbar.tsx">P</span></span><span className="editable-text" data-unique-id="8cbc9611-45fc-4247-8210-7a2992966692" data-file-name="components/layout/navbar.tsx">AN
               </span></h1> */}
-            <img src="/NPA-logo.png" className="h-10" alt="" />
+            <img src="/NPA-logo.png" className="h-14" alt="" />
           </motion.div>
         </Link>
 
