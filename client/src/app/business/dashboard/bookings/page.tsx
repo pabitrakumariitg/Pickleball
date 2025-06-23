@@ -349,7 +349,7 @@ export default function BookingsPage() {
                       <div className="flex items-center space-x-2">
                         <Dialog>
                           <DialogTrigger asChild>
-                            <Button variant="ghost" size="icon" onClick={() => setSelectedBooking(booking)}>
+                            <Button variant="ghost" size="sm" onClick={() => setSelectedBooking(booking)}>
                               <Eye className="h-4 w-4" />
                             </Button>
                           </DialogTrigger>
@@ -480,10 +480,10 @@ export default function BookingsPage() {
                         </Dialog>
                         {booking.bookingStatus === "pending" && (
                           <>
-                            <Button variant="ghost" size="icon" onClick={() => handleAcceptBooking(booking.id)}>
+                            <Button variant="ghost" size="sm" onClick={() => handleAcceptBooking(booking.id)}>
                               <Check className="h-4 w-4 text-green-600" />
                             </Button>
-                            <Button variant="ghost" size="icon" onClick={() => handleRejectBooking(booking.id)}>
+                            <Button variant="ghost" size="sm" onClick={() => handleRejectBooking(booking.id)}>
                               <X className="h-4 w-4 text-red-600" />
                             </Button>
                           </>
