@@ -613,7 +613,7 @@ export default function CourtsPage() {
                 </div>
                 <div className="flex justify-between text-sm">
                   <span className="text-muted-foreground">Price per hour:</span>
-                  <span className="text-foreground">${court.price}</span>
+                  <span className="text-foreground">₹{court.price}</span>
                 </div>
                 <div className="flex justify-between text-sm">
                   <span className="text-muted-foreground">Capacity:</span>

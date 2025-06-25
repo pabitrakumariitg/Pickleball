@@ -84,7 +84,7 @@ export default function PartnersPage() {
             <div className="mt-4 pt-4 border-t border-border">
               <div className="flex justify-between items-center text-sm">
                 <span className="text-muted-foreground">Monthly Revenue:</span>
-                <span className="text-foreground font-medium">${partner.revenue}</span>
+                <span className="text-foreground font-medium">₹{partner.revenue}</span>
               </div>
             </div>
 
@@ -202,7 +202,7 @@ export default function PartnersPage() {
                   </div>
                   <div className="bg-muted p-4 rounded-lg">
                     <h3 className="text-sm font-medium text-muted-foreground">Revenue</h3>
-                    <p className="text-2xl font-semibold mt-1">$12,450</p>
+                    <p className="text-2xl font-semibold mt-1">₹12,450</p>
                   </div>
                   <div className="bg-muted p-4 rounded-lg">
                     <h3 className="text-sm font-medium text-muted-foreground">Utilization</h3>

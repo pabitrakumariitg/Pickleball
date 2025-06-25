@@ -44,7 +44,7 @@ export default function CourtsPage() {
     openingTime: '09:00',
     closingTime: '21:00',
     status: 'active',
-    createdBy: "admin",
+    createdBy: "Admin",
     
     amenities: []
   });
@@ -141,7 +141,7 @@ export default function CourtsPage() {
         openingTime: openingDate.toISOString(),
         closingTime: closingDate.toISOString(),
         status: formData.status,
-        createdBy: "admin",
+        createdBy: "Admin",
         amenities: formData.amenities,
         image: formData.imageUrl
       };
@@ -175,7 +175,7 @@ export default function CourtsPage() {
         openingTime: '09:00',
         closingTime: '21:00',
         status: 'active',
-        createdBy:"admin",
+        createdBy:"Admin",
         amenities: []
       });
       setImagePreview(null);
@@ -220,7 +220,7 @@ export default function CourtsPage() {
       description: court.description,
       openingTime,
       closingTime,
-      createdBy: "admin",
+      createdBy: "Admin",
       status: court.status,
       amenities: court.amenities || [],
       imageUrl: court.image || ''
@@ -330,7 +330,7 @@ export default function CourtsPage() {
         openingTime: '09:00',
         closingTime: '21:00',
         status: 'active',
-        createdBy:"admin",
+        createdBy:"Admin",
         amenities: []
       });
       setImagePreview(null);
@@ -413,7 +413,7 @@ export default function CourtsPage() {
                 </div>
                 <div className="flex justify-between text-sm">
                   <span className="text-muted-foreground">Price per hour:</span>
-                  <span className="text-foreground">${court.price}</span>
+                  <span className="text-foreground">₹{court.price}</span>
                 </div>
                 <div className="flex justify-between text-sm">
                   <span className="text-muted-foreground">Capacity:</span>
@@ -639,7 +639,7 @@ export default function CourtsPage() {
                         openingTime: '09:00',
                         closingTime: '21:00',
                         status: 'active',
-                        createdBy:"admin",
+                        createdBy:"Admin",
                         amenities: []
                       });
                       setImagePreview(null);

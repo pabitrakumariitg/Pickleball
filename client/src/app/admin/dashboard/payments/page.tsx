@@ -173,17 +173,17 @@ export default function PaymentsPage() {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <div className="bg-card rounded-lg shadow p-6">
           <h3 className="text-sm font-medium text-muted-foreground mb-2">Total Revenue</h3>
-          <p className="text-2xl font-bold text-foreground">$12,345</p>
+          <p className="text-2xl font-bold text-foreground">₹12,345</p>
           <p className="text-sm text-green-500">+12% from last month</p>
         </div>
         <div className="bg-card rounded-lg shadow p-6">
           <h3 className="text-sm font-medium text-muted-foreground mb-2">Pending Payments</h3>
-          <p className="text-2xl font-bold text-foreground">$1,234</p>
+          <p className="text-2xl font-bold text-foreground">₹1,234</p>
           <p className="text-sm text-yellow-500">5 transactions pending</p>
         </div>
         <div className="bg-card rounded-lg shadow p-6">
           <h3 className="text-sm font-medium text-muted-foreground mb-2">Failed Transactions</h3>
-          <p className="text-2xl font-bold text-foreground">$123</p>
+          <p className="text-2xl font-bold text-foreground">₹123</p>
           <p className="text-sm text-red-500">2 transactions failed</p>
         </div>
       </div>

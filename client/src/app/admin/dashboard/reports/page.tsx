@@ -68,7 +68,7 @@ export default function ReportsPage() {
             <h3 className="text-sm font-medium text-muted-foreground">Total Revenue</h3>
             <CreditCard className="w-4 h-4 text-muted-foreground" />
           </div>
-          <p className="text-2xl font-bold text-foreground">${metrics.totalRevenue}</p>
+          <p className="text-2xl font-bold text-foreground">₹{metrics.totalRevenue}</p>
           <p className={`text-sm ${metrics.revenueChange >= 0 ? 'text-green-500' : 'text-red-500'}`}>
             {metrics.revenueChange >= 0 ? '+' : ''}{metrics.revenueChange}% from last period
           </p>

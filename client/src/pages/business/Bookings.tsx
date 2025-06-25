@@ -157,7 +157,7 @@ const Bookings: React.FC = () => {
                   <TableCell>
                     {booking.startTime} - {booking.endTime}
                   </TableCell>
-                  <TableCell>${booking.totalAmount}</TableCell>
+                  <TableCell>₹{booking.totalAmount}</TableCell>
                   <TableCell>
                     <Chip
                       label={booking.status}

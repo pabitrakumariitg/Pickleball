@@ -111,11 +111,11 @@ export default function BookCourtPage() {
     console.log('Court object:', court);
     console.log('Resolved court owner ID:', courtOwnerId);
     
-    if (!courtOwnerId) {
-      console.error('Available court fields:', Object.keys(court));
-      toast.error('Booking failed: Unable to identify court owner. Please contact support.');
-      return;
-    }
+    // if (!courtOwnerId) {
+    //   console.error('Available court fields:', Object.keys(court));
+    //   toast.error('Booking failed: Unable to identify court owner. Please contact support.');
+    //   return;
+    // }
 
     try {
       // Sort slots by start time to ensure proper order
@@ -128,7 +128,7 @@ export default function BookCourtPage() {
       const totalAmount = selectedSlots.reduce((total, slot) => total + slot.price, 0);
 
       const bookingData = {
-        courtBy: courtOwnerId, // Use the resolved owner ID
+        courtBy: court.createdBy, // Use the resolved owner ID
         court: court._id,
         startTime: new Date(`${selectedDate}T${firstSlot.startTime}`).toISOString(),
         endTime: new Date(`${selectedDate}T${lastSlot.endTime}`).toISOString(),
@@ -155,6 +155,7 @@ export default function BookCourtPage() {
       });
 
       if (!response.ok) {
+        console.log(bookingData)
         const error = await response.json();
         console.error('Booking API error:', error);
         throw new Error(error.error || error.message || 'Failed to create booking');

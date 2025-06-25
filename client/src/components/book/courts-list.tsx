@@ -149,7 +149,7 @@ export function CourtsList() {
                 </div>
                 <div className="text-right" data-unique-id="03c3fb94-ba2c-455a-a5c8-e5cf0bf27bb2" data-file-name="components/book/courts-list.tsx">
                   <div className="text-sm text-foreground/70" data-unique-id="e426373-1c90-4da8-a2cb-03b2b41bba96" data-file-name="components/book/courts-list.tsx"><span className="editable-text" data-unique-id="c7044aea-6244-47c5-8c18-4bb14a3db575" data-file-name="components/book/courts-list.tsx">Per hour</span></div>
-                  <div className="text-lg font-semibold" data-unique-id="734bc1d0-d40d-41bc-8cc2-5df4d49a3c44" data-file-name="components/book/courts-list.tsx" data-dynamic-text="true"><span className="editable-text" data-unique-id="8053a84c-0d68-4877-8f8c-154ceefdd129" data-file-name="components/book/courts-list.tsx">₹</span>{court.price / 100}</div>
+                  <div className="text-lg font-semibold" data-unique-id="734bc1d0-d40d-41bc-8cc2-5df4d49a3c44" data-file-name="components/book/courts-list.tsx" data-dynamic-text="true"><span className="editable-text" data-unique-id="8053a84c-0d68-4877-8f8c-154ceefdd129" data-file-name="components/book/courts-list.tsx">₹</span>{court.price }</div>
                 </div>
               </div>
 

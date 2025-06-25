@@ -142,7 +142,7 @@ export default function BookingsPage() {
                 {bookings.map((booking) => (
                   <tr key={booking._id} className="border-b border-border last:border-0">
                     <td className="py-3 px-4 text-sm text-foreground">{booking.user.name}</td>
-                    <td className="py-3 px-4 text-sm text-foreground">{booking.court.name}</td>
+                    <td className="py-3 px-4 text-sm text-foreground">{booking.court?.name}</td>
                     <td className="py-3 px-4 text-sm text-foreground">
                       {new Date(booking.startTime).toLocaleDateString('en-GB', {
                         day: '2-digit',
