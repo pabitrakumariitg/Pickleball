@@ -21,6 +21,10 @@ const bookingSchema = new mongoose.Schema({
     ref: 'User',
     required: [true, 'User ID is required']
   },
+  courtBy: {
+    type: String,
+    required: true
+  },
   court: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Court',
@@ -79,53 +83,53 @@ bookingSchema.index({ startTime: 1 });
 bookingSchema.index({ endTime: 1 });
 
 // Method to check if booking is active
-bookingSchema.methods.isActive = function() {
+bookingSchema.methods.isActive = function () {
   const now = new Date();
   return this.status === 'confirmed' && this.startTime <= now && this.endTime >= now;
 };
 
 // Method to check if booking can be cancelled
-bookingSchema.methods.canBeCancelled = function() {
+bookingSchema.methods.canBeCancelled = function () {
   const now = new Date();
   const hoursUntilStart = (this.startTime - now) / (1000 * 60 * 60);
   return this.status === 'confirmed' && hoursUntilStart >= 24;
 };
 
 // Method to calculate duration in hours
-bookingSchema.methods.getDuration = function() {
+bookingSchema.methods.getDuration = function () {
   return (this.endTime - this.startTime) / (1000 * 60 * 60);
 };
 
 // Method to get booking status
-bookingSchema.methods.getStatus = function() {
+bookingSchema.methods.getStatus = function () {
   const now = new Date();
-  
+
   if (this.status === 'cancelled') {
     return 'cancelled';
   }
-  
+
   if (this.status === 'completed') {
     return 'completed';
   }
-  
+
   if (this.endTime < now) {
     return 'completed';
   }
-  
+
   if (this.startTime <= now && this.endTime >= now) {
     return 'active';
   }
-  
+
   return this.status;
 };
 
 // Method to get number of time slots
-bookingSchema.methods.getSlotCount = function() {
+bookingSchema.methods.getSlotCount = function () {
   return this.timeSlots.length;
 };
 
 // Method to get total price from time slots
-bookingSchema.methods.getTotalFromSlots = function() {
+bookingSchema.methods.getTotalFromSlots = function () {
   return this.timeSlots.reduce((total, slot) => total + slot.price, 0);
 };
 

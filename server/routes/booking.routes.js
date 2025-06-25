@@ -19,7 +19,7 @@ router.get('/my-bookings', protect, getMyBookings);
 // Then put parameter routes
 router
   .route('/')
-  .get(protect, restrictTo('Admin'), getBookings)
+  .get(protect, restrictTo('Admin','business'), getBookings)
   .post(protect, createBooking);
 
 router

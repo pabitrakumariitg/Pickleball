@@ -85,7 +85,7 @@ export default function DashboardPage() {
               <Users className="h-4 w-4 text-blue-600" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{business?.email}</div>
+              <div className=" font-bold">{business?.email}</div>
               <p className="text-xs text-muted-foreground">Contact email</p>
             </CardContent>
           </Card>

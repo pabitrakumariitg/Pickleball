@@ -18,6 +18,7 @@ interface CourtFormData {
   description: string;
   openingTime: string;
   closingTime: string;
+  createdBy:string;
   status: 'active' | 'maintenance' | 'inactive';
   amenities?: ('parking' | 'showers' | 'lockers' | 'equipment_rental' | 'cafe' | 'wifi')[];
   imageUrl?: string;
@@ -43,6 +44,8 @@ export default function CourtsPage() {
     openingTime: '09:00',
     closingTime: '21:00',
     status: 'active',
+    createdBy: "admin",
+    
     amenities: []
   });
   const [imagePreview, setImagePreview] = useState<string | null>(null);
@@ -138,6 +141,7 @@ export default function CourtsPage() {
         openingTime: openingDate.toISOString(),
         closingTime: closingDate.toISOString(),
         status: formData.status,
+        createdBy: "admin",
         amenities: formData.amenities,
         image: formData.imageUrl
       };
@@ -152,6 +156,7 @@ export default function CourtsPage() {
       });
 
       if (!response.ok) {
+        console.log(courtData);
         const errorData = await response.json();
         throw new Error(errorData.message || 'Failed to create court');
       }
@@ -170,6 +175,7 @@ export default function CourtsPage() {
         openingTime: '09:00',
         closingTime: '21:00',
         status: 'active',
+        createdBy:"admin",
         amenities: []
       });
       setImagePreview(null);
@@ -214,6 +220,7 @@ export default function CourtsPage() {
       description: court.description,
       openingTime,
       closingTime,
+      createdBy: "admin",
       status: court.status,
       amenities: court.amenities || [],
       imageUrl: court.image || ''
@@ -323,6 +330,7 @@ export default function CourtsPage() {
         openingTime: '09:00',
         closingTime: '21:00',
         status: 'active',
+        createdBy:"admin",
         amenities: []
       });
       setImagePreview(null);
@@ -631,6 +639,7 @@ export default function CourtsPage() {
                         openingTime: '09:00',
                         closingTime: '21:00',
                         status: 'active',
+                        createdBy:"admin",
                         amenities: []
                       });
                       setImagePreview(null);

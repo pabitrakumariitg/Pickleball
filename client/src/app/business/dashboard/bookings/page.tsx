@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { DashboardLayout } from "@/components/dashboard-layout"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
@@ -10,6 +10,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Input } from "@/components/ui/input"
 import { Calendar } from "@/components/ui/calendar"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
+import { getApiUrl } from '@/config';
+import axios from '@/lib/axios';
 import {
   Dialog,
   DialogContent,
@@ -21,113 +23,175 @@ import {
 import { useToast } from "@/hooks/use-toast"
 import { CalendarIcon, Search, Check, X, Eye, Phone, Mail, MapPin, Clock, Users } from "lucide-react"
 import { format } from "date-fns"
+import { useRouter } from "next/navigation"
 
-const bookings = [
-  {
-    id: "BK001",
-    playerName: "Rahul Sharma",
-    playerEmail: "rahul@example.com",
-    playerPhone: "+91 9876543210",
-    court: "Indoor Court 1",
-    date: "2024-01-15",
-    timeSlot: "10:00 AM - 11:00 AM",
-    duration: 1,
-    pricePerHour: 500,
-    totalAmount: 500,
-    paymentStatus: "paid",
-    bookingStatus: "confirmed",
-    bookingDate: "2024-01-10",
-    specialRequests: "Need extra lighting",
-  },
-  {
-    id: "BK002",
-    playerName: "Priya Patel",
-    playerEmail: "priya@example.com",
-    playerPhone: "+91 9876543211",
-    court: "Outdoor Court 1",
-    date: "2024-01-15",
-    timeSlot: "2:00 PM - 4:00 PM",
-    duration: 2,
-    pricePerHour: 400,
-    totalAmount: 800,
-    paymentStatus: "pending",
-    bookingStatus: "pending",
-    bookingDate: "2024-01-12",
-    specialRequests: "",
-  },
-  {
-    id: "BK003",
-    playerName: "Amit Kumar",
-    playerEmail: "amit@example.com",
-    playerPhone: "+91 9876543212",
-    court: "Indoor Court 2",
-    date: "2024-01-16",
-    timeSlot: "6:00 PM - 7:00 PM",
-    duration: 1,
-    pricePerHour: 500,
-    totalAmount: 500,
-    paymentStatus: "paid",
-    bookingStatus: "confirmed",
-    bookingDate: "2024-01-11",
-    specialRequests: "",
-  },
-  {
-    id: "BK004",
-    playerName: "Sneha Reddy",
-    playerEmail: "sneha@example.com",
-    playerPhone: "+91 9876543213",
-    court: "Indoor Court 1",
-    date: "2024-01-14",
-    timeSlot: "9:00 AM - 10:00 AM",
-    duration: 1,
-    pricePerHour: 500,
-    totalAmount: 500,
-    paymentStatus: "refunded",
-    bookingStatus: "cancelled",
-    bookingDate: "2024-01-09",
-    specialRequests: "",
-  },
-]
+interface User {
+  _id: string;
+  name: string;
+  email: string;
+}
+
+interface CourtType {
+  _id: string;
+  name: string;
+  createdBy: string;
+}
+
+interface Booking {
+  _id: string;
+  user: User;
+  court: CourtType;
+  startTime: string;
+  endTime: string;
+  status: string;
+  courtBy?: string;
+}
 
 export default function BookingsPage() {
+  const router = useRouter();
   const [selectedDate, setSelectedDate] = useState<Date>()
   const [statusFilter, setStatusFilter] = useState("all")
   const [courtFilter, setCourtFilter] = useState("all")
   const [searchTerm, setSearchTerm] = useState("")
   const [selectedBooking, setSelectedBooking] = useState<any>(null)
   const { toast } = useToast()
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [showCreateForm, setShowCreateForm] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [dateFilter, setDateFilter] = useState('');
+  const [bookings, setBookings] = useState<Booking[]>([]);
+  const [companyName, setCompanyName] = useState<string | null>(null);
 
-  const handleAcceptBooking = (bookingId: string) => {
-    toast({
-      title: "Booking accepted",
-      description: `Booking ${bookingId} has been confirmed.`,
-    })
-  }
+  // Check authentication
+  useEffect(() => {
+    const token = localStorage.getItem('businessToken');
+    if (!token) {
+      router.replace('/business/login');
+      return;
+    }
+  }, [router]);
 
-  const handleRejectBooking = (bookingId: string) => {
-    toast({
-      title: "Booking rejected",
-      description: `Booking ${bookingId} has been cancelled.`,
-    })
-  }
+  // Fetch business data and bookings
+  useEffect(() => {
+    const initializeData = async () => {
+      console.log("businessToken", localStorage.getItem("businessToken"));
+      console.log("Initializing dashboard data");
+      setLoading(true);
+      setError(null);
 
-  const filteredBookings = bookings.filter((booking) => {
-    const matchesStatus = statusFilter === "all" || booking.bookingStatus === statusFilter
-    const matchesCourt = courtFilter === "all" || booking.court === courtFilter
-    const matchesSearch =
-      booking.playerName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      booking.id.toLowerCase().includes(searchTerm.toLowerCase())
-    const matchesDate = !selectedDate || booking.date === format(selectedDate, "yyyy-MM-dd")
+      try {
+        const token = localStorage.getItem('businessToken');
+        if (!token) {
+          router.replace('/business/login');
+          return;
+        }
 
-    return matchesStatus && matchesCourt && matchesSearch && matchesDate
-  })
+        // Fetch business data
+        const businessRes = await axios.get("/api/v1/businesses/dashboard");
+        const businessCompany = businessRes.data.data.business.company;
+        console.log("Business company:", businessCompany);
+        setCompanyName(businessCompany);
 
-  const stats = {
-    total: bookings.length,
-    pending: bookings.filter((b) => b.bookingStatus === "pending").length,
-    confirmed: bookings.filter((b) => b.bookingStatus === "confirmed").length,
-    cancelled: bookings.filter((b) => b.bookingStatus === "cancelled").length,
-  }
+        // Fetch bookings with proper headers
+        const headers = {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        };
+
+        const bookingsResponse = await fetch(getApiUrl('api/v1/bookings'), { headers });
+        console.log("Bookings response:", bookingsResponse);
+
+        if (!bookingsResponse.ok) {
+          throw new Error('Failed to fetch bookings');
+        }
+
+        const bookingsData = await bookingsResponse.json();
+        // console.log("Bookings data:", bookingsData.data);
+        // console.log("Company name for filtering:", businessCompany);
+
+        // Filter bookings for this business - check court.createdBy instead of booking.createdBy
+        const businessBookings = bookingsData.data.filter(
+          (booking: Booking) => {
+            // console.log("Booking courtBy:", booking.courtBy);
+            // console.log("Comparing with company:", businessCompany);
+            return booking.courtBy === businessCompany;
+          }
+        );
+
+        console.log("Filtered business bookings:", businessBookings);
+        console.log("Total bookings found:", businessBookings.length);
+        setBookings(businessBookings);
+
+      } catch (err: any) {
+        console.error("Error initializing data:", err);
+        setError(err.response?.data?.message || err.message || "Failed to load dashboard data.");
+        toast({
+          title: "Error",
+          description: "Failed to load dashboard data",
+          variant: "destructive"
+        });
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    initializeData();
+  }, [router, toast]);
+
+  // Filter bookings based on current filters
+  const filteredBookings = bookings.filter(booking => {
+    const matchesSearch = searchQuery === '' ||
+      booking.user.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      booking.user.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      booking.court.name.toLowerCase().includes(searchQuery.toLowerCase());
+
+    const matchesStatus = statusFilter === 'all' || booking.status === statusFilter;
+
+    const matchesCourt = courtFilter === 'all' || booking.court._id === courtFilter;
+
+    const matchesDate = !selectedDate ||
+      new Date(booking.startTime).toDateString() === selectedDate.toDateString();
+
+    return matchesSearch && matchesStatus && matchesCourt && matchesDate;
+  });
+
+  const handleStatusUpdate = async (bookingId: string, newStatus: string) => {
+    try {
+      const token = localStorage.getItem('businessToken');
+      const response = await fetch(getApiUrl(`api/v1/bookings/${bookingId}/status`), {
+        method: 'PATCH',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ status: newStatus })
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to update booking status');
+      }
+
+      // Update local state
+      setBookings(prev => prev.map(booking =>
+        booking._id === bookingId ? { ...booking, status: newStatus } : booking
+      ));
+
+      toast({
+        title: "Success",
+        description: `Booking ${newStatus} successfully`,
+      });
+
+    } catch (err) {
+      console.error('Error updating booking status:', err);
+      toast({
+        title: "Error",
+        description: "Failed to update booking status",
+        variant: "destructive"
+      });
+    }
+  };
+
 
   return (
     <DashboardLayout>
@@ -138,49 +202,7 @@ export default function BookingsPage() {
           <p className="text-muted-foreground">Manage all court bookings and reservations</p>
         </div>
 
-        {/* Stats Cards */}
-        <div className="grid gap-4 md:grid-cols-4">
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Total Bookings</CardTitle>
-              <CalendarIcon className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{stats.total}</div>
-              <p className="text-xs text-muted-foreground">All time</p>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Pending</CardTitle>
-              <Clock className="h-4 w-4 text-orange-600" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold text-orange-600">{stats.pending}</div>
-              <p className="text-xs text-muted-foreground">Awaiting approval</p>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Confirmed</CardTitle>
-              <Check className="h-4 w-4 text-green-600" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold text-green-600">{stats.confirmed}</div>
-              <p className="text-xs text-muted-foreground">Active bookings</p>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Cancelled</CardTitle>
-              <X className="h-4 w-4 text-red-600" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold text-red-600">{stats.cancelled}</div>
-              <p className="text-xs text-muted-foreground">Cancelled bookings</p>
-            </CardContent>
-          </Card>
-        </div>
+
 
         {/* Filters */}
         <Card>
@@ -263,239 +285,52 @@ export default function BookingsPage() {
         </Card>
 
         {/* Bookings Table */}
-        <Card>
-          <CardHeader>
-            <CardTitle>All Bookings</CardTitle>
-            <CardDescription>
-              Showing {filteredBookings.length} of {bookings.length} bookings
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Booking ID</TableHead>
-                  <TableHead>Player Details</TableHead>
-                  <TableHead>Court & Date</TableHead>
-                  <TableHead>Time Slot</TableHead>
-                  <TableHead>Amount</TableHead>
-                  <TableHead>Payment</TableHead>
-                  <TableHead>Status</TableHead>
-                  <TableHead>Actions</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {filteredBookings.map((booking) => (
-                  <TableRow key={booking.id}>
-                    <TableCell className="font-medium">{booking.id}</TableCell>
-                    <TableCell>
-                      <div>
-                        <div className="font-medium">{booking.playerName}</div>
-                        <div className="text-sm text-muted-foreground flex items-center">
-                          <Mail className="h-3 w-3 mr-1" />
-                          {booking.playerEmail}
-                        </div>
-                        <div className="text-sm text-muted-foreground flex items-center">
-                          <Phone className="h-3 w-3 mr-1" />
-                          {booking.playerPhone}
-                        </div>
-                      </div>
-                    </TableCell>
-                    <TableCell>
-                      <div>
-                        <div className="font-medium">{booking.court}</div>
-                        <div className="text-sm text-muted-foreground">{booking.date}</div>
-                      </div>
-                    </TableCell>
-                    <TableCell>
-                      <div className="text-sm">
-                        <div>{booking.timeSlot}</div>
-                        <div className="text-muted-foreground">{booking.duration}h duration</div>
-                      </div>
-                    </TableCell>
-                    <TableCell>
-                      <div>
-                        <div className="font-medium">₹{booking.totalAmount}</div>
-                        <div className="text-sm text-muted-foreground">₹{booking.pricePerHour}/hr</div>
-                      </div>
-                    </TableCell>
-                    <TableCell>
-                      <Badge
-                        variant={
-                          booking.paymentStatus === "paid"
-                            ? "default"
-                            : booking.paymentStatus === "pending"
-                              ? "secondary"
-                              : "destructive"
-                        }
-                      >
-                        {booking.paymentStatus}
-                      </Badge>
-                    </TableCell>
-                    <TableCell>
-                      <Badge
-                        variant={
-                          booking.bookingStatus === "confirmed"
-                            ? "default"
-                            : booking.bookingStatus === "pending"
-                              ? "secondary"
-                              : "destructive"
-                        }
-                      >
-                        {booking.bookingStatus}
-                      </Badge>
-                    </TableCell>
-                    <TableCell>
-                      <div className="flex items-center space-x-2">
-                        <Dialog>
-                          <DialogTrigger asChild>
-                            <Button variant="ghost" size="sm" onClick={() => setSelectedBooking(booking)}>
-                              <Eye className="h-4 w-4" />
-                            </Button>
-                          </DialogTrigger>
-                          <DialogContent className="max-w-2xl">
-                            <DialogHeader>
-                              <DialogTitle>Booking Details - {booking.id}</DialogTitle>
-                              <DialogDescription>Complete booking information and player details</DialogDescription>
-                            </DialogHeader>
-                            {selectedBooking && (
-                              <div className="space-y-6">
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                  <div className="space-y-4">
-                                    <div>
-                                      <h4 className="font-semibold mb-2">Player Information</h4>
-                                      <div className="space-y-2 text-sm">
-                                        <div className="flex items-center">
-                                          <Users className="h-4 w-4 mr-2 text-muted-foreground" />
-                                          {selectedBooking.playerName}
-                                        </div>
-                                        <div className="flex items-center">
-                                          <Mail className="h-4 w-4 mr-2 text-muted-foreground" />
-                                          {selectedBooking.playerEmail}
-                                        </div>
-                                        <div className="flex items-center">
-                                          <Phone className="h-4 w-4 mr-2 text-muted-foreground" />
-                                          {selectedBooking.playerPhone}
-                                        </div>
-                                      </div>
-                                    </div>
-                                    <div>
-                                      <h4 className="font-semibold mb-2">Booking Details</h4>
-                                      <div className="space-y-2 text-sm">
-                                        <div className="flex items-center">
-                                          <MapPin className="h-4 w-4 mr-2 text-muted-foreground" />
-                                          {selectedBooking.court}
-                                        </div>
-                                        <div className="flex items-center">
-                                          <CalendarIcon className="h-4 w-4 mr-2 text-muted-foreground" />
-                                          {selectedBooking.date}
-                                        </div>
-                                        <div className="flex items-center">
-                                          <Clock className="h-4 w-4 mr-2 text-muted-foreground" />
-                                          {selectedBooking.timeSlot}
-                                        </div>
-                                      </div>
-                                    </div>
-                                  </div>
-                                  <div className="space-y-4">
-                                    <div>
-                                      <h4 className="font-semibold mb-2">Payment Information</h4>
-                                      <div className="space-y-2 text-sm">
-                                        <div className="flex items-center justify-between">
-                                          <span>Duration:</span>
-                                          <span>{selectedBooking.duration} hour(s)</span>
-                                        </div>
-                                        <div className="flex items-center justify-between">
-                                          <span>Rate per hour:</span>
-                                          <span>₹{selectedBooking.pricePerHour}</span>
-                                        </div>
-                                        <div className="flex items-center justify-between font-medium">
-                                          <span>Total Amount:</span>
-                                          <span>₹{selectedBooking.totalAmount}</span>
-                                        </div>
-                                        <div className="flex items-center justify-between">
-                                          <span>Payment Status:</span>
-                                          <Badge
-                                            variant={
-                                              selectedBooking.paymentStatus === "paid"
-                                                ? "default"
-                                                : selectedBooking.paymentStatus === "pending"
-                                                  ? "secondary"
-                                                  : "destructive"
-                                            }
-                                          >
-                                            {selectedBooking.paymentStatus}
-                                          </Badge>
-                                        </div>
-                                      </div>
-                                    </div>
-                                    <div>
-                                      <h4 className="font-semibold mb-2">Additional Information</h4>
-                                      <div className="space-y-2 text-sm">
-                                        <div className="flex items-center justify-between">
-                                          <span>Booking Date:</span>
-                                          <span>{selectedBooking.bookingDate}</span>
-                                        </div>
-                                        <div className="flex items-center justify-between">
-                                          <span>Status:</span>
-                                          <Badge
-                                            variant={
-                                              selectedBooking.bookingStatus === "confirmed"
-                                                ? "default"
-                                                : selectedBooking.bookingStatus === "pending"
-                                                  ? "secondary"
-                                                  : "destructive"
-                                            }
-                                          >
-                                            {selectedBooking.bookingStatus}
-                                          </Badge>
-                                        </div>
-                                        {selectedBooking.specialRequests && (
-                                          <div>
-                                            <span className="font-medium">Special Requests:</span>
-                                            <p className="text-muted-foreground mt-1">
-                                              {selectedBooking.specialRequests}
-                                            </p>
-                                          </div>
-                                        )}
-                                      </div>
-                                    </div>
-                                  </div>
-                                </div>
-                                {selectedBooking.bookingStatus === "pending" && (
-                                  <div className="flex justify-end space-x-2 pt-4 border-t">
-                                    <Button variant="outline" onClick={() => handleRejectBooking(selectedBooking.id)}>
-                                      <X className="h-4 w-4 mr-2" />
-                                      Reject
-                                    </Button>
-                                    <Button onClick={() => handleAcceptBooking(selectedBooking.id)}>
-                                      <Check className="h-4 w-4 mr-2" />
-                                      Accept
-                                    </Button>
-                                  </div>
-                                )}
-                              </div>
-                            )}
-                          </DialogContent>
-                        </Dialog>
-                        {booking.bookingStatus === "pending" && (
-                          <>
-                            <Button variant="ghost" size="sm" onClick={() => handleAcceptBooking(booking.id)}>
-                              <Check className="h-4 w-4 text-green-600" />
-                            </Button>
-                            <Button variant="ghost" size="sm" onClick={() => handleRejectBooking(booking.id)}>
-                              <X className="h-4 w-4 text-red-600" />
-                            </Button>
-                          </>
-                        )}
-                      </div>
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </CardContent>
-        </Card>
+        <div className="bg-card rounded-lg shadow">
+          <div className="p-6">
+            <h2 className="text-lg font-semibold text-foreground mb-4">Recent Bookings</h2>
+            <div className="overflow-x-auto">
+              <table className="w-full">
+                <thead>
+                  <tr className="border-b border-border">
+                    <th className="text-left py-3 px-4 text-sm font-medium text-muted-foreground">User</th>
+                    <th className="text-left py-3 px-4 text-sm font-medium text-muted-foreground">Court</th>
+                    <th className="text-left py-3 px-4 text-sm font-medium text-muted-foreground">Date</th>
+                    <th className="text-left py-3 px-4 text-sm font-medium text-muted-foreground">Time</th>
+                    <th className="text-left py-3 px-4 text-sm font-medium text-muted-foreground">Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {bookings.map((booking) => (
+                    <tr key={booking._id} className="border-b border-border last:border-0">
+                      <td className="py-3 px-4 text-sm text-foreground">{booking.user && booking.user.name ? booking.user.name : '-'}</td>
+                      <td className="py-3 px-4 text-sm text-foreground">{booking.court && booking.court.name ? booking.court.name : '-'}</td>
+                      <td className="py-3 px-4 text-sm text-foreground">
+                        {new Date(booking.startTime).toLocaleDateString('en-GB', {
+                          day: '2-digit',
+                          month: '2-digit',
+                          year: 'numeric'
+                        })}
+                      </td>
+                      <td className="py-3 px-4 text-sm text-foreground">
+                        {new Date(booking.startTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                      </td>
+                      <td className="py-3 px-4 text-sm">
+                        <span
+                          className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${booking.status === 'Confirmed'
+                            ? 'bg-green-100 text-green-800'
+                            : 'bg-yellow-100 text-yellow-800'
+                            }`}
+                        >
+                          {booking.status}
+                        </span>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
       </div>
     </DashboardLayout>
   )

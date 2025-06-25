@@ -9,6 +9,7 @@ const TemporarySelection = require('../models/temporarySelection.model');
 
 // Create new court
 exports.createCourt = async (req, res, next) => {
+  console.log("dscacsx");
   try {
     const {
       name,
@@ -20,7 +21,8 @@ exports.createCourt = async (req, res, next) => {
       images,
       amenities
     } = req.body;
-
+    // Always set createdBy from the authenticated user
+    // req.body.createdBy = req.user.id;
     // Check if business exists and is active
     const business = await Business.findById(req.user.id);
     if (!business || business.status !== 'active') {
@@ -36,6 +38,7 @@ exports.createCourt = async (req, res, next) => {
       equipmentRental,
       images,
       amenities,
+      createdBy,
       ownerId: req.user.id
     });
 

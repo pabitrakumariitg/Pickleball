@@ -70,6 +70,10 @@ const courtSchema = new mongoose.Schema({
   createdAt: {
     type: Date,
     default: Date.now
+  },
+  createdBy: {
+    type: String,
+    required: true
   }
 });
 

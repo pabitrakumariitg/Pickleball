@@ -37,6 +37,11 @@ interface Court {
   amenities: string[];
   status: 'active' | 'maintenance' | 'inactive';
   city: string;
+  createdBy: string;
+  // Add alternative field names that might be used
+  owner?: string;
+  businessId?: string;
+  ownerId?: string;
 }
 
 export default function BookCourtPage() {
@@ -57,6 +62,10 @@ export default function BookCourtPage() {
           throw new Error('Failed to fetch court details');
         }
         const result = await response.json();
+        
+        // Debug: Log the entire court object to see what fields are available
+        console.log('Court data received:', result.data);
+        
         setCourt(result.data);
       } catch (err) {
         console.error('Error fetching court details:', err);
@@ -71,7 +80,6 @@ export default function BookCourtPage() {
 
   const handleSlotSelect = (slots: TimeSlot[]) => {
     setSelectedSlots(slots);
-    // Don't automatically move to confirm step - let user continue when ready
   };
 
   const handleContinue = () => {
@@ -82,8 +90,32 @@ export default function BookCourtPage() {
     }
   };
 
+  // Helper function to get the court owner/creator ID
+  const getCourtOwnerId = (court: Court): string | null => {
+    // Try different possible field names
+    return court.createdBy || 
+           court.owner || 
+           court.businessId || 
+           court.ownerId || 
+           court.business || // business field might contain the owner ID
+           null;
+  };
+
   const handleBooking = async () => {
     if (selectedSlots.length === 0 || !court) return;
+
+    // Get the court owner ID using the helper function
+    const courtOwnerId = getCourtOwnerId(court);
+    
+    // Debug: log court and all possible owner fields
+    console.log('Court object:', court);
+    console.log('Resolved court owner ID:', courtOwnerId);
+    
+    if (!courtOwnerId) {
+      console.error('Available court fields:', Object.keys(court));
+      toast.error('Booking failed: Unable to identify court owner. Please contact support.');
+      return;
+    }
 
     try {
       // Sort slots by start time to ensure proper order
@@ -95,31 +127,37 @@ export default function BookCourtPage() {
       const lastSlot = sortedSlots[sortedSlots.length - 1];
       const totalAmount = selectedSlots.reduce((total, slot) => total + slot.price, 0);
 
+      const bookingData = {
+        courtBy: courtOwnerId, // Use the resolved owner ID
+        court: court._id,
+        startTime: new Date(`${selectedDate}T${firstSlot.startTime}`).toISOString(),
+        endTime: new Date(`${selectedDate}T${lastSlot.endTime}`).toISOString(),
+        totalAmount: totalAmount,
+        players: 2, // Default minimum players
+        notes: '', // Optional notes
+        status: 'pending', // Initial status
+        timeSlots: selectedSlots.map(slot => ({
+          startTime: slot.startTime,
+          endTime: slot.endTime,
+          price: slot.price
+        }))
+      };
+
+      console.log('Booking data being sent:', bookingData);
+
       const response = await fetch('/api/v1/bookings', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${localStorage.getItem('token')}`
         },
-        body: JSON.stringify({
-          court: court._id,
-          startTime: new Date(`${selectedDate}T${firstSlot.startTime}`).toISOString(),
-          endTime: new Date(`${selectedDate}T${lastSlot.endTime}`).toISOString(),
-          totalAmount: totalAmount,
-          players: 2, // Default minimum players
-          notes: '', // Optional notes
-          status: 'pending', // Initial status
-          timeSlots: selectedSlots.map(slot => ({
-            startTime: slot.startTime,
-            endTime: slot.endTime,
-            price: slot.price
-          }))
-        }),
+        body: JSON.stringify(bookingData),
       });
 
       if (!response.ok) {
         const error = await response.json();
-        throw new Error(error.error || 'Failed to create booking');
+        console.error('Booking API error:', error);
+        throw new Error(error.error || error.message || 'Failed to create booking');
       }
 
       const data = await response.json();
@@ -130,6 +168,7 @@ export default function BookCourtPage() {
       toast.success('Booking created successfully!');
       router.push('/bookings/success');
     } catch (error: any) {
+      console.error('Booking error:', error);
       toast.error(error.message || 'Failed to create booking');
     }
   };
@@ -325,4 +364,4 @@ export default function BookCourtPage() {
       </div>
     </ProtectedRoute>
   );
-} 
+}

@@ -10,15 +10,15 @@ export function RootLayoutWrapper({
   children: React.ReactNode;
 }) {
   const pathname = usePathname();
-  const isAdminRoute = pathname?.startsWith('/admin') ?? false;
+  const isAdminOrBusinessRoute = pathname?.startsWith('/admin') || pathname?.startsWith('/business');
 
   return (
     <>
-      {!isAdminRoute && <Navbar />}
+      {!isAdminOrBusinessRoute && <Navbar />}
       <main className="flex-grow">
         {children}
       </main>
-      {!isAdminRoute && <Footer />}
+      {!isAdminOrBusinessRoute && <Footer />}
     </>
   );
 } 

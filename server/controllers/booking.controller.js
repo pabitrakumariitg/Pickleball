@@ -54,12 +54,16 @@ exports.getBooking = asyncHandler(async (req, res, next) => {
 exports.createBooking = asyncHandler(async (req, res, next) => {
   // Add user to req.body
   req.body.user = req.user.id;
-
+  
   // Check if court exists
   const court = await Court.findById(req.body.court);
   if (!court) {
     return next(new ErrorResponse(`Court not found with id of ${req.body.court}`, 404));
   }
+
+  // Set courtBy to court.createdBy (or business/owner field as appropriate)
+  req.body.courtBy = court.createdBy;
+  console.log(req.body)
 
   // Check if court is available for the entire time range
   const isAvailable = await court.isAvailable(req.body.startTime, req.body.endTime);

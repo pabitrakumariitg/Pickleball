@@ -30,32 +30,32 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { LayoutDashboard, MapPin, Calendar, DollarSign, Settings, Bell, LogOut, User } from "lucide-react"
+import { LayoutDashboard, MapPin, Calendar, DollarSign, Settings, Bell, LogOut, User, Menu, ChevronLeft, ChevronRight } from "lucide-react"
 
 const menuItems = [
   {
     title: "Dashboard",
-    url: "/dashboard",
+    url: "/business/dashboard",
     icon: LayoutDashboard,
   },
   {
     title: "Court Management",
-    url: "/dashboard/courts",
+    url: "/business/dashboard/courts",
     icon: MapPin,
   },
   {
     title: "Booking Management",
-    url: "/dashboard/bookings",
+    url: "/business/dashboard/bookings",
     icon: Calendar,
   },
   {
     title: "Payouts",
-    url: "/dashboard/payouts",
+    url: "/business/dashboard/payouts",
     icon: DollarSign,
   },
   {
     title: "Settings",
-    url: "/dashboard/settings",
+    url: "/business/dashboard/settings",
     icon: Settings,
   },
 ]
@@ -87,29 +87,27 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
     router.push("/auth/login")
   }
 
+  // Sidebar always expanded
+  const open = true;
+  const setOpen = () => {};
+
   return (
-    <SidebarProvider>
+    <SidebarProvider open={open} onOpenChange={setOpen}>
       <div className="flex min-h-screen w-full">
-        <Sidebar>
+        <Sidebar className="w-64 min-w-[16rem] bg-white border-r transition-all duration-200">
           <SidebarHeader>
             <div className="flex items-center gap-2 px-4 py-2">
-              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-green-600 text-white font-bold">
-                NPA
-              </div>
-              <div className="flex flex-col">
-                <span className="text-sm font-semibold">Nagaland Pickleball</span>
-                <span className="text-xs text-muted-foreground">Association</span>
-              </div>
+              <h1 className="text-2xl font-bold">Business Panel</h1>
             </div>
           </SidebarHeader>
           <SidebarContent>
             <SidebarGroup>
-              <SidebarGroupLabel>Menu</SidebarGroupLabel>
+              {/* <SidebarGroupLabel>Menu</SidebarGroupLabel> */}
               <SidebarGroupContent>
                 <SidebarMenu>
                   {menuItems.map((item) => (
                     <SidebarMenuItem key={item.title}>
-                      <SidebarMenuButton asChild isActive={pathname === item.url}>
+                      <SidebarMenuButton asChild isActive={pathname === item.url} className={pathname === item.url ? "bg-green-100 text-green-700" : ""}>
                         <Link href={item.url}>
                           <item.icon className="h-4 w-4" />
                           <span>{item.title}</span>
@@ -157,15 +155,14 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
           </SidebarFooter>
         </Sidebar>
         <SidebarInset>
-          <header className="flex h-16 shrink-0 items-center gap-2 border-b px-4">
-            <SidebarTrigger className="-ml-1" />
+          <header className="flex h-16 shrink-0 items-center gap-2 border-b px-4 ml-64 transition-all duration-200">
             <div className="ml-auto flex items-center gap-2">
               <Button variant="ghost" size="sm">
                 <Bell className="h-4 w-4" />
               </Button>
             </div>
           </header>
-          <main className="flex-1 p-6">{children}</main>
+          <main className="flex-1 p-6 ml-64 transition-all duration-200">{children}</main>
         </SidebarInset>
       </div>
     </SidebarProvider>

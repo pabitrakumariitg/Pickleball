@@ -16,13 +16,13 @@ const {
 router
   .route('/')
   .get(getCourts)
-  .post(protect, restrictTo('Admin'), createCourt);
+  .post(protect, restrictTo('Admin','business'), createCourt);
 
 router
   .route('/:id')
   .get(getCourt)
-  .put(protect, restrictTo('Admin'), updateCourt)
-  .delete(protect, restrictTo('Admin'), deleteCourt);
+  .put(protect, restrictTo('Admin','business'), updateCourt)
+  .delete(protect, restrictTo('Admin','business'), deleteCourt);
 
 router.get('/:id/bookings', protect, getCourtBookings);
 router.get('/:id/availability', getCourtAvailability);
