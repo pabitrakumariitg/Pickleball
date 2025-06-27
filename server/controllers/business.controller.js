@@ -329,7 +329,7 @@ exports.forgotPasswordBusiness = async (req, res, next) => {
     business.resetPasswordToken = resetTokenHash;
     business.resetPasswordExpire = Date.now() + 60 * 60 * 1000; // 1 hour
     await business.save({ validateBeforeSave: false });
-    const resetUrl = `${process.env.FRONTEND_URL || 'http://localhost:3000'}/business/reset-password/${resetToken}`;
+    const resetUrl = `${process.env.FRONTEND_URL}/business/reset-password/${resetToken}`;
     const message = `You requested a password reset. Please use the following link to reset your password: ${resetUrl}`;
     await sendEmail({
       email: business.email,

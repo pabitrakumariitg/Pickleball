@@ -45,7 +45,7 @@ export default function ForgotPasswordPage() {
             <Button variant="outline" onClick={() => setIsSubmitted(false)} className="w-full">
               Try Again
             </Button>
-            <Link href="/auth/login" className="block">
+            <Link href="/business/auth/login" className="block">
               <Button variant="ghost" className="w-full">
                 <ArrowLeft className="w-4 h-4 mr-2" />
                 Back to Login
@@ -82,7 +82,7 @@ export default function ForgotPasswordPage() {
             </Button>
           </form>
           <div className="mt-4 text-center">
-            <Link href="/auth/login" className="text-sm text-blue-600 hover:underline">
+            <Link href="/business/auth/login" className="text-sm text-blue-600 hover:underline">
               <ArrowLeft className="w-4 h-4 inline mr-1" />
               Back to Login
             </Link>

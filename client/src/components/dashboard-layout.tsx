@@ -75,7 +75,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
 
     if (!isAuthenticated) {
       console.log("Not authenticated")
-      router.push("/auth/login")
+      router.push("/business/auth/login")
     } else {
       setBusinessName(storedBusinessName || "Business")
     }
@@ -84,7 +84,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
   const handleLogout = () => {
     localStorage.removeItem("isAuthenticated")
     localStorage.removeItem("businessName")
-    router.push("/auth/login")
+    router.push("/business/auth/login")
   }
 
   // Sidebar always expanded

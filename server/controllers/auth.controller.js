@@ -39,9 +39,9 @@ exports.login = asyncHandler(async (req, res, next) => {
   // Check for user
   const user = await User.findOne({ email }).select('+password');
 
-  // if (!user) {
-  //   return next(new ErrorResponse('Invalid credentials', 401));
-  // }
+  if (!user) {
+    return next(new ErrorResponse('Invalid credentials', 401));
+  }
 
   // Check if password matches
   const isMatch = await user.comparePassword(password);
@@ -178,11 +178,16 @@ exports.resetPassword = asyncHandler(async (req, res, next) => {
     return next(new ErrorResponse('Invalid token', 400));
   }
 
+  // Check if role is valid, if not set to default 'Member'
+  if (user.role && !['Member', 'Admin', 'Partner'].includes(user.role)) {
+    user.role = 'Member';
+  }
+
   // Set new password
   user.password = req.body.password;
   user.resetPasswordToken = undefined;
   user.resetPasswordExpire = undefined;
-  await user.save();
+  await user.save({ validateBeforeSave: false });
 
   sendTokenResponse(user, 200, res);
 });
