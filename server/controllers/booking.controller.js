@@ -97,8 +97,19 @@ exports.createBooking = asyncHandler(async (req, res, next) => {
     
     const bookingStartTime = new Date(req.body.startTime);
     const bookingEndTime = new Date(req.body.endTime);
-    const firstSlotTime = new Date(`${bookingStartTime.toISOString().split('T')[0]}T${firstSlot.startTime}`);
-    const lastSlotTime = new Date(`${bookingEndTime.toISOString().split('T')[0]}T${lastSlot.endTime}`);
+    // Helper to create a Date in IST from a date and time string (e.g., '15:00')
+    function toIST(date, timeStr) {
+      // timeStr = "15:00"
+      const [h, m] = timeStr.split(":");
+      // Create a date in UTC at midnight
+      const d = new Date(date);
+      d.setUTCHours(0, 0, 0, 0);
+      // Add IST offset
+      d.setUTCHours(parseInt(h) - 5, parseInt(m) - 30);
+      return d;
+    }
+    const firstSlotTime = toIST(bookingStartTime, firstSlot.startTime);
+    const lastSlotTime = toIST(bookingEndTime, lastSlot.endTime);
     
     // Debug logging for production issue
     console.log('--- Booking Time Debug ---');
