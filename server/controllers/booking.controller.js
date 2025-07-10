@@ -100,8 +100,19 @@ exports.createBooking = asyncHandler(async (req, res, next) => {
     const firstSlotTime = new Date(`${bookingStartTime.toISOString().split('T')[0]}T${firstSlot.startTime}`);
     const lastSlotTime = new Date(`${bookingEndTime.toISOString().split('T')[0]}T${lastSlot.endTime}`);
     
+    // Debug logging for production issue
+    console.log('--- Booking Time Debug ---');
+    console.log('Received bookingStartTime:', bookingStartTime.toISOString());
+    console.log('Received bookingEndTime:', bookingEndTime.toISOString());
+    console.log('First slot startTime:', firstSlot.startTime);
+    console.log('Last slot endTime:', lastSlot.endTime);
+    console.log('Calculated firstSlotTime:', firstSlotTime.toISOString());
+    console.log('Calculated lastSlotTime:', lastSlotTime.toISOString());
+    console.log('Diff start (ms):', Math.abs(bookingStartTime.getTime() - firstSlotTime.getTime()));
+    console.log('Diff end (ms):', Math.abs(bookingEndTime.getTime() - lastSlotTime.getTime()));
     if (Math.abs(bookingStartTime.getTime() - firstSlotTime.getTime()) > 60000 || // 1 minute tolerance
         Math.abs(bookingEndTime.getTime() - lastSlotTime.getTime()) > 60000) {
+      console.error('Booking time range does not match time slots');
       return next(new ErrorResponse('Booking time range does not match time slots', 400));
     }
   } else {
