@@ -84,6 +84,7 @@ app.use(limiter);
 app.use(hpp());
 
 // Mount routers
+
 app.use('/api/v1/auth', authRoutes);
 app.use('/api/v1/admin', adminRoutes);
 app.use('/api/v1/courts', courtRoutes);
@@ -93,7 +94,9 @@ app.use('/api/v1/memberships', membershipRoutes);
 app.use('/api/v1/businesses', businessRoutes);
 app.use('/api/v1/users', userRoutes);
 app.use('/api/v1/upload', uploadRoutes);
-
+app.get('/', (req, res) => {
+  res.status(200).json({ success: true, message: 'Server is running' });
+});
 // Error handler
 app.use(errorHandler);
 
