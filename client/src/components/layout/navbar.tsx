@@ -66,6 +66,10 @@ export function Navbar() {
   const handleLogout = async () => {
     try {
       await logout();
+      localStorage.removeItem('token');
+      localStorage.removeItem('profileImage');
+      localStorage.removeItem('user');
+      router.push('/login');
       setIsUserMenuOpen(false);
     } catch (error) {
       console.error('Logout failed:', error);

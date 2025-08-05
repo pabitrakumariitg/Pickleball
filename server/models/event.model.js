@@ -11,29 +11,44 @@ const eventSchema = new mongoose.Schema({
     required: [true, 'Event description is required'],
     trim: true
   },
-  date: {
+
+  startDate: {
     type: Date,
-    required: [true, 'Event date is required']
+    required: [true, 'Event start date is required']
+  },
+  endDate: {
+    type: Date,
+    required: [true, 'Event end date is required']
   },
   location: {
     type: String,
     required: [true, 'Event location is required'],
     trim: true
   },
+  city: {
+    type: String,
+    trim: true
+  },
+  state: {
+    type: String,
+    trim: true
+  },
+  country: {
+    type: String,
+    default: 'India',
+    trim: true
+  },
+  pincode: {
+    type: String,
+    trim: true
+  },
+
   fee: {
     type: Number,
     required: [true, 'Event fee is required'],
     min: [0, 'Fee cannot be negative']
   },
-  registrationLink: {
-    type: String,
-    trim: true
-  },
-  type: {
-    type: String,
-    enum: ['tournament', 'clinic', 'community-game', 'workshop'],
-    required: [true, 'Event type is required']
-  },
+ 
   maxParticipants: {
     type: Number,
     required: [true, 'Maximum participants is required'],
@@ -45,7 +60,7 @@ const eventSchema = new mongoose.Schema({
   },
   status: {
     type: String,
-    enum: ['upcoming', 'ongoing', 'completed', 'cancelled'],
+    enum: ['upcoming', 'ongoing', 'completed', 'cancelled', 'pending'],
     default: 'upcoming'
   },
   createdBy: {
@@ -53,14 +68,26 @@ const eventSchema = new mongoose.Schema({
     ref: 'User',
     required: [true, 'Creator ID is required']
   },
-  images: [{
+  images: {
     type: String,
     trim: true
-  }],
-  requirements: [{
+  },
+  requirements: {
     type: String,
     trim: true
-  }],
+  },
+  convenience: {
+    percentage: {
+      type: Number,
+      default: 0,
+      min: 0
+    },
+    fixedAmount: {
+      type: Number,
+      default: 0,
+      min: 0
+    }
+  },
   participants: [{
     userId: {
       type: mongoose.Schema.Types.ObjectId,
@@ -74,6 +101,9 @@ const eventSchema = new mongoose.Schema({
       type: String,
       enum: ['pending', 'paid'],
       default: 'pending'
+    },
+    ticketId: {
+      type: String
     }
   }],
   createdAt: {
@@ -95,48 +125,10 @@ eventSchema.index({ type: 1 });
 eventSchema.index({ createdBy: 1 });
 
 // Method to check if event is full
-eventSchema.methods.isFull = function() {
+eventSchema.methods.isFull = function () {
   return this.currentParticipants >= this.maxParticipants;
-};
-
-// Method to add participant
-eventSchema.methods.addParticipant = async function(userId) {
-  if (this.isFull()) {
-    throw new Error('Event is full');
-  }
-
-  const isAlreadyRegistered = this.participants.some(
-    p => p.userId.toString() === userId.toString()
-  );
-
-  if (isAlreadyRegistered) {
-    throw new Error('User is already registered for this event');
-  }
-
-  this.participants.push({
-    userId,
-    registrationDate: Date.now()
-  });
-
-  this.currentParticipants += 1;
-  await this.save();
-};
-
-// Method to remove participant
-eventSchema.methods.removeParticipant = async function(userId) {
-  const participantIndex = this.participants.findIndex(
-    p => p.userId.toString() === userId.toString()
-  );
-
-  if (participantIndex === -1) {
-    throw new Error('User is not registered for this event');
-  }
-
-  this.participants.splice(participantIndex, 1);
-  this.currentParticipants -= 1;
-  await this.save();
 };
 
 const Event = mongoose.model('Event', eventSchema);
 
-module.exports = Event; 
+module.exports = Event;

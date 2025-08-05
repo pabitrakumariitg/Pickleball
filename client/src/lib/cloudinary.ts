@@ -10,6 +10,23 @@ export interface CloudinaryPhoto {
   created_at: string;
 }
 
+// Upload file to the server
+interface UploadResponse {
+  status: 'success' | 'error';
+  data?: {
+    photo: {
+      url: string;
+      public_id: string;
+      width: number;
+      height: number;
+      format: string;
+      resourceType: string;
+      size?: number;
+      created_at?: string;
+    };
+  };
+  message?: string;
+}
 export interface ResponsiveUrls {
   thumbnail: string;
   small: string;
@@ -239,3 +256,35 @@ export const createImagePreview = (file: File): Promise<string> => {
     reader.readAsDataURL(file);
   });
 }; 
+
+export const uploadFile = async (file: File): Promise<UploadResponse> => {
+  try {
+    const formData = new FormData();
+    formData.append('photo', file);
+
+    const response = await fetch('/api/upload', {
+      method: 'POST',
+      body: formData,
+    });
+
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.message || 'Failed to upload file');
+    }
+
+    const result = await response.json();
+    
+    // Ensure the response has the expected structure
+    if (result.status !== 'success' || !result.data?.photo) {
+      throw new Error(result.message || 'Invalid response from server');
+    }
+    
+    return result;
+  } catch (error) {
+    console.error('Upload error:', error);
+    return {
+      status: 'error',
+      message: error instanceof Error ? error.message : 'Failed to upload file',
+    };
+  }
+};

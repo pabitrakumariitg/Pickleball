@@ -3,6 +3,7 @@
 import { usePathname } from 'next/navigation';
 import { Navbar } from "./navbar";
 import { Footer } from "./footer";
+import { Toaster } from "@/components/ui/toaster";
 
 export function RootLayoutWrapper({
   children
@@ -19,6 +20,7 @@ export function RootLayoutWrapper({
         {children}
       </main>
       {!isAdminOrBusinessRoute && <Footer />}
+      <Toaster />
     </>
   );
 } 

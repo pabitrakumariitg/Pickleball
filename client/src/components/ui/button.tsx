@@ -3,6 +3,7 @@
 import { cn } from "@/lib/utils";
 import { motion } from "framer-motion";
 import React from "react";
+
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: "primary" | "secondary" | "accent" | "cta" | "outline" | "ghost";
   size?: "default" | "sm" | "lg";
@@ -11,6 +12,34 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   iconPosition?: "left" | "right";
   motion?: boolean;
 }
+
+const variantClasses = {
+  primary: "btn-primary",
+  secondary: "btn-secondary",
+  accent: "btn-accent",
+  cta: "btn-cta",
+  outline: "btn-outline",
+  ghost: "bg-transparent hover:bg-secondary/50 text-foreground"
+};
+
+const sizeClasses = {
+  default: "btn",
+  sm: "btn btn-sm",
+  lg: "btn btn-lg"
+};
+
+export const buttonVariants = ({ variant = "primary", size = "default", className = "" }: {
+  variant?: keyof typeof variantClasses;
+  size?: keyof typeof sizeClasses;
+  className?: string;
+} = {}) => {
+  return cn(
+    variantClasses[variant],
+    sizeClasses[size],
+    className
+  );
+};
+
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(({
   className,
   variant = "primary",
@@ -22,19 +51,6 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(({
   children,
   ...props
 }, ref) => {
-  const variantClasses = {
-    primary: "btn-primary",
-    secondary: "btn-secondary",
-    accent: "btn-accent",
-    cta: "btn-cta",
-    outline: "btn-outline",
-    ghost: "bg-transparent hover:bg-secondary/50 text-foreground"
-  };
-  const sizeClasses = {
-    default: "btn",
-    sm: "btn btn-sm",
-    lg: "btn btn-lg"
-  };
   if (useMotion) {
     return <motion.button ref={ref as React.Ref<HTMLButtonElement>} className={cn(variantClasses[variant], sizeClasses[size], "relative flex items-center justify-center gap-2", className)} disabled={isLoading || props.disabled} whileHover={{
       scale: 1.03
@@ -76,5 +92,6 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(({
       </span>
     </button>;
 });
+
 Button.displayName = "Button";
 export { Button };

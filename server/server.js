@@ -29,6 +29,7 @@ const membershipRoutes = require('./routes/membership.routes');
 const businessRoutes = require('./routes/business.routes');
 const userRoutes = require('./routes/user.routes');
 const uploadRoutes = require('./routes/upload.routes');
+const registrationRoutes = require('./routes/registration.routes');
 
 const app = express();
 
@@ -94,6 +95,7 @@ app.use('/api/v1/memberships', membershipRoutes);
 app.use('/api/v1/businesses', businessRoutes);
 app.use('/api/v1/users', userRoutes);
 app.use('/api/v1/upload', uploadRoutes);
+app.use('/api/v1/registrations', registrationRoutes);
 app.get('/', (req, res) => {
   res.status(200).json({ success: true, message: 'Server is running' });
 });

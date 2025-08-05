@@ -8,7 +8,10 @@ const {
   getUser,
   createUser,
   updateUser,
-  deleteUser
+  deleteUser,
+  createAdminEvent,
+  getAdminEvents,
+  updateAdminEvent
 } = require('../controllers/admin.controller');
 
 // Protect all routes after this middleware
@@ -217,4 +220,12 @@ router.route('/users/:id')
   .put(updateUser)
   .delete(deleteUser);
 
-module.exports = router; 
+// Admin event routes
+router.route('/events')
+  .get(protect, restrictTo('Admin'), getAdminEvents)
+  .post(protect, restrictTo('Admin'), createAdminEvent);
+
+router.route('/events/:id')
+  .put(protect, restrictTo('Admin'), updateAdminEvent);
+
+module.exports = router;

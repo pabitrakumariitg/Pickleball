@@ -174,7 +174,9 @@ export default function EventPage({
             </div>
             
             <div className="mt-10 flex gap-4" data-unique-id="6f2e4dd3-1560-43c5-a596-51d3274a8e6a" data-file-name="app/updates/events/[id]/page.tsx">
-              <Button variant="primary" size="lg" data-unique-id="d26c27f4-8902-4987-8ad2-cfcbfc1de6e3" data-file-name="app/updates/events/[id]/page.tsx"><span className="editable-text" data-unique-id="46a4a398-a7b0-4225-ac88-76732253fe63" data-file-name="app/updates/events/[id]/page.tsx">Register Now</span></Button>
+              <Link href={`/updates/events/register?eventId=${params.id}&eventName=${encodeURIComponent(event.title)}&eventDate=${encodeURIComponent(event.date)}&eventLocation=${encodeURIComponent(event.location)}`}>
+                <Button variant="primary" size="lg" data-unique-id="d26c27f4-8902-4987-8ad2-cfcbfc1de6e3" data-file-name="app/updates/events/[id]/page.tsx"><span className="editable-text" data-unique-id="46a4a398-a7b0-4225-ac88-76732253fe63" data-file-name="app/updates/events/[id]/page.tsx">Register Now</span></Button>
+              </Link>
               <Button variant="outline" size="lg" data-unique-id="e3d3de51-e383-4b63-9215-51145e0efc08" data-file-name="app/updates/events/[id]/page.tsx"><span className="editable-text" data-unique-id="4e91d35e-2486-451c-b1cf-64da2151d662" data-file-name="app/updates/events/[id]/page.tsx">Share Event</span></Button>
             </div>
           </div>
