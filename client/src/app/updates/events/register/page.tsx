@@ -69,12 +69,14 @@ function EventRegistrationPage({
         player1Age: "",
         player1Email: "",
         player1Phone: "",
+        player1DuprNo: "",
 
         // Player 2 details
         player2FullName: "",
         player2Age: "",
         player2Email: "",
         player2Phone: "",
+        player2DuprNo: "",
 
         // Team details
         teamName: "",
@@ -179,6 +181,10 @@ function EventRegistrationPage({
             newErrors.player1Email = "Please enter a valid email address";
         }
 
+        if (!formData.player1DuprNo.trim()) {
+            newErrors.player1DuprNo = "Player 1 DUPR number is required";
+        }
+
         // Validate Player 2 details
         if (!formData.player2FullName.trim()) {
             newErrors.player2FullName = "Player 2 full name is required";
@@ -192,6 +198,10 @@ function EventRegistrationPage({
             newErrors.player2Email = "Player 2 email is required";
         } else if (!/\S+@\S+\.\S+/.test(formData.player2Email)) {
             newErrors.player2Email = "Please enter a valid email address";
+        }
+
+        if (!formData.player2DuprNo.trim()) {
+            newErrors.player2DuprNo = "Player 2 DUPR number is required";
         }
 
         // Validate Team details
@@ -261,13 +271,15 @@ function EventRegistrationPage({
                     fullName: formData.player1FullName,
                     phoneNumber: formData.player1Phone,
                     email: formData.player1Email,
-                    age: formData.player1Age
+                    age: formData.player1Age,
+                    duprNo: formData.player1DuprNo
                 },
                 player2: {
                     fullName: formData.player2FullName,
                     phoneNumber: formData.player2Phone,
                     email: formData.player2Email,
-                    age: formData.player2Age
+                    age: formData.player2Age,
+                    duprNo: formData.player2DuprNo
                 },
                 category: categoryMapping[formData.category],
                 paymentAmount: '1500',
@@ -346,11 +358,11 @@ function EventRegistrationPage({
                             </div>
                             <div className="flex items-center">
                                 <Clock className="h-4 w-4 mr-1 text-primary" />
-                                <span>Time: 9:00 AM onwards</span>
+                                <span>Time: 12:00 PM onwards</span>
                             </div>
                         </div>
-                        <div className="mt-2 text-sm">
-                            <span className="font-medium">Last Date to Register:</span> 14 August 2025, 12:00 PM
+                        <div className="mt-2 text-sm font-bold text-red-500">
+                            <span className="font-medium">Last Date to Register:</span> 14 August 2025, 9:00 PM
                         </div>
                     </div>
 
@@ -461,6 +473,25 @@ function EventRegistrationPage({
                                                 <p className="text-xs text-red-500 mt-1">{errors.player1Email}</p>
                                             )}
                                         </div>
+                                        <div>
+                                            <Label htmlFor="player1DuprNo" className={errors.player1DuprNo ? "text-red-500" : ""}>
+                                                DUPR No. (Player 1) *
+                                            </Label>
+                                            <Input
+                                                id="player1DuprNo"
+                                                name="player1DuprNo"
+                                                type="text"
+                                                value={formData.player1DuprNo}
+                                                onChange={handleInputChange}
+                                                required
+                                                placeholder="Enter player 1's DUPR number"
+                                                className={errors.player1DuprNo ? "border-red-500" : ""}
+                                            />
+                                            {errors.player1DuprNo && (
+                                                <p className="text-xs text-red-500 mt-1">{errors.player1DuprNo}</p>
+                                            )}
+                                        </div>
+                                        <p className="text-xs text-red-500 mt-1">If you don't have a DUPR number, please <a href="https://www.dupr.com/" target="_blank" rel="noopener noreferrer" className="text-primary underline">click here</a> to get one.</p>
                                     </div>
                                 </div>
 
@@ -533,6 +564,25 @@ function EventRegistrationPage({
                                                 <p className="text-xs text-red-500 mt-1">{errors.player2Email}</p>
                                             )}
                                         </div>
+                                        <div>
+                                            <Label htmlFor="player2DuprNo" className={errors.player2DuprNo ? "text-red-500" : ""}>
+                                                DUPR No. (Player 2) *
+                                            </Label>
+                                            <Input
+                                                id="player2DuprNo"
+                                                name="player2DuprNo"
+                                                type="text"
+                                                value={formData.player2DuprNo}
+                                                onChange={handleInputChange}
+                                                required
+                                                placeholder="Enter player 2's DUPR number"
+                                                className={errors.player2DuprNo ? "border-red-500" : ""}
+                                            />
+                                            {errors.player2DuprNo && (
+                                                <p className="text-xs text-red-500 mt-1">{errors.player2DuprNo}</p>
+                                            )}
+                                        </div>
+                                        <p className="text-xs text-red-500 mt-1">If you don't have a DUPR number, please <a href="https://www.dupr.com/" target="_blank" rel="noopener noreferrer" className="text-primary underline">click here</a> to get one.</p>
                                     </div>
                                 </div>
 
@@ -628,7 +678,7 @@ function EventRegistrationPage({
                                                         }}
                                                     />
                                                 </div>
-                                                <p className="text-sm text-center">Scan and Pay ₹1,500</p>
+                                                <p className="text-sm text-center">Scan and Pay ₹1,300</p>
                                             </div>
                                         </div>
 

@@ -29,7 +29,7 @@ export function EventsList() {
     id: "101",
     title: "Kohima Open Tournament 2025",
     date: "2025-08-16",
-    time: "9:00 AM",
+    time: "12:00 PM",
     location: "Akim Astro Turf Arena, Kohima",
     description:
       "Perfect for beginners! Learn the basics of pickleball in a friendly, supportive environment.",

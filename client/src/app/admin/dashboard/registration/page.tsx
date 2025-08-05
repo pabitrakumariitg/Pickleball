@@ -16,12 +16,14 @@ interface Registration {
         phoneNumber: string;
         email: string;
         age?: number;
+        duprNo: string;
     };
     player2: {
         fullName: string;
         phoneNumber: string;
         email: string;
         age?: number;
+        duprNo: string;
     };
     category: string;
     paymentScreenshot: string;
@@ -90,6 +92,8 @@ export default function RegistrationsPage() {
         reg.player2.fullName.toLowerCase().includes(searchQuery.toLowerCase()) ||
         reg.player1.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
         reg.player2.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        reg.player1.duprNo.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        reg.player2.duprNo.toLowerCase().includes(searchQuery.toLowerCase()) ||
         reg.category.toLowerCase().includes(searchQuery.toLowerCase())
     );
 
@@ -165,11 +169,13 @@ export default function RegistrationsPage() {
                                             <div className="font-medium text-foreground">{reg.player1.fullName}</div>
                                             <div className="text-muted-foreground text-xs">{reg.player1.email}</div>
                                             <div className="text-muted-foreground text-xs">{reg.player1.phoneNumber}</div>
+                                            <div className="text-muted-foreground text-xs">DUPR No: {reg.player1.duprNo}</div>
                                         </td>
                                         <td className="py-3 px-4 text-sm">
                                             <div className="font-medium text-foreground">{reg.player2.fullName}</div>
                                             <div className="text-muted-foreground text-xs">{reg.player2.email}</div>
                                             <div className="text-muted-foreground text-xs">{reg.player2.phoneNumber}</div>
+                                            <div className="text-muted-foreground text-xs">DUPR No: {reg.player2.duprNo}</div>
                                         </td>
                                         <td className="py-3 px-4 text-sm text-foreground">{reg.category}</td>
                                         <td className="py-3 px-4 text-sm">

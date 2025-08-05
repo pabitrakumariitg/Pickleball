@@ -31,6 +31,11 @@ const registrationSchema = new mongoose.Schema(
                 type: Number,
                 min: [5, 'Age must be at least 5 years old'],
                 max: [100, 'Age must be less than 100 years old']
+            },
+            duprNo: {
+                type: String,
+                required: [true, 'Player 1 DUPR No. is required'],
+                trim: true
             }
         },
         player2: {
@@ -55,6 +60,11 @@ const registrationSchema = new mongoose.Schema(
                 type: Number,
                 min: [5, 'Age must be at least 5 years old'],
                 max: [100, 'Age must be less than 100 years old']
+            },
+            duprNo: {
+                type: String,
+                required: [true, 'Player 2 DUPR No. is required'],
+                trim: true
             }
         },
         category: {
