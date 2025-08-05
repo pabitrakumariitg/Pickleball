@@ -659,7 +659,7 @@ function EventRegistrationPage({
                                 <div className="space-y-4">
                                     <h2 className="text-xl font-semibold border-b pb-2">💰 Registration Fee</h2>
                                     <div className="bg-muted/50 p-4 rounded-md mb-4">
-                                        <p className="font-medium">Registration Fee: ₹1,500 per team</p>
+                                        <p className="font-medium">Registration Fee: ₹1,300 per team</p>
                                         <p className="text-sm text-foreground/70 mt-1">Please make the payment and upload the screenshot below.</p>
                                     </div>
 
