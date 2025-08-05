@@ -27,6 +27,7 @@ const navigation = [
   { name: 'Memberships', href: '/admin/dashboard/memberships', icon: Ticket },
   { name: 'Events', href: '/admin/dashboard/events', icon: CalendarDays },
   { name: 'Payments', href: '/admin/dashboard/payments', icon: CreditCard },
+  { name: 'Registration', href: '/admin/dashboard/registration', icon: CreditCard },
   // { name: 'Reports', href: '/admin/dashboard/reports', icon: BarChart3 },
   // { name: 'Settings', href: '/admin/dashboard/settings', icon: Settings },
 ];

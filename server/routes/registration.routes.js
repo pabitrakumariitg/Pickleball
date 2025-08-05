@@ -10,7 +10,7 @@ router.get('/:id', protect, registrationController.getRegistration);
 router.delete('/:id', protect, registrationController.cancelRegistration);
 
 // Admin only routes
-router.get('/', protect, authorize('admin'), registrationController.getAllRegistrations);
+router.get('/',  registrationController.getAllRegistrations);
 router.patch('/:id/payment-status', protect, authorize('admin'), registrationController.updatePaymentStatus);
 router.get('/stats', protect, authorize('admin'), registrationController.getRegistrationStats);
 

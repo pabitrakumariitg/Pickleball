@@ -4,6 +4,7 @@ import { usePathname } from 'next/navigation';
 import { Navbar } from "./navbar";
 import { Footer } from "./footer";
 import { Toaster } from "@/components/ui/toaster";
+import { FloatingWhatsAppButton } from '../ui/FloatingWhatsAppButton';
 
 export function RootLayoutWrapper({
   children
@@ -20,6 +21,7 @@ export function RootLayoutWrapper({
         {children}
       </main>
       {!isAdminOrBusinessRoute && <Footer />}
+      {!isAdminOrBusinessRoute && <FloatingWhatsAppButton />}
       <Toaster />
     </>
   );
