@@ -75,7 +75,7 @@ const getNewsItem = (slug: string) => {
           <li>Men's Singles: Neiketouzo Kire, Limanukshi Jamir</li>
           <li>Women's Singles: Kethosituo Solo, Abeni Lotha</li>
           <li>Men's Doubles: Akumtoshi Jamir/Yhunshalo Kemp, Imtisunep Longchar/Chumbemo Tsanglao</li>
-          <li>Women's Doubles: Narola Ao/Thejangulie Rio, Asano Peseyie/Vitsino Kuotsu</li>
+          <li>Mixed Doubles: Narola Ao/Thejangulie Rio, Asano Peseyie/Vitsino Kuotsu</li>
           <li>Mixed Doubles: Team selection to be finalized based on tournament performance</li>
         </ul>
         

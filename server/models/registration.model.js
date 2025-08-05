@@ -68,10 +68,10 @@ const registrationSchema = new mongoose.Schema(
             }
         },
         category: {
-            type: String,
+            type: [String],
             required: [true, 'Category is required'],
             enum: {
-                values: ["Men's Doubles", "Women's Doubles"],
+                values: ["Men's Doubles", "Mixed Doubles"],
                 message: 'Invalid category selected'
             }
         },

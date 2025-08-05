@@ -25,7 +25,7 @@ interface Registration {
         age?: number;
         duprNo: string;
     };
-    category: string;
+    category: string[];
     paymentScreenshot: string;
     paymentStatus: 'pending' | 'verified' | 'rejected';
     createdAt: string;
@@ -94,7 +94,7 @@ export default function RegistrationsPage() {
         reg.player2.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
         reg.player1.duprNo.toLowerCase().includes(searchQuery.toLowerCase()) ||
         reg.player2.duprNo.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        reg.category.toLowerCase().includes(searchQuery.toLowerCase())
+        reg.category.some(cat => cat.toLowerCase().includes(searchQuery.toLowerCase()))
     );
 
     const getPaymentStatusColor = (status: string) => {
@@ -177,7 +177,13 @@ export default function RegistrationsPage() {
                                             <div className="text-muted-foreground text-xs">{reg.player2.phoneNumber}</div>
                                             <div className="text-muted-foreground text-xs">DUPR No: {reg.player2.duprNo}</div>
                                         </td>
-                                        <td className="py-3 px-4 text-sm text-foreground">{reg.category}</td>
+                                        <td className="py-3 px-4 text-sm text-foreground">
+                                            {reg.category.map((cat, index) => (
+                                                <span key={index} className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-primary/10 text-primary mr-1">
+                                                    {cat}
+                                                </span>
+                                            ))}
+                                        </td>
                                         <td className="py-3 px-4 text-sm">
                                             <a href={reg.paymentScreenshot} target="_blank" rel="noopener noreferrer" className="text-primary underline">View</a>
                                         </td>

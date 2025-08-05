@@ -92,7 +92,7 @@ const getEvent = (id: string) => {
     time: "8:00 AM - 7:00 PM",
     location: "State Indoor Stadium, Dimapur",
     description: "The premier pickleball event in Nagaland. Three days of competition across all divisions. Registration required by August 1.",
-    fullDescription: "The Nagaland State Championships is the premier pickleball event in the region, bringing together the best players from across the state for three days of intense competition. The tournament features Men's Singles, Women's Singles, Men's Doubles, Women's Doubles, and Mixed Doubles divisions, each with multiple skill level brackets. Players can enter up to three events. Registration includes a tournament t-shirt, player welcome bag, and admission to the Saturday evening players' banquet. Spectators are welcome free of charge.",
+    fullDescription: "The Nagaland State Championships is the premier pickleball event in the region, bringing together the best players from across the state for three days of intense competition. The tournament features Men's Singles, Women's Singles, Men's Doubles, Mixed Doubles divisions, each with multiple skill level brackets. Players can enter up to three events. Registration includes a tournament t-shirt, player welcome bag, and admission to the Saturday evening players' banquet. Spectators are welcome free of charge.",
     participants: "150+ players expected",
     entryFee: "₹1,500 per player (₹500 per additional event)",
     prizes: "Trophies and cash prizes totaling over ₹100,000",

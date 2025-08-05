@@ -83,7 +83,7 @@ function EventRegistrationPage({
         cityTown: "",
 
         // Category
-        category: "",
+        categories: [] as string[],
 
         // Payment
         paymentMethod: "upi",
@@ -116,6 +116,24 @@ function EventRegistrationPage({
         // Clear error when user selects
         if (errors[name]) {
             setErrors({ ...errors, [name]: "" });
+        }
+    };
+
+    const handleCategoryChange = (category: string, checked: boolean) => {
+        if (checked) {
+            setFormData(prev => ({
+                ...prev,
+                categories: [...prev.categories, category]
+            }));
+        } else {
+            setFormData(prev => ({
+                ...prev,
+                categories: prev.categories.filter(cat => cat !== category)
+            }));
+        }
+        // Clear error when user selects
+        if (errors.categories) {
+            setErrors({ ...errors, categories: "" });
         }
     };
 
@@ -214,8 +232,8 @@ function EventRegistrationPage({
         }
 
         // Validate Category
-        if (!formData.category) {
-            newErrors.category = "Please select a category";
+        if (formData.categories.length === 0) {
+            newErrors.categories = "Please select at least one category";
         }
 
         // Payment validation
@@ -260,7 +278,7 @@ function EventRegistrationPage({
             // Map category values to the format expected by the backend
             const categoryMapping: Record<string, string> = {
                 'mens_doubles': "Men's Doubles",
-                'womens_doubles': "Women's Doubles",
+                'mixed_doubles': "Mixed Doubles",
             };
 
             // Create JSON data object for API
@@ -281,8 +299,8 @@ function EventRegistrationPage({
                     age: formData.player2Age,
                     duprNo: formData.player2DuprNo
                 },
-                category: categoryMapping[formData.category],
-                paymentAmount: '1500',
+                category: formData.categories.map(cat => categoryMapping[cat]),
+                paymentAmount: '1300',
                 paymentScreenshot: paymentScreenshotUrl,
                 waiverAccepted: formData.photoConsent,
                 rulesAccepted: formData.photoConsent,
@@ -631,26 +649,29 @@ function EventRegistrationPage({
                                 <div className="space-y-4">
                                     <h2 className="text-xl font-semibold border-b pb-2">🏅 Category</h2>
                                     <div>
-                                        <Label className={errors.category ? "text-red-500" : ""}>
+                                        <Label className={errors.categories ? "text-red-500" : ""}>
                                             Select Category *
                                         </Label>
-                                        <RadioGroup
-                                            value={formData.category}
-                                            onValueChange={(value) => handleRadioChange("category", value)}
-                                            className="grid gap-2 mt-2"
-                                        >
+                                        <div className="grid gap-2 mt-2">
                                             <div className="flex items-center space-x-2">
-                                                <RadioGroupItem value="mens_doubles" id="mens_doubles" />
+                                                <Checkbox
+                                                    id="mens_doubles"
+                                                    checked={formData.categories.includes('mens_doubles')}
+                                                    onCheckedChange={(checked) => handleCategoryChange('mens_doubles', checked === true)}
+                                                />
                                                 <Label htmlFor="mens_doubles">Men's Doubles</Label>
                                             </div>
                                             <div className="flex items-center space-x-2">
-                                                <RadioGroupItem value="womens_doubles" id="womens_doubles" />
-                                                <Label htmlFor="womens_doubles">Women's Doubles</Label>
+                                                <Checkbox
+                                                    id="mixed_doubles"
+                                                    checked={formData.categories.includes('mixed_doubles')}
+                                                    onCheckedChange={(checked) => handleCategoryChange('mixed_doubles', checked === true)}
+                                                />
+                                                <Label htmlFor="mixed_doubles">Mixed Doubles</Label>
                                             </div>
-
-                                        </RadioGroup>
-                                        {errors.category && (
-                                            <p className="text-xs text-red-500 mt-1">{errors.category}</p>
+                                        </div>
+                                        {errors.categories && (
+                                            <p className="text-xs text-red-500 mt-1">{errors.categories}</p>
                                         )}
                                     </div>
                                 </div>
