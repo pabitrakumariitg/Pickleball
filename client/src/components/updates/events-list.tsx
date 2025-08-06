@@ -34,7 +34,7 @@ export function EventsList() {
     description:
       "Perfect for beginners! Learn the basics of pickleball in a friendly, supportive environment.",
     image:
-      "https://images.unsplash.com/photo-1511067007398-7e4b90cfa4bc?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3"
+      "/kohima.jpg"
   };
 
   return (
@@ -69,11 +69,21 @@ export function EventsList() {
             <div className="rounded-xl overflow-hidden shadow-lg border border-border bg-card transition-transform duration-300 hover:scale-[1.01]">
               {/* Image Banner */}
               <div className="relative h-[300px] sm:h-[400px] w-full overflow-hidden">
-                <img
-                  src={event.image}
-                  alt={event.title}
-                  className="h-full w-full object-cover transition-transform duration-500 hover:scale-110"
-                />
+                <>
+                  {/* Desktop Image */}
+                  <img
+                    src="/kohima.jpg"
+                    alt={event.title}
+                    className="hidden sm:block h-full w-full object-cover transition-transform duration-500 hover:scale-110"
+                  />
+
+                  {/* Mobile Image */}
+                  <img
+                    src="/kohima-mobile.jpg"
+                    alt={event.title}
+                    className="block sm:hidden h-[400px] w-full object-fit transition-transform duration-500 hover:scale-110"
+                  />
+                </>
                 <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-6">
                   <p className="text-sm sm:text-base font-medium text-white">
                     {formatDate(event.date)} at {event.time}

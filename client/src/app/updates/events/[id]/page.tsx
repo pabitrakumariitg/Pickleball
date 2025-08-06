@@ -22,7 +22,7 @@ const getEvent = (id: string) => {
     entryFee: "₹1,000 per player",
     prizes: "Trophies and cash prizes for each division",
     registrationDeadline: "June 5, 2025",
-    image: "https://images.unsplash.com/photo-1511067007398-7e4b90cfa4bc?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3",
+    image: "/kohima.jpg",
     organizer: "Nagaland Pickleball Association",
     contact: "tournaments@pickleballnagaland.org"
   }, {
