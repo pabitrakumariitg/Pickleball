@@ -9,22 +9,44 @@ interface FAQ {
 }
 export function FAQSection() {
   const [openIndex, setOpenIndex] = useState<number | null>(0);
-  const faqs: FAQ[] = [{
-    question: "What are the benefits of membership?",
-    answer: "Members enjoy discounted court rates, priority booking, access to members-only events and tournaments, discounts on equipment purchases, and regular training opportunities. Different membership tiers offer varying levels of benefits."
-  }, {
-    question: "How do I renew my membership?",
-    answer: "Memberships can be renewed online through our website or in person at any of our facilities. We'll send you a reminder email 30 days before your membership expires with instructions for renewal."
-  }, {
-    question: "Can I upgrade my membership mid-term?",
-    answer: "Yes, you can upgrade your membership at any time. We'll prorate the difference and apply it to your new membership level. Contact our membership office for assistance with upgrades."
-  }, {
-    question: "Are there discounts for seniors or students?",
-    answer: "Yes, we offer special rates for seniors (65+) and full-time students. Please bring valid ID when registering to receive these discounted rates."
-  }, {
-    question: "Can I freeze my membership temporarily?",
-    answer: "Individual and Family memberships can be frozen for up to 3 months per year for medical reasons or extended travel. A small monthly maintenance fee applies during the freeze period."
-  }];
+  const faqs: FAQ[] = [
+    {
+      question: "Who needs to register?",
+      answer: "All players who wish to participate in any event organized or recognized by the NPA must register."
+    },
+    {
+      question: "How long is the registration valid?",
+      answer: "It is valid for 1 year from the date of approval. You must renew annually."
+    },
+    {
+      question: "Is there a registration fee?",
+      answer: "Yes, a nominal registration fee will be applicable. The details will be provided in the registration form."
+    },
+    {
+      question: "What benefits do I get from registering?",
+      answer: "• Entry to official NPA events\n• State ranking inclusion\n• Eligibility for state team selection\n• Invitations to camps and special programs\n• Exclusive updates, training, and partner benefits"
+    },
+    {
+      question: "Can I register on behalf of someone else?",
+      answer: "Minors may be registered by their parent/guardian. All others must register themselves."
+    },
+    {
+      question: "What documents are required for registration?",
+      answer: "• Valid ID proof\n• Address proof (e.g., Aadhaar, Voter ID)\n• Passport-size photo\n• Consent form (for minors)"
+    },
+    {
+      question: "What happens if I don’t register?",
+      answer: "You will not be eligible to play in any NPA tournaments, ranking events, or be considered for the state team."
+    },
+    {
+      question: "How do I get selected for the state team?",
+      answer: "Selections are based on performance, ranking points, and selection trials conducted by NPA. Only registered players are eligible."
+    },
+    {
+      question: "Will I be notified about upcoming events?",
+      answer: "Yes, registered players will receive priority updates and notifications through WhatsApp, email, and the official NPA channels."
+    }
+  ];
   const toggleFAQ = (index: number) => {
     setOpenIndex(openIndex === index ? null : index);
   };

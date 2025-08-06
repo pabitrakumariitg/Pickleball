@@ -14,6 +14,7 @@ import { MembershipBenefits } from "@/components/membership/membership-benifits"
 import JoinMembership from "@/components/membership/join-membership";
 import { MembershipTier } from "@/types";
 import { ProtectedRoute } from "@/components/auth/ProtectedRoute";
+import { TermsCond } from "@/components/membership/TermsCond";
 
 interface Membership {
   _id: string;
@@ -103,7 +104,7 @@ export default function MembershipPage() {
 
       const data = await response.json();
       setUser(data.data);
-      
+
       // Check membership status
       await checkMembershipStatus(token);
     } catch (err) {
@@ -186,7 +187,7 @@ export default function MembershipPage() {
       description: tier.name,
       duration: tier.id === 'visitor' ? 1 : 12
     };
-    
+
     setSelectedMembership(membership);
     setStep(2);
     setShowPurchaseFlow(true);
@@ -220,7 +221,7 @@ export default function MembershipPage() {
       if (!response.ok) {
         const errorData = await response.json();
         const errorMessage = errorData.message || errorData.error || 'Failed to purchase membership';
-        
+
         // Handle specific membership error
         if (errorMessage.includes('already have an active membership')) {
           setError('You already have an active membership! You cannot purchase another membership while your current one is still active.');
@@ -308,7 +309,7 @@ export default function MembershipPage() {
                 </div>
               ))}
             </div>
-            
+
             <div className="text-center mt-8">
               <button
                 onClick={() => setShowPurchaseFlow(false)}
@@ -471,8 +472,8 @@ export default function MembershipPage() {
     <ProtectedRoute>
       <div>
         <MembershipHero />
-        
-        {/* Membership Status Banner */}
+
+        {/* Membership Status Banner
         {hasActiveMembership && membershipStatus && (
           <div className="bg-green-50 border border-green-200 py-6">
             <div className="container mx-auto px-6">
@@ -494,10 +495,10 @@ export default function MembershipPage() {
               </div>
             </div>
           </div>
-        )}
+        )} */}
 
         {/* Error Message */}
-        {error && (
+        {/* {error && (
           <div className="bg-red-50 border border-red-200 py-4">
             <div className="container mx-auto px-6">
               <div className="flex items-center justify-center">
@@ -517,12 +518,15 @@ export default function MembershipPage() {
             </div>
           </div>
         )}
-        
+         */}
         <MembershipBenefits />
-        <PricingSection onSelectPlan={handlePlanSelection} hasActiveMembership={hasActiveMembership} />
-        <TestimonialsSection />
+        {/* <PricingSection onSelectPlan={handlePlanSelection} hasActiveMembership={hasActiveMembership} /> */}
+        {/* <TestimonialsSection /> */}
+        <TermsCond />
         <FAQSection />
-        <JoinMembership hasActiveMembership={hasActiveMembership} />
+
+        {/* Terms and Conditions Section */}
+        {/* <JoinMembership hasActiveMembership={hasActiveMembership} /> */}
         <CTASection />
       </div>
     </ProtectedRoute>

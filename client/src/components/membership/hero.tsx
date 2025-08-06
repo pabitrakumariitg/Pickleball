@@ -43,8 +43,8 @@ export function MembershipHero() {
         }} transition={{
           duration: 0.7,
           delay: 0.4
-        }} className="mb-4 text-4xl font-bold md:text-5xl lg:text-6xl" data-unique-id="726a8426-eb1b-4da2-81ae-6630c1154d4b" data-file-name="components/membership/hero.tsx"><span className="editable-text" data-unique-id="91bc4d22-5f2f-496c-b5ba-464425d85c98" data-file-name="components/membership/hero.tsx">
-            Join the</span><span className="text-primary" data-unique-id="f8e3e4c3-6185-4757-8e6f-7903378de607" data-file-name="components/membership/hero.tsx"><span className="editable-text" data-unique-id="4a0e6e7d-338f-4ed2-a296-ce6484dcb27c" data-file-name="components/membership/hero.tsx"> Nagaland Pickleball Association</span></span>
+        }} className="mb-4 text-4xl font-bold md:text-5xl lg:text-6xl">
+          Nagaland Pickleball Association (NPA) – <span className="text-primary">Player Registration</span>
         </motion.h1>
 
         <motion.p initial={{
@@ -56,9 +56,10 @@ export function MembershipHero() {
         }} transition={{
           duration: 0.7,
           delay: 0.5
-        }} className="mb-8 text-lg text-foreground/80" data-unique-id="a712873e-a0b3-4665-a7fe-3cfffb30e304" data-file-name="components/membership/hero.tsx"><span className="editable-text" data-unique-id="49c088fd-350c-4489-931b-73964fb7a5d4" data-file-name="components/membership/hero.tsx">
-          Become a member of NPA and unlock a world of pickleball perks! Our membership plans are designed to suit players of all levels, offering exclusive benefits to enhance your experience.
-          </span></motion.p>
+        }} className="mb-8 text-lg text-foreground/80">
+          The Nagaland Pickleball Association (NPA) is proud to launch its official player registration system, a gateway for all aspiring and active pickleball players across the state. This mandatory annual registration ensures that every participant in NPA-sanctioned tournaments and events is verified, ranked, and eligible to progress through the official pathway from local competitions to national and international representation.<br /><br />
+          Whether you're a beginner with ambition or a competitive player ready to rise through the ranks, this registration is your first official step into the recognized pickleball ecosystem of Nagaland and India.
+        </motion.p>
 
         <motion.div initial={{
           opacity: 0,
@@ -70,9 +71,9 @@ export function MembershipHero() {
           duration: 0.7,
           delay: 0.6
         }} className="flex flex-wrap justify-center gap-4" data-unique-id="9e9d9e70-bb0f-4d58-b0de-6b35d6efdfa7" data-file-name="components/membership/hero.tsx">
-          <Button motion variant="cta" size="lg" className="group" icon={<ChevronRight className="transition-transform group-hover:translate-x-1" />} iconPosition="right" onClick={scrollToPricing} data-unique-id="796cf066-3db1-46b4-b377-17ee36b36dab" data-file-name="components/membership/hero.tsx"><span className="editable-text" data-unique-id="9d62a2fa-1260-4fed-adcd-a69457d5059f" data-file-name="components/membership/hero.tsx">
+          {/* <Button motion variant="cta" size="lg" className="group" icon={<ChevronRight className="transition-transform group-hover:translate-x-1" />} iconPosition="right" onClick={scrollToPricing} data-unique-id="796cf066-3db1-46b4-b377-17ee36b36dab" data-file-name="components/membership/hero.tsx"><span className="editable-text" data-unique-id="9d62a2fa-1260-4fed-adcd-a69457d5059f" data-file-name="components/membership/hero.tsx">
             View Pricing
-          </span></Button>
+          </span></Button> */}
           <Button motion variant="outline" size="lg" className="border-primary" onClick={scrollToBenefits} data-unique-id="bf34778e-b21d-4016-940e-50a91f3d9063" data-file-name="components/membership/hero.tsx"><span className="editable-text" data-unique-id="92a6b58e-59ca-4c1e-bc39-3c8966875d76" data-file-name="components/membership/hero.tsx">
             Learn More
           </span></Button>
