@@ -15,11 +15,13 @@ const navItems = [{
 }, {
   name: "Updates",
   href: "/updates"
-}, {
-  name: "Membership",
-  href: "/membership",
-  requiresAuth: true
-}, {
+}, 
+// {
+//   name: "Membership",
+//   href: "/membership",
+//   requiresAuth: true
+// },
+ {
   name: "How to Play",
   href: "/how-to-play"
 }, {
